@@ -1,0 +1,36 @@
+.book-header {
+  height: 195px;
+  &__headbar{
+    background: #7dc7ea;
+    height: 10px;
+  }
+  &__title {
+    height: 85px;
+    width: 480px;
+    padding: 0 20px 0;
+    line-height: 85px;
+    .title-name {
+      font-size: 26px;
+    }
+  }
+  &__breadcrumbs {
+    font-size: 12px;
+    padding: 0 20px 0;
+  }
+  &__menutab {
+    margin-bottom: 10px;
+    padding: 0 30px 0;
+    height: 37px;
+    border-bottom: 1px solid #000;
+    display: flex;
+    .tab {
+      width: 133px;
+      height: 18px;
+      margin: 3px 8px 0 0;
+      padding: 9px 12px 5px 8px;
+      border: 1px solid #8ed8fb;
+      border-radius: 8px 8px 0 0;
+      background: #5ba5c8;
+    }
+  }
+}

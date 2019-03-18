@@ -1,18 +1,23 @@
-<header class="whole__header">
-  <div class="whole__header--headbar">
+<header class="book-header">
+  <div class="book-header__headbar">
   </div>
-  <div class="whole__header--title">
-    <h1 class="title-name">Book-property</h1>
+  <div class="book-header__title">
+    <a href="/book"><h1 class="title-name">Book-property</h1></a>
   </div>
-  <div class="whole__header--breadcrumbs">
+  <div class="book-header__breadcrumbs">
     トップページ > ライブラリー
   </div>
-  <div class="whole__header--menutab">
+  <div class="book-header__menutab">
     <div class="tab mypage">
       マイページ
     </div>
     <div class="tab search">
       検索
     </div>
+    <a href="/book/create">
+      <div class="tab entry">
+        新規登録
+      </div>
+    </a>
   </div>
 </header>

@@ -1,31 +1,31 @@
-.whole__header {
+.book-header {
   height: 195px;
 }
-.whole__header--headbar {
+.book-header__headbar {
   background: #7dc7ea;
   height: 10px;
 }
-.whole__header--title {
+.book-header__title {
   height: 85px;
   width: 480px;
   padding: 0 20px 0;
   line-height: 85px;
 }
-.whole__header--title .title-name {
+.book-header__title .title-name {
   font-size: 26px;
 }
-.whole__header--breadcrumbs {
+.book-header__breadcrumbs {
   font-size: 12px;
   padding: 0 20px 0;
 }
-.whole__header--menutab {
+.book-header__menutab {
   margin-bottom: 10px;
   padding: 0 30px 0;
   height: 37px;
   border-bottom: 1px solid #000;
   display: flex;
 }
-.whole__header--menutab .tab {
+.book-header__menutab .tab {
   width: 133px;
   height: 18px;
   margin: 3px 8px 0 0;
