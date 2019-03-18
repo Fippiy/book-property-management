@@ -10,7 +10,10 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <!-- Styles -->
-        <style>
+        <!-- scss利用に変更 -->
+        <link href="/css/style.css" rel="stylesheet" type="text/css">
+        <!-- 元のスタイル設定 -->
+<!--         <style>
             html, body {
                 background-color: #fff;
                 color: #636b6f;
@@ -61,7 +64,7 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
-        </style>
+        </style> -->
     </head>
     <body>
         <div class="flex-center position-ref full-height">

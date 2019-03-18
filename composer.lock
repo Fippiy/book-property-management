@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "94d4bf9ac7f4a933030e46a346ee2917",
+    "content-hash": "f5465da6c7054cb7e8e6fa8703add14b",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -268,16 +268,16 @@
         },
         {
             "name": "erusev/parsedown",
-            "version": "1.7.1",
+            "version": "v1.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown.git",
-                "reference": "92e9c27ba0e74b8b028b111d1b6f956a15c01fc1"
+                "reference": "d60bcdc46978357759ecb13cb4b078da783f8faf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/92e9c27ba0e74b8b028b111d1b6f956a15c01fc1",
-                "reference": "92e9c27ba0e74b8b028b111d1b6f956a15c01fc1",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/d60bcdc46978357759ecb13cb4b078da783f8faf",
+                "reference": "d60bcdc46978357759ecb13cb4b078da783f8faf",
                 "shasum": ""
             },
             "require": {
@@ -310,7 +310,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2018-03-08T01:11:30+00:00"
+            "time": "2019-03-17T17:19:46+00:00"
         },
         {
             "name": "fideloper/proxy",
@@ -2904,6 +2904,52 @@
             "time": "2016-01-20T08:20:44+00:00"
         },
         {
+            "name": "leafo/scssphp",
+            "version": "v0.0.14",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/leafo/scssphp.git",
+                "reference": "dfb793daf3ecdce82c40fb6e6c3a84b6ab230364"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/dfb793daf3ecdce82c40fb6e6c3a84b6ab230364",
+                "reference": "dfb793daf3ecdce82c40fb6e6c3a84b6ab230364",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "require-dev": {
+                "php": ">=5.3.0",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "bin": [
+                "pscss"
+            ],
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "scss.inc.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Leaf Corcoran",
+                    "email": "leafot@gmail.com",
+                    "homepage": "http://leafo.net"
+                }
+            ],
+            "description": "scssphp is a compiler for SCSS written in PHP.",
+            "homepage": "http://leafo.net/scssphp/",
+            "time": "2014-08-05T05:45:15+00:00"
+        },
+        {
             "name": "mockery/mockery",
             "version": "1.2.2",
             "source": {
@@ -3079,6 +3125,50 @@
                 "symfony"
             ],
             "time": "2019-03-07T21:35:13+00:00"
+        },
+        {
+            "name": "panique/laravel-sass",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/panique/laravel-sass.git",
+                "reference": "6145efcb99ff7ace4e9642c74cc89afc14ad6e24"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/panique/laravel-sass/zipball/6145efcb99ff7ace4e9642c74cc89afc14ad6e24",
+                "reference": "6145efcb99ff7ace4e9642c74cc89afc14ad6e24",
+                "shasum": ""
+            },
+            "require": {
+                "leafo/scssphp": "v0.0.14",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "sass-compiler.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Panique",
+                    "homepage": "http://careers.stackoverflow.com/panique",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Compiles your Sass .scss files to .css every time you run your app (in development)",
+            "homepage": "https://github.com/panique/laravel-sass",
+            "keywords": [
+                "css",
+                "sass",
+                "scss"
+            ],
+            "time": "2017-03-07T18:55:48+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -4393,7 +4483,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "panique/laravel-sass": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
