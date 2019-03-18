@@ -1,0 +1,16 @@
+.book-form-area {
+  display: flex;
+  .book-form {
+    tr {
+      width: 100px;
+    }
+    th {
+      width: 100px;
+      padding: 5px;
+    }
+    td {
+      width: 100px;
+      padding: 5px;
+    }
+  }
+}
