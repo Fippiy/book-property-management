@@ -46,18 +46,14 @@
               <td>タイトル</td>
               <td>登録日</td>
             </tr>
+            @foreach ($books as $book)
             <tr>
-              <td>1</td>
-              <td>sam_pic</td>
-              <td>titlea</td>
-              <td>2000/01/01</td>
+              <td>{{$book->id}}</td>
+              <td>{{$book->picture}}</td>
+              <td>{{$book->title}}</td>
+              <td>{{$book->created_at}}</td>
             </tr>
-            <tr>
-              <td>2</td>
-              <td>sam_pic</td>
-              <td>titlea</td>
-              <td>2000/01/01</td>
-            </tr>
+            @endforeach
           </table>
         </div>
       </div>
