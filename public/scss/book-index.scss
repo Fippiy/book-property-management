@@ -1,0 +1,36 @@
+.index-content {
+  display: flex;
+  .books-list {
+    margin: 0 auto;
+    width: 80%;
+    &__title {
+      font-size: 22px;
+      padding: 5px 10px;
+    }
+    .book-table{
+      font-size:14px;
+      text-align: center;
+      tr {
+        &:hover {
+          background: #eeeeee;
+        }
+      }
+      td {
+        height: 90px;
+        line-height: 90px;
+        text-align: center;
+        border: 1px solid #bbb;
+        &:first-child {
+          width: 50px;
+          background: #f4f4fd;
+        }
+        &:nth-of-type(2) {
+          width: 50px;
+        }
+        &:nth-of-type(3) {
+          width: 500px;
+        }
+      }
+    }
+  }
+}
