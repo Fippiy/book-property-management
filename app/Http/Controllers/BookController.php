@@ -25,7 +25,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+      return view('book.create');
     }
 
     /**
@@ -36,7 +36,11 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $book = new Book;
+      $form = $request->all();
+      unset($form['_token']);
+      $book->fill($form)->save();
+      return redirect('/book');
     }
 
     /**
