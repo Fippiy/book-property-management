@@ -33,8 +33,11 @@
         </table>
       </div>
       <a href="/book/{{$book->id}}/edit">編集</a>
-      ・
-      <a href="">削除</a>
+      <form action="/book/{{$book->id}}" method="post">
+        {{ csrf_field() }}
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="submit" value="削除">
+      </form>
     </div>
   </div>
 @endsection
