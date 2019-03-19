@@ -28,7 +28,7 @@
           <tr>
             <td>{{$book->id}}</td>
             <td>{{$book->picture}}</td>
-            <td><a href="/book/{{$book->id}}/edit">{{$book->title}}</a></td>
+            <td><a href="/book/{{$book->id}}">{{$book->title}}</a></td>
             <td>{{$book->created_at}}</td>
           </tr>
           @endforeach
