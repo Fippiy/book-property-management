@@ -25,7 +25,7 @@ class BookController extends Controller
      */
     public function create()
     {
-      return view('book.form');
+      return view('book.create');
     }
 
     /**
@@ -62,7 +62,8 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        //
+      $book = Bookdata::find($id);
+      return view('book.edit', ['form' => $book]);
     }
 
     /**
@@ -74,7 +75,11 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $book = Bookdata::find($id);
+      $form = $request->all();
+      unset($form['_token']);
+      $book->fill($form)->save();
+      return redirect('/book');
     }
 
     /**
