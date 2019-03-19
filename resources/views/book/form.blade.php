@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'AddBook')
+@section('title', 'Form')
 
 @section('stylesheet')
   <link href="/css/sidebar.css" rel="stylesheet" type="text/css">
