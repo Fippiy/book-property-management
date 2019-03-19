@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
+use App\Bookdata;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -14,7 +14,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::all();
+        $books = Bookdata::all();
         return view('book.index', ['books' => $books]);
     }
 
@@ -36,7 +36,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-      $book = new Book;
+      $book = new Bookdata;
       $form = $request->all();
       unset($form['_token']);
       $book->fill($form)->save();
