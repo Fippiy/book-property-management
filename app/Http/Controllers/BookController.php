@@ -51,7 +51,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        //
+      $book = Bookdata::find($id);
+      return view('book.show', ['book' => $book]);
     }
 
     /**

@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'TopPage')
+@section('title', 'ShowPage')
 
 @section('stylesheet')
   <link href="/css/sidebar.css" rel="stylesheet" type="text/css">
@@ -14,7 +14,7 @@
     @endcomponent
     <div class="books-list">
       <div class="books-list__title">
-        全タイトル
+        詳細ページ
       </div>
       <div class="book-table">
         <table class="book-table__list">
@@ -24,16 +24,17 @@
             <td>タイトル</td>
             <td>登録日</td>
           </tr>
-          @foreach ($books as $book)
           <tr>
             <td>{{$book->id}}</td>
             <td>{{$book->picture}}</td>
-            <td><a href="/book/{{$book->id}}">{{$book->title}}</a></td>
+            <td>{{$book->title}}</td>
             <td>{{$book->created_at}}</td>
           </tr>
-          @endforeach
         </table>
       </div>
+      <a href="/book/{{$book->id}}/edit">編集</a>
+      ・
+      <a href="">削除</a>
     </div>
   </div>
 @endsection
