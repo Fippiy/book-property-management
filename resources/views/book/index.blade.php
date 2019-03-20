@@ -19,17 +19,17 @@
       <div class="book-table">
         <table class="book-table__list">
           <tr>
-            <td>id</td>
-            <td>写真</td>
-            <td>タイトル</td>
-            <td>登録日</td>
+            <th>id</th>
+            <th>写真</th>
+            <th>タイトル</th>
+            <th>登録日</th>
           </tr>
           @foreach ($books as $book)
           <tr>
             <td>{{$book->id}}</td>
-            <td>{{$book->picture}}</td>
+            <td><img src="/storage/book_images/{{$book->id}}.jpg"></td>
             <td><a href="/book/{{$book->id}}">{{$book->title}}</a></td>
-            <td>{{$book->created_at}}</td>
+            <td>{{$book->created_at->format('y/m/d')}}</td>
           </tr>
           @endforeach
         </table>
