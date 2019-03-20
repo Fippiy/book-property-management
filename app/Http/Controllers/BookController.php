@@ -102,8 +102,9 @@ class BookController extends Controller
 
     public function search(Request $request)
     {
-      $book = Bookdata::where('title', $request->input)->first();
-      $param = ['input' => $request->input, 'book' => $book];
+      $title = $request->input;
+      $books = Bookdata::where('title', 'like', "%{$title}%")->get();
+      $param = ['input' => $title, 'books' => $books];
       return view('book.find', $param);
     }
 }

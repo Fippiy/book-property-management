@@ -14,16 +14,13 @@
     @endcomponent
     <div class="books-list">
       <div class="books-list__title">
-        検索
+        検索ページ
       </div>
-
     <form action="/book/find" method="post">
       {{ csrf_field() }}
       <input type="text" name="input" value="{{$input}}">
       <input type="submit" value="find">
     </form>
-
-
       <div class="book-table">
         <table class="book-table__list">
           <tr>
@@ -32,19 +29,20 @@
             <td>タイトル</td>
             <td>登録日</td>
           </tr>
-          @if (isset($book))
-            <tr>
-              <td>{{$book->id}}</td>
-              <td>{{$book->picture}}</td>
-              <td><a href="/book/{{$book->id}}">{{$book->title}}</a></td>
-              <td>{{$book->created_at}}</td>
-            </tr>
+          @if (isset($books))
+            @foreach ($books as $book)
+              <tr>
+                <td>{{$book->id}}</td>
+                <td>{{$book->picture}}</td>
+                <td><a href="/book/{{$book->id}}">{{$book->title}}</a></td>
+                <td>{{$book->created_at}}</td>
+              </tr>
+            @endforeach
           @endif
         </table>
       </div>
     </div>
   </div>
-
 @endsection
 
 @section('footer')
