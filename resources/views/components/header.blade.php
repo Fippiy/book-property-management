@@ -11,9 +11,11 @@
     <div class="tab mypage">
       マイページ
     </div>
-    <div class="tab search">
-      検索
-    </div>
+    <a href="/book/find">
+      <div class="tab search">
+        検索
+      </div>
+    </a>
     <a href="/book/create">
       <div class="tab entry">
         新規登録
