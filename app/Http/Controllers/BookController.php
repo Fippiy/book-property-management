@@ -94,4 +94,16 @@ class BookController extends Controller
       Bookdata::find($id)->delete();
       return redirect('/book');
     }
+
+    public function find(Request $request)
+    {
+      return view('book.find', ['input' => '']);
+    }
+
+    public function search(Request $request)
+    {
+      $book = Bookdata::where('title', $request->input)->first();
+      $param = ['input' => $request->input, 'book' => $book];
+      return view('book.find', $param);
+    }
 }
