@@ -40,7 +40,9 @@ class BookController extends Controller
       $form = $request->all();
       unset($form['_token']);
       $book->fill($form)->save();
-      $request->picture->storeAs('public/book_images', $book->id . '.jpg');
+      if (isset($form['picture'])) {
+        $request->picture->storeAs('public/book_images', $book->id . '.jpg');
+      }
       return redirect('/book');
     }
 
