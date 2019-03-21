@@ -109,7 +109,15 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-      Bookdata::find($id)->delete();
+      // 削除レコード取得
+      $deleteBook = Bookdata::find($id);
+      // 写真削除情報取得
+      $deletename = $deleteBook->picture;
+      $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
+      // 写真削除
+      \File::delete($pathdel);
+      // レコード削除
+      $deleteBook->delete();
       return redirect('/book');
     }
 
