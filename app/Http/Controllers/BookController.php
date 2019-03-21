@@ -36,13 +36,28 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+      // 新規投稿レコード
       $book = new Bookdata;
+      // リクエストデータ受取
       $form = $request->all();
+      // フォームトークン削除
       unset($form['_token']);
-      $book->fill($form)->save();
+      // 画像データ情報取得
+      $file = $request->file('picture');
       if (isset($form['picture'])) {
-        $request->picture->storeAs('public/book_images', $book->id . '.jpg');
+        // 拡張子取得
+        $ext = $file->getClientOriginalExtension();
+        // ファイル保存用トークン発行
+        $file_token = str_random(32);
+        // 画像ファイル名作成
+        $pictureFile = $file_token . "." . $ext;
+        // 画像ファイル名指定
+        $form['picture'] = $pictureFile;
+        // 画像ファイルをstorage保存
+        $request->picture->storeAs('public/book_images', $pictureFile);
       }
+      // DB保存
+      $book->fill($form)->save();
       return redirect('/book');
     }
 
