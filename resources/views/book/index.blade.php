@@ -27,7 +27,13 @@
           @foreach ($books as $book)
           <tr>
             <td>{{$book->id}}</td>
-            <td><img src="/storage/book_images/{{$book->id}}.jpg"></td>
+            <td>
+              @if (isset($book->picture))
+                <img src="/storage/book_images/{{$book->picture}}">
+              @else
+                No Image
+              @endif
+            </td>
             <td><a href="/book/{{$book->id}}">{{$book->title}}</a></td>
             <td>{{$book->created_at->format('y/m/d')}}</td>
           </tr>
