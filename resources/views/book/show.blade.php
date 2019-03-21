@@ -26,7 +26,13 @@
           </tr>
           <tr>
             <td>{{$book->id}}</td>
-            <td>{{$book->picture}}</td>
+            <td>
+              @if (isset($book->picture))
+                <img src="/storage/book_images/{{$book->id}}.jpg">
+              @else
+                No Image
+              @endif
+            </td>
             <td>{{$book->title}}</td>
             <td>{{$book->created_at}}</td>
           </tr>
