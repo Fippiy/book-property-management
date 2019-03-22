@@ -99,23 +99,18 @@ class BookController extends Controller
       $form = $request->all();
       unset($form['_token']);
 
-      // フォーム画像情報取得
-      // 変更なければ処理なし
-      // 変更あり・削除時に削除処理
-      // 変更時に新データアップロード
-
-      // 画像アップロード処理
-      // eval(\Psy\sh());
+      // 写真削除処理
       if (isset($form['picture'])) {
-        // 写真削除処理
+        // 削除写真名取得
+        $deletename = $book->picture;
+        // 写真削除
+        $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
+        \File::delete($pathdel);
+        // 削除のみ時
         if ($form['picture'] == "no-picture") {
-          // 削除写真名取得
-          $deletename = $book->picture;
-          // 写真削除
-          $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
-          \File::delete($pathdel);
           // レコード更新処理
           $form['picture'] = null;
+        // 変更後画像がある時
         } else {
           // 写真追加処理
           // 画像情報取得
