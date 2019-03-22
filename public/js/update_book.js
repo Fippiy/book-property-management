@@ -9,8 +9,13 @@ $(function() {
     }
   });
 
-  // 画像処理
-
+  // --画像処理--
+  // 画像削除
+  $(".delete-picture").click(function() {
+    $('.delete-picture').after("<input type='hidden' id='no-picture' name='picture' value='no-picture'>");
+    $('.afterimage').html("No Image");
+  });
+  // 画像追加処理
   // アップロードするファイルを選択
   $('input[type=file]').change(function() {
     var file = $(this).prop('files')[0];
@@ -29,5 +34,7 @@ $(function() {
       $('.afterimage').html(img_src);
     }
     reader.readAsDataURL(file);
+    // 削除フラグがある場合は解除
+    $('#no-picture').remove();
   });
 });
