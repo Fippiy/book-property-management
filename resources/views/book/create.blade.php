@@ -12,7 +12,7 @@
     <!-- サイドバー(コンポーネント) -->
     @component('components.sidebar')
     @endcomponent
-    <form action="/book" method="post" class="book-form" enctype="multipart/form-data" >
+    <form action="/book" method="post" class="book-form" enctype="multipart/form-data">
       {{ csrf_field() }}
       <table>
       <tr><th>タイトル</th><td><input type="text" name="title" value="{{old('title')}}"></td></tr>

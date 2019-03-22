@@ -43,8 +43,9 @@ class BookController extends Controller
       // フォームトークン削除
       unset($form['_token']);
       // 画像データ情報取得
-      $file = $request->file('picture');
       if (isset($form['picture'])) {
+        // 画像情報取得
+        $file = $request->file('picture');
         // 拡張子取得
         $ext = $file->getClientOriginalExtension();
         // ファイル保存用トークン発行
@@ -97,6 +98,42 @@ class BookController extends Controller
       $book = Bookdata::find($id);
       $form = $request->all();
       unset($form['_token']);
+
+      // フォーム画像情報取得
+      // 変更なければ処理なし
+      // 変更あり・削除時に削除処理
+      // 変更時に新データアップロード
+
+      // 画像アップロード処理
+      // eval(\Psy\sh());
+      if (isset($form['picture'])) {
+        // 写真削除処理
+        if ($form['picture'] == "no-picture") {
+          // 削除写真名取得
+          $deletename = $book->picture;
+          // 写真削除
+          $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
+          \File::delete($pathdel);
+          // レコード更新処理
+          $form['picture'] = null;
+        } else {
+          // 写真追加処理
+          // 画像情報取得
+          $file = $request->file('picture');
+          // 拡張子取得
+          $ext = $file->getClientOriginalExtension();
+          // ファイル保存用トークン発行
+          $file_token = str_random(32);
+          // 画像ファイル名作成
+          $pictureFile = $file_token . "." . $ext;
+          // 画像ファイル名指定
+          $form['picture'] = $pictureFile;
+          // 画像ファイルをstorage保存
+          $request->picture->storeAs('public/book_images', $pictureFile);
+        }
+      }
+
+      // レコードアップデート
       $book->fill($form)->save();
       return redirect('/book');
     }
