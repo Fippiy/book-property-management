@@ -16,9 +16,9 @@ Route::get('/', function () {
   return view('index');
 });
 
-Route::get('/book/find', 'BookController@find');
-Route::post('/book/find', 'BookController@search');
-Route::resource('book', 'BookController');
+Route::get('/book/find', 'BookController@find')->middleware('auth');
+Route::post('/book/find', 'BookController@search')->middleware('auth');
+Route::resource('book', 'BookController')->middleware('auth');
 
 Auth::routes();
 
