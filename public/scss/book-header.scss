@@ -4,13 +4,24 @@
     background: #7dc7ea;
     height: 10px;
   }
-  &__title {
-    height: 85px;
-    width: 480px;
-    padding: 0 20px 0;
-    line-height: 85px;
-    .title-name {
-      font-size: 26px;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    &--title {
+      height: 85px;
+      width: 480px;
+      padding: 0 20px 0;
+      line-height: 85px;
+      .title-name {
+        font-size: 26px;
+      }
+    }
+    &--navbar {
+      text-align: right;
+      height: 85px;
+      width: 480px;
+      padding: 0 20px 0;
+      line-height: 85px;
     }
   }
   &__breadcrumbs {

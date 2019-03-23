@@ -5,14 +5,25 @@
   background: #7dc7ea;
   height: 10px;
 }
-.book-header__title {
+.book-header__header {
+  display: flex;
+  justify-content: space-between;
+}
+.book-header__header--title {
   height: 85px;
   width: 480px;
   padding: 0 20px 0;
   line-height: 85px;
 }
-.book-header__title .title-name {
+.book-header__header--title .title-name {
   font-size: 26px;
+}
+.book-header__header--navbar {
+  text-align: right;
+  height: 85px;
+  width: 480px;
+  padding: 0 20px 0;
+  line-height: 85px;
 }
 .book-header__breadcrumbs {
   font-size: 12px;
