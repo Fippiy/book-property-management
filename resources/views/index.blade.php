@@ -17,10 +17,10 @@
       <div class="toppage-contents__main--right-content">
         <div class="select-menu">
           <div class="select-menu__sign-up">
-            <a href="">新規登録</a>
+            <a href="./register">新規登録</a>
           </div>
           <div class="select-menu__sign-in">
-            <a href="">ログイン</a>
+            <a href="./login">ログイン</a>
           </div>
         </div>
       </div>
