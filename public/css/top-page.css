@@ -1,0 +1,38 @@
+body {
+  background-image: url(../image/library.jpg);
+}
+a {
+  text-decoration: none;
+}
+.toppage-contents__top {
+  height: 200px;
+  width: 100%;
+  text-align: center;
+  line-height: 200px;
+}
+.toppage-contents__top .title {
+  border-radius: 30px;
+  background: rgba(184, 134, 11, 0.8);
+}
+.toppage-contents__main {
+  display: flex;
+}
+.toppage-contents__main--left-content {
+  width: 50%;
+}
+.toppage-contents__main--right-content {
+  margin: 0 auto;
+}
+.toppage-contents__main--right-content .select-menu a {
+  background: rgba(184, 134, 11, 0.8);
+  color: #fff;
+  font-size: 30px;
+  border-radius: 10px;
+  padding: 10px 100px;
+}
+.toppage-contents__main--right-content .select-menu__sign-up {
+  margin-top: 100px;
+}
+.toppage-contents__main--right-content .select-menu__sign-in {
+  margin-top: 100px;
+}
