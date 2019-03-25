@@ -29,7 +29,7 @@
             <td>{{$book->id}}</td>
             <td>
               @if (isset($book->picture))
-                <img src="/storage/book_images/{{$book->picture}}">
+                <img src="{{$book->picture}}">
               @else
                 No Image
               @endif
