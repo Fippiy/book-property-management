@@ -45,6 +45,7 @@ class BookController extends Controller
       unset($form['_token']);
       // 画像データ有無判定
       if (isset($form['picture'])) {
+        \Debugbar::info($_FILES['picture']);
         // 画像データ情報取得
         // ファイル名
         $picture_name = $_FILES['picture']['name'];
@@ -87,6 +88,11 @@ class BookController extends Controller
 
           //バケット名を指定
           $bucket = getenv('S3_BUCKET_NAME')?: die('No "S3_BUCKET_NAME" config var in found in env!');
+          \Debugbar::info($_FILES['picture']);
+          \Debugbar::info($tmpname);
+          \Debugbar::info($new_filename);
+          \Debugbar::info($s3client);
+          \Debugbar::info($bucket);
 
           //アップロードするファイルを用意
           $image = fopen($tmpname,'rb');
