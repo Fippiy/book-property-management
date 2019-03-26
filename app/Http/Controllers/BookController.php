@@ -45,13 +45,11 @@ class BookController extends Controller
       unset($form['_token']);
       // 画像データ有無判定
       if (isset($form['picture'])) {
-        \Debugbar::info($_FILES['picture']);
-        // 画像データ情報取得
-        // ファイル名
+        // ファイル名取得
         $picture_name = $_FILES['picture']['name'];
         // 拡張子取得
         $ext = substr($_FILES['picture']['name'], strrpos($_FILES['picture']['name'], '.') + 1);
-        // 画像の判定
+        // 画像ファイルの判定
         if(strtolower($ext) !== 'png' && strtolower($ext) !== 'jpg' && strtolower($ext) !== 'gif'){
             echo '画像以外のファイルが指定されています。画像ファイル(png/jpg/jpeg/gif)を指定して下さい';
             exit();
@@ -70,12 +68,9 @@ class BookController extends Controller
 
         } else {
           // ローカル以外は、S3にファイルアップロード
-          // まず、開発環境でS3をためす
-
           //読み込みの際のキーとなるS3上のファイルパスを作る
           $tmp_replace_name = str_replace('/tmp/','',$_FILES['picture']['tmp_name']);
           $tmpname = $_FILES['picture']['tmp_name'];
-          // $new_filename = 'bookimages/'.$tmpname.'.'.$ext;
           $new_filename = 'bookimages/'.$tmp_replace_name.'.'.$ext;
 
           //S3clientのインスタンス生成
@@ -90,18 +85,12 @@ class BookController extends Controller
 
           //バケット名を指定
           $bucket = getenv('S3_BUCKET_NAME')?: die('No "S3_BUCKET_NAME" config var in found in env!');
-          \Debugbar::info($_FILES['picture']);
-          \Debugbar::info($tmpname);
-          \Debugbar::info($new_filename);
-          \Debugbar::info($s3client);
-          \Debugbar::info($bucket);
-
           //アップロードするファイルを用意
           $image = fopen($tmpname,'rb');
 
           // //S3画像のアップロード
           $result = $s3client->putObject([
-              'ACL' => 'public-read',
+              // 'ACL' => 'public-read',
               'Bucket' => $bucket,
               'Key' => $new_filename,
               'Body' => $image,
@@ -110,11 +99,9 @@ class BookController extends Controller
 
           // 画像読み取り用のパスを返す
           $path = $result['ObjectURL'];
-
           // パスをDBに保存してここを呼ぶことで画像表示
           $form['picture'] = $path;
         }
-
       }
       // DB保存
       $book->fill($form)->save();
