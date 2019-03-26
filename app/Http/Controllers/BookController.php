@@ -90,7 +90,7 @@ class BookController extends Controller
 
           // //S3画像のアップロード
           $result = $s3client->putObject([
-              // 'ACL' => 'public-read',
+              'ACL' => 'public-read',
               'Bucket' => $bucket,
               'Key' => $new_filename,
               'Body' => $image,
