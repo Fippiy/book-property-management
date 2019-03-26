@@ -76,7 +76,7 @@ class BookController extends Controller
           $tmp_replace_name = str_replace('/tmp/','',$_FILES['picture']['tmp_name']);
           $tmpname = $_FILES['picture']['tmp_name'];
           // $new_filename = 'bookimages/'.$tmpname.'.'.$ext;
-          $new_filename = 'bookimages'.$tmp_replace_name.'.'.$ext;
+          $new_filename = 'bookimages/'.$tmp_replace_name.'.'.$ext;
 
           //S3clientのインスタンス生成
           $s3client = S3Client::factory([
