@@ -45,63 +45,34 @@ class BookController extends Controller
       unset($form['_token']);
       // 画像データ有無判定
       if (isset($form['picture'])) {
-        // ファイル名取得
-        $picture_name = $_FILES['picture']['name'];
-        // 拡張子取得
-        $ext = substr($_FILES['picture']['name'], strrpos($_FILES['picture']['name'], '.') + 1);
+        // 画像保存ディレクトリ設定
+        $save_directory = "book_images";
+
+        // 画像情報
+        $picture_name = $_FILES['picture']['name']; //ファイル名
+        $picture_ext = substr($picture_name, strrpos($picture_name, '.') + 1); //拡張子
+        $picture_tmp_name = $_FILES['picture']['tmp_name']; //tmp_name
+        $picture_error = $_FILES['picture']['error']; //errorコード
+
         // 画像ファイルの判定
-        if(strtolower($ext) !== 'png' && strtolower($ext) !== 'jpg' && strtolower($ext) !== 'gif'){
-            echo '画像以外のファイルが指定されています。画像ファイル(png/jpg/jpeg/gif)を指定して下さい';
-            exit();
-        } elseif ($_FILES['picture']['error'] == 1){
-          echo '画像アップロードでエラーが発生しました';
-          exit();
-        }
+        picture_check($picture_ext,$picture_error);
 
         // 開発環境で画像保存先を変更
         if ( app()->isLocal() || app()->runningUnitTests() ) {
-          // ローカル
-          // 画像ファイルをstorage保存
-          $request->picture->storeAs('public/book_images', $picture_name.".".$ext);
-          // 保存先のURLを生成
-          $form['picture'] = "/storage/book_images/".$picture_name.".".$ext;
+        // if ( app()->runningUnitTests() ) {
+          // ローカル保存処理
+          $request->picture->storeAs('public/'.$save_directory, $picture_name.".".$picture_ext); // 画像ファイルをstorage保存
+          $picture_upload = "/storage/".$save_directory."/".$picture_name.".".$picture_ext; //画像保存パス
 
         } else {
-          // ローカル以外は、S3にファイルアップロード
-          //読み込みの際のキーとなるS3上のファイルパスを作る
-          $tmp_replace_name = str_replace('/tmp/','',$_FILES['picture']['tmp_name']);
-          $tmpname = $_FILES['picture']['tmp_name'];
-          $new_filename = 'bookimages/'.$tmp_replace_name.'.'.$ext;
+          // 本番環境保存処理
+          // S3インスタンス生成
+          $s3settings = s3settings();
 
-          //S3clientのインスタンス生成
-          $s3client = S3Client::factory([
-              'credentials' => [
-                  'key' => env('AWS_ACCESS_KEY_ID'),
-                  'secret' => env('AWS_SECRET_ACCESS_KEY'),
-              ],
-              'region' => env('AWS_DEFAULT_REGION'),
-              'version' => 'latest',
-          ]);
-
-          //バケット名を指定
-          $bucket = getenv('S3_BUCKET_NAME')?: die('No "S3_BUCKET_NAME" config var in found in env!');
-          //アップロードするファイルを用意
-          $image = fopen($tmpname,'rb');
-
-          // //S3画像のアップロード
-          $result = $s3client->putObject([
-              'ACL' => 'public-read',
-              'Bucket' => $bucket,
-              'Key' => $new_filename,
-              'Body' => $image,
-              'ContentType' => mime_content_type($_FILES['picture']['tmp_name']),
-          ]);
-
-          // 画像読み取り用のパスを返す
-          $path = $result['ObjectURL'];
-          // パスをDBに保存してここを呼ぶことで画像表示
-          $form['picture'] = $path;
+          // S3アップロード処理
+          $picture_upload = picture_upload($save_directory,$picture_name,$picture_tmp_name,$picture_ext,$s3settings);
         }
+        $form['picture'] = $picture_upload; //画像パスをDB保存値に設定
       }
       // DB保存
       $book->fill($form)->save();
