@@ -59,7 +59,7 @@ class BookController extends Controller
 
         // 開発環境で画像保存先を変更
         if ( app()->isLocal() || app()->runningUnitTests() ) {
-        // if ( app()->runningUnitTests() ) {
+        // if ( app()->runningUnitTests() ) {g
           // ローカル保存処理
           $request->picture->storeAs('public/'.$save_directory, $picture_name); // 画像ファイルをstorage保存
           $picture_upload = "/storage/".$save_directory."/".$picture_name; //画像保存パス
@@ -161,9 +161,9 @@ class BookController extends Controller
       // 画像保存ディレクトリ設定
       $save_directory = "book_images";
       // 削除レコード取得
-      $deleteBook = Bookdata::find($id);
+      $delete_book = Bookdata::find($id);
       // 写真削除情報取得
-      $deletename = str_replace('/storage/'.$save_directory.'/','',$deleteBook->picture);
+      $deletename = str_replace('/storage/'.$save_directory.'/','',$delete_book->picture);
 
       $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
       // 写真削除
