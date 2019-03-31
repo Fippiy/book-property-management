@@ -122,31 +122,48 @@ class BookController extends Controller
 
       // 写真変更がある場合
       if (isset($form['picture'])) {
-        // 写真削除情報取得
-        $deletename = str_replace('/storage/'.$save_directory.'/','',$book->picture);
-        $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
-        // 写真削除
-        \File::delete($pathdel);
+        // 削除処理実施
+        // 開発環境で画像保存先を変更
+        if ( app()->isLocal() || app()->runningUnitTests() ) {
+          // 写真削除情報取得
+          $deletename = str_replace('/storage/'.$save_directory.'/','',$book->picture);
+          $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
+          // 写真削除
+          \File::delete($pathdel);
+        } else {
+          // 本番環境削除処理
+          // S3インスタンス生成
+          $s3settings = s3settings();
+          // S3削除処理
+          $picture_delete = picture_delete($save_directory,$book,$s3settings);
+        }
         // 削除のみか判定
         if ($form['picture'] == "no-picture") {
           // レコードをnull化
           $picture_upload = null;
         // 画像変更時
         } else {
-        // 写真追加処理
-        // 変更画像情報取得
-        $picture_name = $_FILES['picture']['name']; //ファイル名
-        $picture_ext = substr($picture_name, strrpos($picture_name, '.') + 1); //拡張子
-        $picture_tmp_name = $_FILES['picture']['tmp_name']; //tmp_name
-        $picture_error = $_FILES['picture']['error']; //errorコード
+          // 写真追加処理
+          // 変更画像情報取得
+          $picture_name = $_FILES['picture']['name']; //ファイル名
+          $picture_ext = substr($picture_name, strrpos($picture_name, '.') + 1); //拡張子
+          $picture_tmp_name = $_FILES['picture']['tmp_name']; //tmp_name
+          $picture_error = $_FILES['picture']['error']; //errorコード
 
-        // 画像ファイルの判定
-        picture_check($picture_ext,$picture_error);
-        // ローカル保存処理
-        $request->picture->storeAs('public/'.$save_directory, $picture_name); // 画像ファイルをstorage保存
-        $picture_upload = "/storage/".$save_directory."/".$picture_name; //画像保存パス
-
-
+          // 画像ファイルの判定
+          picture_check($picture_ext,$picture_error);
+          // 開発環境で画像保存先を変更
+          if ( app()->isLocal() || app()->runningUnitTests() ) {
+            // ローカル保存処理
+            $request->picture->storeAs('public/'.$save_directory, $picture_name); // 画像ファイルをstorage保存
+            $picture_upload = "/storage/".$save_directory."/".$picture_name; //画像保存パス
+          } else {
+            // 本番環境画像追加処理
+            // S3インスタンス生成
+            $s3settings = s3settings();
+            // S3アップロード処理
+            $picture_upload = picture_upload($save_directory,$picture_name,$picture_tmp_name,$picture_ext,$s3settings);
+          }
         }
         $form['picture'] = $picture_upload; //画像パスをDB保存値に設定
       }
@@ -168,20 +185,24 @@ class BookController extends Controller
       $save_directory = "book_images";
       // 削除レコード取得
       $delete_book = Bookdata::find($id);
-      // 開発環境で画像保存先を変更
-      if ( app()->isLocal() || app()->runningUnitTests() ) {
-        // 写真削除情報取得
-        $deletename = str_replace('/storage/'.$save_directory.'/','',$delete_book->picture);
 
-        $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
-        // 写真削除
-        \File::delete($pathdel);
-      } else {
-        // 本番環境削除処理
-        // S3インスタンス生成
-        $s3settings = s3settings();
-        // S3削除処理
-        $picture_delete = picture_delete($save_directory,$delete_book,$s3settings);
+      // 写真削除がある場合
+      if (isset($delete_book['picture'])) {
+        // 開発環境で画像保存先を変更
+        if ( app()->isLocal() || app()->runningUnitTests() ) {
+          // 写真削除情報取得
+          $deletename = str_replace('/storage/'.$save_directory.'/','',$delete_book->picture);
+
+          $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
+          // 写真削除
+          \File::delete($pathdel);
+        } else {
+          // 本番環境削除処理
+          // S3インスタンス生成
+          $s3settings = s3settings();
+          // S3削除処理
+          $picture_delete = picture_delete($save_directory,$delete_book,$s3settings);
+        }
       }
       // レコード削除
       $delete_book->delete();
