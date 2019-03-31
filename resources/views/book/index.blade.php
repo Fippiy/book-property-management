@@ -1,4 +1,3 @@
-<?php $action = explode('@', Route::currentRouteAction())[1]; ?>
 @extends('layouts.layout')
 
 @section('title', 'TopPage')
@@ -9,12 +8,17 @@
 @endsection
 
 @section('content')
-  <?php echo $action ?>
   <div class="index-content">
     <!-- サイドバー(コンポーネント) -->
     @component('components.sidebar')
     @endcomponent
-    @include('components.book',['form_title' => '全タイトル','action' => $action])
+
+    <div class="books-list">
+      <div class="books-list__title">
+        全タイトル
+      </div>
+      @include('components.books_list')
+    </div>
 
   </div>
 @endsection

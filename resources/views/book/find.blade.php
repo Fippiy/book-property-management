@@ -1,4 +1,3 @@
-<?php $action = explode('@', Route::currentRouteAction())[1]; ?>
 @extends('layouts.layout')
 
 @section('title', 'FindPage')
@@ -13,7 +12,21 @@
     <!-- サイドバー(コンポーネント) -->
     @component('components.sidebar')
     @endcomponent
-    @include('components.book',['form_title' => '検索','action' => $action])
+
+    <div class="books-list">
+      <div class="books-list__title">
+        検索
+      </div>
+        <form class="book-find" action="/book/find" method="post">
+          {{ csrf_field() }}
+          <h2 class="book-find__word">検索ワードを入力して下さい</h2>
+          <div class="book-find__input">
+            <input type="text" class="book-find__input--text" name="input" value="{{$input}}">
+            <input type="submit" class="book-find__input--submit" value="検索">
+          </div>
+        </form>
+      @include('components.books_list')
+    </div>
   </div>
 @endsection
 
