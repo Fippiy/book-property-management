@@ -123,19 +123,22 @@ class BookController extends Controller
       // 写真変更がある場合
       if (isset($form['picture'])) {
         // 削除処理実施
-        // 開発環境で画像保存先を変更
-        if ( app()->isLocal() || app()->runningUnitTests() ) {
-          // 写真削除情報取得
-          $deletename = str_replace('/storage/'.$save_directory.'/','',$book->picture);
-          $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
-          // 写真削除
-          \File::delete($pathdel);
-        } else {
-          // 本番環境削除処理
-          // S3インスタンス生成
-          $s3settings = s3settings();
-          // S3削除処理
-          $picture_delete = picture_delete($save_directory,$book,$s3settings);
+        // 既存画像がない時は削除処理不要
+        if ($book['picture'] != null) {
+          // 開発環境で画像保存先を変更
+          if ( app()->isLocal() || app()->runningUnitTests() ) {
+            // 写真削除情報取得
+            $deletename = str_replace('/storage/'.$save_directory.'/','',$book->picture);
+            $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
+            // 写真削除
+            \File::delete($pathdel);
+          } else {
+            // 本番環境削除処理
+            // S3インスタンス生成
+            $s3settings = s3settings();
+            // S3削除処理
+            $picture_delete = picture_delete($save_directory,$book,$s3settings);
+          }
         }
         // 削除のみか判定
         if ($form['picture'] == "no-picture") {
