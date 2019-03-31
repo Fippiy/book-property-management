@@ -59,10 +59,9 @@ class BookController extends Controller
 
         // 開発環境で画像保存先を変更
         if ( app()->isLocal() || app()->runningUnitTests() ) {
-        // if ( app()->runningUnitTests() ) {
           // ローカル保存処理
-          $request->picture->storeAs('public/'.$save_directory, $picture_name.".".$picture_ext); // 画像ファイルをstorage保存
-          $picture_upload = "/storage/".$save_directory."/".$picture_name.".".$picture_ext; //画像保存パス
+          $request->picture->storeAs('public/'.$save_directory, $picture_name); // 画像ファイルをstorage保存
+          $picture_upload = "/storage/".$save_directory."/".$picture_name; //画像保存パス
 
         } else {
           // 本番環境保存処理
@@ -158,15 +157,27 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
+      // 画像保存ディレクトリ設定
+      $save_directory = "book_images";
       // 削除レコード取得
-      $deleteBook = Bookdata::find($id);
-      // 写真削除情報取得
-      $deletename = $deleteBook->picture;
-      $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
-      // 写真削除
-      \File::delete($pathdel);
+      $delete_book = Bookdata::find($id);
+      // 開発環境で画像保存先を変更
+      if ( app()->isLocal() || app()->runningUnitTests() ) {
+        // 写真削除情報取得
+        $deletename = str_replace('/storage/'.$save_directory.'/','',$delete_book->picture);
+
+        $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
+        // 写真削除
+        \File::delete($pathdel);
+      } else {
+        // 本番環境削除処理
+        // S3インスタンス生成
+        $s3settings = s3settings();
+        // S3削除処理
+        $picture_delete = picture_delete($save_directory,$delete_book,$s3settings);
+      }
       // レコード削除
-      $deleteBook->delete();
+      $delete_book->delete();
       return redirect('/book');
     }
 
