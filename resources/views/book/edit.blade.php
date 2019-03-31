@@ -44,7 +44,7 @@
                 <td>編集後</td>
                 <td class="afterimage">
                   @if (isset($form->picture))
-                    <img src="/storage/book_images/{{$form->picture}}" width="100px">
+                    <img src="{{$form->picture}}" width="100px">
                   @else
                     No Image
                   @endif
@@ -56,7 +56,7 @@
                 <td>編集前</td>
                 <td>
                   @if (isset($form->picture))
-                    <img src="/storage/book_images/{{$form->picture}}" width="100px">
+                    <img src="{{$form->picture}}" width="100px">
                   @else
                     No Image
                   @endif
