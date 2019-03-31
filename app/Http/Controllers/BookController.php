@@ -58,8 +58,7 @@ class BookController extends Controller
         picture_check($picture_ext,$picture_error);
 
         // 開発環境で画像保存先を変更
-        // if ( app()->isLocal() || app()->runningUnitTests() ) {
-        if ( app()->runningUnitTests() ) {
+        if ( app()->isLocal() || app()->runningUnitTests() ) {
           // ローカル保存処理
           $request->picture->storeAs('public/'.$save_directory, $picture_name); // 画像ファイルをstorage保存
           $picture_upload = "/storage/".$save_directory."/".$picture_name; //画像保存パス
@@ -163,9 +162,7 @@ class BookController extends Controller
       // 削除レコード取得
       $delete_book = Bookdata::find($id);
       // 開発環境で画像保存先を変更
-      // if ( app()->isLocal() || app()->runningUnitTests() ) {
-      if ( app()->runningUnitTests() ) {
-
+      if ( app()->isLocal() || app()->runningUnitTests() ) {
         // 写真削除情報取得
         $deletename = str_replace('/storage/'.$save_directory.'/','',$delete_book->picture);
 
@@ -179,7 +176,6 @@ class BookController extends Controller
         // S3削除処理
         $picture_delete = picture_delete($save_directory,$delete_book,$s3settings);
       }
-      // eval(\Psy\sh());
       // レコード削除
       $delete_book->delete();
       return redirect('/book');

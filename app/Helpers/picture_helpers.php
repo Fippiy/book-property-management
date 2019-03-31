@@ -14,20 +14,22 @@ function picture_check($ext,$error) {
 
 function s3settings(){
   //S3関連共通処理
+  //バケット名を指定
+  $bucket = getenv('S3_BUCKET_NAME')?: die('No "S3_BUCKET_NAME" config var in found in env!');
+  //リージョン名指定
+  $region = env('AWS_DEFAULT_REGION');
   //S3clientのインスタンス生成
   $s3client = S3Client::factory([
       'credentials' => [
           'key' => env('AWS_ACCESS_KEY_ID'),
           'secret' => env('AWS_SECRET_ACCESS_KEY'),
       ],
-      'region' => env('AWS_DEFAULT_REGION'),
+      'region' => $region,
       'version' => 'latest',
   ]);
-  //バケット名を指定
-  $bucket = getenv('S3_BUCKET_NAME')?: die('No "S3_BUCKET_NAME" config var in found in env!');
 
   // 結果を引き渡し
-  return ['s3client'=>$s3client,'bucket'=>$bucket];
+  return ['s3client'=>$s3client,'bucket'=>$bucket,'region'=>$region];
 }
 
 // 画像アップロード処理
@@ -52,25 +54,15 @@ function picture_upload($directory,$name,$tmp_name,$ext,$s3) {
 }
 
 function picture_delete($directory,$book,$s3) {
-  // eval(\Psy\sh());
-  // 削除用キー生成
+  // 画像削除用キー生成
   $book_pass = $book["picture"];// DB保存パス
   $bucket = $s3["bucket"];//バケット名
-  $region = env('AWS_DEFAULT_REGION');//リージョン名
-  $delete_pass = "{.*".$bucket.".s3.".$region.".amazonaws.com/}";//削除テキスト生成
-  //$delete_passを含む先頭からの文字をDB保存パスから削除する
-  // $delete_key = preg_replace("{.*fippiy.s3.ap-northeast-1.amazonaws.com/}", "", $book_pass);
-  $delete_key = preg_replace("$delete_pass", "", $book_pass);
-  // eval(\Psy\sh());
-
-  // $delete_key = ;// 削除キー
-
-    // 'Key' => "book_images/private/var/folders/x2/96c_zgys1yvfp4905c063n_80000gn/T/phpJ8TnBx.jpg"
-
+  $region = $s3["region"];//リージョン名
+  $delete_pass = "{.*".$bucket.".s3.".$region.".amazonaws.com/}";//削除アドレス部生成
+  $delete_key = preg_replace("$delete_pass", "", $book_pass);// DB保存パスから$delete_pass部を削除
+  //削除キー指定によるS3データ削除実施
   $result = $s3["s3client"]->deleteObject([
     'Bucket' => $s3["bucket"],
     'Key' => $delete_key
   ]);
-  // eval(\Psy\sh());
-
 }
