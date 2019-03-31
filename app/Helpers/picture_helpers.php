@@ -36,7 +36,7 @@ function s3settings(){
 function picture_upload($directory,$name,$tmp_name,$ext,$s3) {
   //読み込みの際のキーとなるS3上のファイルパスを作る
   $tmp_replace_name = str_replace('tmp/','',$tmp_name);
-  $new_filename = $directory."/".$tmp_replace_name.'.'.$ext;
+  $new_filename = $directory.$tmp_replace_name.'.'.$ext;
   //アップロードするファイルを用意
   $image = fopen($tmp_name,'rb');
   //S3画像のアップロード
