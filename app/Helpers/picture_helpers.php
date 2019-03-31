@@ -34,22 +34,43 @@ function s3settings(){
 function picture_upload($directory,$name,$tmp_name,$ext,$s3) {
   //読み込みの際のキーとなるS3上のファイルパスを作る
   $tmp_replace_name = str_replace('/tmp/','',$tmp_name);
-  $new_filename = $directory.'/'.$tmp_replace_name.'.'.$ext;
+  $new_filename = $directory.$tmp_replace_name.'.'.$ext;
   //アップロードするファイルを用意
   $image = fopen($tmp_name,'rb');
   //S3画像のアップロード
   $result = $s3["s3client"]->putObject([
-      'ACL' => 'public-read',
-      'Bucket' => $s3["bucket"],
-      'Key' => $new_filename,
-      'Body' => $image,
-      'ContentType' => mime_content_type($tmp_name),
+    'ACL' => 'public-read',
+    'Bucket' => $s3["bucket"],
+    'Key' => $new_filename,
+    'Body' => $image,
+    'ContentType' => mime_content_type($tmp_name),
   ]);
+  // eval(\Psy\sh());
   // 画像読み取り用のパスを返す
   $path = $result['ObjectURL'];
   return $path;
 }
 
-function picture_delete() {
+function picture_delete($directory,$book,$s3) {
+  // eval(\Psy\sh());
+  // 削除用キー生成
+  $book_pass = $book["picture"];// DB保存パス
+  $bucket = $s3["bucket"];//バケット名
+  $region = env('AWS_DEFAULT_REGION');//リージョン名
+  $delete_pass = "{.*".$bucket.".s3.".$region.".amazonaws.com/}";//削除テキスト生成
+  //$delete_passを含む先頭からの文字をDB保存パスから削除する
+  // $delete_key = preg_replace("{.*fippiy.s3.ap-northeast-1.amazonaws.com/}", "", $book_pass);
+  $delete_key = preg_replace("$delete_pass", "", $book_pass);
+  // eval(\Psy\sh());
+
+  // $delete_key = ;// 削除キー
+
+    // 'Key' => "book_images/private/var/folders/x2/96c_zgys1yvfp4905c063n_80000gn/T/phpJ8TnBx.jpg"
+
+  $result = $s3["s3client"]->deleteObject([
+    'Bucket' => $s3["bucket"],
+    'Key' => $delete_key
+  ]);
+  // eval(\Psy\sh());
 
 }
