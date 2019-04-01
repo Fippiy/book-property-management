@@ -13,7 +13,7 @@ $(function() {
   // 画像削除
   $(".delete-picture").click(function() {
     $('.delete-picture').after("<input type='hidden' id='no-picture' name='picture' value='no-picture'>");
-    $('.afterimage').html("No Image");
+    $('.afterimage').html('<span class="form-input__picture--text">写真が削除されます</span>');
   });
   // 画像追加処理
   // アップロードするファイルを選択

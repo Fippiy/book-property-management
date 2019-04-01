@@ -148,6 +148,9 @@
 .index-content .books-list .book-new .form-contents .form-input__picture--text {
   line-height: 300px;
 }
+.index-content .books-list .book-new .form-contents .form-input [type="text"] {
+  margin-top: 10px;
+}
 .index-content .books-list .book-new .form-foot .send {
   height: 30px;
   width: 100%;
