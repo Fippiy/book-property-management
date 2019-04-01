@@ -52,7 +52,7 @@
             </div>
           </div>
           <div class="form-foot">
-            <input class="send" type="submit" value="登録">
+            <input class="send" type="submit" value="更新">
           </div>
         </form>
       </div>
