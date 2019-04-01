@@ -1,0 +1,53 @@
+.mypage-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+.mypage-content__left {
+  width: 20%;
+  height: 100%;
+}
+.mypage-content__left--box {
+  width: 80%;
+  margin: 20px auto;
+  background: white;
+}
+.mypage-content__left--box .mypage-label {
+  font-size: 20px;
+  font-weight: bold;
+  color: #f9f;
+}
+.mypage-content__left--box .mypage-label__top {
+  font-size: 30px;
+}
+.mypage-content__left--box .mypage-element {
+  font-size: 18px;
+}
+.mypage-content__right {
+  margin: 0 auto;
+  width: calc(90% - 250px);
+}
+.mypage-content__right .my-book__title {
+  font-size: 22px;
+  padding: 5px 10px;
+  background: pink;
+  border-radius: 15px;
+}
+.mypage-content__right .my-book__list {
+  height: 90px;
+  padding: 10px 5px;
+  border-bottom: 1px solid pink;
+  display: flex;
+}
+.mypage-content__right .my-book__list--picture {
+  height: 90px;
+  width: 90px;
+}
+.mypage-content__right .my-book__list--picture img {
+  height: 90px;
+  width: 90px;
+}
+.mypage-content__right .my-book__list--detail .book-title {
+  font-size: 20px;
+  color: blue;
+}

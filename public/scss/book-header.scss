@@ -1,5 +1,4 @@
 .book-header {
-  height: 195px;
   &__headbar{
     background: #7dc7ea;
     height: 10px;
@@ -39,8 +38,16 @@
       height: 18px;
       margin: 3px 8px 0 0;
       padding: 9px 12px 5px 8px;
-      border: 1px solid #8ed8fb;
+      border: 1px solid #ffffff;
       border-radius: 8px 8px 0 0;
+      background: #ffffff;
+    }
+    .mypage {
+      border: 1px solid pink;
+      background: pink;
+    }
+    .book {
+      border: 1px solid #8ed8fb;
       background: #5ba5c8;
     }
   }
