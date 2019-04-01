@@ -8,11 +8,10 @@
 @endsection
 
 @section('content')
+  <!-- サイドバー(コンポーネント) -->
+  @component('components.menu_book')
+  @endcomponent
   <div class="index-content">
-    <!-- サイドバー(コンポーネント) -->
-    @component('components.sidebar')
-    @endcomponent
-
     <div class="books-list">
       <div class="books-list__title">
         検索
