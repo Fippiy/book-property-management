@@ -30,7 +30,7 @@ $(function() {
     // 画像表示
     var reader = new FileReader();
     reader.onload = function() {
-      var img_src = $('<img width="100px">').attr('src', reader.result);
+      var img_src = $('<img class="">').attr('src', reader.result);
       $('.afterimage').html(img_src);
     }
     reader.readAsDataURL(file);
