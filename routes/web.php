@@ -19,6 +19,7 @@ Route::get('/', function () {
 Route::get('/book/find', 'BookController@find')->middleware('auth');
 Route::post('/book/find', 'BookController@search')->middleware('auth');
 Route::resource('book', 'BookController')->middleware('auth');
+Route::resource('user', 'UserController')->middleware('auth');
 
 Auth::routes();
 
