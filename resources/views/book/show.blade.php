@@ -15,35 +15,27 @@
     <div class="books-list">
       <div class="books-list__title">
         詳細ページ
+        <div class="books-list__title--navigation">
+          <a href="/book/{{$book->id}}/edit" class="nav-btn edit">編集</a>
+          <form action="/book/{{$book->id}}" method="post">
+            {{ csrf_field() }}
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" class="nav-btn delete" value="削除">
+          </form>
+        </div>
       </div>
-      <div class="book-table">
-        <table class="book-table__list">
-          <tr>
-            <td>id</td>
-            <td>写真</td>
-            <td>タイトル</td>
-            <td>登録日</td>
-          </tr>
-          <tr>
-            <td>{{$book->id}}</td>
-            <td>
-              @if (isset($book->picture))
-                <img src="{{$book->picture}}">
-              @else
-                No Image
-              @endif
-            </td>
-            <td>{{$book->title}}</td>
-            <td>{{$book->created_at}}</td>
-          </tr>
-        </table>
+      <div class="book-detail">
+        <div class="book-detail__picture">
+          @if (isset($book->picture))
+            <img src="{{$book->picture}}">
+          @else
+            No Image
+          @endif
+        </div>
+        <div class="book-detail__document">
+          <h3 class="book-detail__document--title">{{$book->title}}</h3>
+        </div>
       </div>
-      <a href="/book/{{$book->id}}/edit">編集</a>
-      <form action="/book/{{$book->id}}" method="post">
-        {{ csrf_field() }}
-        <input type="hidden" name="_method" value="DELETE">
-        <input type="submit" value="削除">
-      </form>
     </div>
   </div>
 @endsection
