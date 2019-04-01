@@ -2,10 +2,33 @@
   display: flex;
   .books-list {
     margin: 0 auto;
-    width: 80%;
+    width: calc(90% - 250px);
     &__title {
       font-size: 22px;
       padding: 5px 10px;
+      background: #5ba5c8;
+      border-radius: 15px;
+        display: flex;
+        justify-content: space-between;
+      &--navigation {
+        display: flex;
+        .nav-btn {
+          background: white;
+          font-size: 15px;
+          height: 20px;
+          border-radius: 5px;
+          padding: 3px;
+          line-height: 20px;
+          margin: 0 5px 0;
+        }
+        .edit {
+          color: blue;
+        }
+        .delete {
+          color: red;
+          height: 27px;
+        }
+      }
     }
     .book-find {
       width: 800px;
@@ -61,6 +84,23 @@
             font-size: 20px;
             color: blue;
           }
+        }
+      }
+    }
+    .book-detail {
+      width: 100%;
+      display: flex;
+      margin-top: 15px;
+      &__picture{
+        img {
+          height: 200px;
+          width: 200px;
+        }
+      }
+      &__document {
+        padding: 10px;
+        &--title {
+          font-size: 30px;
         }
       }
     }
