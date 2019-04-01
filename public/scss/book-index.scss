@@ -99,8 +99,22 @@
       }
       &__document {
         padding: 10px;
-        &--title {
-          font-size: 30px;
+        .document-index {
+          font-size: 24px;
+          font-weight: bold;
+          margin: 10px 0;
+        }
+        .document-content {
+          display: flex;
+          border-bottom: 1px solid green;
+          &__label {
+            width: 150px;
+            padding: 10px;
+          }
+          &__column {
+            width: 600px;
+            padding: 10px;
+          }
         }
       }
     }

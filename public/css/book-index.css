@@ -98,8 +98,22 @@
 .index-content .books-list .book-detail__document {
   padding: 10px;
 }
-.index-content .books-list .book-detail__document--title {
-  font-size: 30px;
+.index-content .books-list .book-detail__document .document-index {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+.index-content .books-list .book-detail__document .document-content {
+  display: flex;
+  border-bottom: 1px solid green;
+}
+.index-content .books-list .book-detail__document .document-content__label {
+  width: 150px;
+  padding: 10px;
+}
+.index-content .books-list .book-detail__document .document-content__column {
+  width: 600px;
+  padding: 10px;
 }
 .index-content .books-list .book-new {
   margin-top: 20px;
