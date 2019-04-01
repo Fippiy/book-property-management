@@ -17,7 +17,7 @@ class CreateBookdataTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('picture')->nullable();
-            $table->text('detail');
+            $table->text('detail')->nullable();
             $table->timestamps();
         });
     }
