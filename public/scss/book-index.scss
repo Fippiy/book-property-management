@@ -8,8 +8,8 @@
       padding: 5px 10px;
       background: #5ba5c8;
       border-radius: 15px;
-        display: flex;
-        justify-content: space-between;
+      display: flex;
+      justify-content: space-between;
       &--navigation {
         display: flex;
         .nav-btn {
@@ -67,7 +67,6 @@
       border-top: 1px solid #5ba5c8;
       &__list {
         height: 90px;
-        // width: 800px;
         padding: 10px 5px;
         border-bottom: 1px solid #5ba5c8;
         display: flex;

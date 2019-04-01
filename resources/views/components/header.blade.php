@@ -17,20 +17,17 @@
     </div>
   </div>
   <div class="book-header__breadcrumbs">
-    トップページ > ライブラリー
+    トップページ > 書籍
   </div>
   <div class="book-header__menutab">
-    <div class="tab mypage">
-      マイページ
-    </div>
-    <a href="/book/find">
-      <div class="tab search">
-        検索
+    <a href="/book">
+      <div class="tab book">
+        登録書籍
       </div>
     </a>
-    <a href="/book/create">
-      <div class="tab entry">
-        新規登録
+    <a href="/user">
+      <div class="tab mypage">
+        マイページ
       </div>
     </a>
   </div>
