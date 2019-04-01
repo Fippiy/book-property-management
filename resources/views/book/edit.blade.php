@@ -35,7 +35,7 @@
                   @if (isset($form->picture))
                     <img src="{{$form->picture}}" width="100px">
                   @else
-                    <span class="form-input__picture--text">写真が選択されていません</span>
+                    <span class="form-input__picture--text">写真が登録されていません</span>
                   @endif
                 </div>
               </div>
