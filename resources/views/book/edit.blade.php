@@ -6,67 +6,55 @@
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="/js/update_book.js" type="text/javascript" charset="UTF-8"></script>
   <link href="/css/sidebar.css" rel="stylesheet" type="text/css">
-  <link href="/css/book-form.css" rel="stylesheet" type="text/css">
   <link href="/css/book-index.css" rel="stylesheet" type="text/css">
+  <link href="/css/label.css" rel="stylesheet" type="text/css">
 @endsection
 
 @section('content')
-  <div class="book-form-area">
+  <div class="index-content">
     <!-- サイドバー(コンポーネント) -->
     @component('components.sidebar')
     @endcomponent
-    <div>
-      <form action="/book/{{$form->id}}" method="post" class="book-form" enctype="multipart/form-data">
-        {{ csrf_field() }}
-        <table>
-        <input type="hidden" name="_method" value="PUT">
-        <tr><th>タイトル</th><td><input type="text" name="title" value="{{$form->title}}" class="book-title"></td></tr>
-        <tr><th>写真</th><td><input type="file" name="picture" value="{{$form->picture}}"></td></tr>
-        <tr><th>写真削除</th><td><input type="button" name="delete" value="削除" class="delete-picture"></td></tr>
-        <tr><th></th><td><input type="submit" value="send"></td></tr>
-        </table>
-      </form>
-      <div class="index-content">
-      <!-- <div> -->
-        <div class="books-list">
-          <div class="books-list__title">
-            編集のイメージ
-          </div>
-          <div class="book-table">
-            <table class="book-table__list">
-              <tr>
-                <th></th>
-                <th>写真</th>
-                <th>タイトル</th>
-                <th>登録日</th>
-              </tr>
-              <tr>
-                <td>編集後</td>
-                <td class="afterimage">
+    <div class="books-list">
+      <div class="books-list__title">
+        編集
+      </div>
+      <div class="book-new">
+        <form action="/book/{{$form->id}}" method="post" enctype="multipart/form-data">
+          {{ csrf_field() }}
+          <input type="hidden" name="_method" value="PUT">
+          <div class="form-contents">
+            <div class="form-left">
+              <div>
+                <div class="form-label">写真</div>
+                <div>
+                  <input type="file" name="picture" value="{{$form->picture}}">
+                  <input type="button" name="delete" value="削除" class="delete-picture">
+                </div>
+                <div class="form-input__picture afterimage">
                   @if (isset($form->picture))
                     <img src="{{$form->picture}}" width="100px">
                   @else
-                    No Image
+                    <span class="form-input__picture--text">写真が選択されていません</span>
                   @endif
-                </td>
-                <td class="aftertitle">{{$form->title}}</td>
-                <td>{{$form->created_at->format('y/m/d')}}</td>
-              </tr>
-              <tr>
-                <td>編集前</td>
-                <td>
-                  @if (isset($form->picture))
-                    <img src="{{$form->picture}}" width="100px">
-                  @else
-                    No Image
-                  @endif
-                </td>
-                <td><a href="/book/{{$form->id}}">{{$form->title}}</a></td>
-                <td>{{$form->created_at->format('y/m/d')}}</td>
-              </tr>
-            </table>
+                </div>
+              </div>
+            </div>
+            <div class="form-right">
+              <div class="form-input">
+                <lavel class="form-label">タイトル名</lavel><span class="label__important">必須</span>
+                <input class="form-input__title" type="text" name="title" value="{{$form->title}}">
+              </div>
+              <div class="form-input">
+                <lavel class="form-label">詳細</lavel>
+                <textarea class="form-input__detail" type="text" name="detail">{{$form->detail}}</textarea>
+              </div>
+            </div>
           </div>
-        </div>
+          <div class="form-foot">
+            <input class="send" type="submit" value="登録">
+          </div>
+        </form>
       </div>
     </div>
   </div>
