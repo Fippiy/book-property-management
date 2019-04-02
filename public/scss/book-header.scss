@@ -24,8 +24,21 @@
     }
   }
   &__breadcrumbs {
-    font-size: 12px;
+    font-size: 15px;
     padding: 0 20px 0;
+    margin-bottom: 10px;
+    .bread-area {
+      padding: 10px;
+      background: #eeeeee;
+      border-radius: 10px;
+      display: flex;
+      &__item {
+        margin-right: 10px;
+      }
+      .active {
+        font-weight: bold;
+      }
+    }
   }
   &__menutab {
     margin-bottom: 10px;

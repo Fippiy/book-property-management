@@ -10,8 +10,14 @@
   <link href="/css/label.css" rel="stylesheet" type="text/css">
 @endsection
 
+@section('breadcrumbs')
+  <div class="book-header__breadcrumbs">
+    {{ Breadcrumbs::render('book.edit',$form) }}
+  </div>
+@endsection
+
 @section('content')
-  <!-- サイドバー(コンポーネント) -->
+  <!-- サブメニュー(コンポーネント) -->
   @component('components.menu_book')
   @endcomponent
   <div class="index-content">
