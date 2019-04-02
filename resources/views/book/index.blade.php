@@ -15,7 +15,7 @@
 
 @section('content')
   <!-- サブメニュー(コンポーネント) -->
-s  @component('components.menu_book')
+  @component('components.menu_book')
   @endcomponent
   <div class="index-content">
     <div class="books-list">
