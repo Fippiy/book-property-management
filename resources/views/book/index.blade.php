@@ -7,9 +7,15 @@
   <link href="/css/book-index.css" rel="stylesheet" type="text/css">
 @endsection
 
+@section('breadcrumbs')
+  <div class="book-header__breadcrumbs">
+    {{ Breadcrumbs::render('book.index') }}
+  </div>
+@endsection
+
 @section('content')
-  <!-- サイドバー(コンポーネント) -->
-  @component('components.menu_book')
+  <!-- サブメニュー(コンポーネント) -->
+s  @component('components.menu_book')
   @endcomponent
   <div class="index-content">
     <div class="books-list">
