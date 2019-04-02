@@ -6,7 +6,7 @@ Breadcrumbs::for('toppage', function ($trail) {
 });
 
 // トップページ > 書籍トップ
-Breadcrumbs::for('book', function ($trail) {
+Breadcrumbs::for('book.index', function ($trail) {
     $trail->parent('toppage');
     $trail->push('書籍トップ', url('book'));
 });
