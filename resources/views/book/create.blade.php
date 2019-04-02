@@ -9,8 +9,14 @@
   <link href="/css/book-index.css" rel="stylesheet" type="text/css">
 @endsection
 
+@section('breadcrumbs')
+  <div class="book-header__breadcrumbs">
+    {{ Breadcrumbs::render('book.create') }}
+  </div>
+@endsection
+
 @section('content')
-  <!-- サイドバー(コンポーネント) -->
+  <!-- サブメニュー(コンポーネント) -->
   @component('components.menu_book')
   @endcomponent
   <div class="index-content">
