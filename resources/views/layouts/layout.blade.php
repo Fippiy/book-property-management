@@ -11,10 +11,14 @@
 <body>
   <!-- ページ全体 -->
   <div class="whole">
-
     <!-- ヘッダ(コンポーネント) -->
-    @component('components.header')
-    @endcomponent
+    @if (Route::currentRouteName() == 'book.show')
+      @component('components.header',['book'=>$book])
+      @endcomponent
+    @else
+      @component('components.header')
+      @endcomponent
+    @endif
 
     <!-- 各ページ内容表示 -->
     @yield('content')

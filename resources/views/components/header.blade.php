@@ -17,7 +17,11 @@
     </div>
   </div>
   <div class="book-header__breadcrumbs">
+    @if (Route::currentRouteName() == 'book.show')
+    {{ Breadcrumbs::render(Route::currentRouteName(),$book) }}
+    @else
     {{ Breadcrumbs::render(Route::currentRouteName()) }}
+    @endif
   </div>
   <div class="book-header__menutab">
     <a href="/book">
