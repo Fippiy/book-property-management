@@ -11,14 +11,32 @@
 <body>
   <!-- ページ全体 -->
   <div class="whole">
-    <!-- ヘッダ(コンポーネント) -->
-    @if (Route::currentRouteName() == 'book.show')
-      @component('components.header',['book'=>$book])
+    <!-- ヘッダ部 -->
+    <header class="book-header">
+      <div class="book-header__headbar">
+      </div>
+      <div class="book-header__header">
+        <div class="book-header__header--title">
+          <a href="/book"><h1 class="title-name">Book-property</h1></a>
+        </div>
+        <div class="book-header__header--navbar">
+          <form id="logout-form" action="{{ route('logout') }}" method="POST">
+            @csrf
+            <a class="dropdown-item" href="{{ route('logout') }}"
+               onclick="event.preventDefault();
+                             document.getElementById('logout-form').submit();">
+                {{ __('Logout') }}
+            </a>
+          </form>
+        </div>
+      </div>
+      <!-- パンくずは各ページにて個別処理 -->
+      @yield('breadcrumbs')
+
+      <!-- サイト内全体メニュー（コンポーネント） -->
+      @component('components.menu_grand')
       @endcomponent
-    @else
-      @component('components.header')
-      @endcomponent
-    @endif
+    </header>
 
     <!-- 各ページ内容表示 -->
     @yield('content')
