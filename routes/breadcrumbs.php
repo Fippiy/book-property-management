@@ -29,11 +29,11 @@ Breadcrumbs::for('book.edit', function ($trail, $book) {
     $trail->push('編集:'.$book->title, url('book.edit'));
 });
 
-// // トップページ / 書籍 / 検索
-// Breadcrumbs::for('book.find', function ($trail) {
-//     $trail->parent('book.index');
-//     $trail->push('書籍検索', url('book.find'));
-// });
+// トップページ / 書籍 / 検索
+Breadcrumbs::for('book.find', function ($trail) {
+    $trail->parent('book.index');
+    $trail->push('書籍検索', url('book.find'));
+});
 
 
 
