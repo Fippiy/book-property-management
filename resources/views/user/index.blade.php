@@ -6,8 +6,14 @@
   <link href="/css/mypage.css" rel="stylesheet" type="text/css">
 @endsection
 
+@section('breadcrumbs')
+  <div class="book-header__breadcrumbs">
+    {{ Breadcrumbs::render('user.index') }}
+  </div>
+@endsection
+
 @section('content')
-  <!-- サイドバー(コンポーネント) -->
+  <!-- サブメニュー(コンポーネント) -->
   @component('components.menu_mypage')
   @endcomponent
 
