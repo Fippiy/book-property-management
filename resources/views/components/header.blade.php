@@ -17,7 +17,7 @@
     </div>
   </div>
   <div class="book-header__breadcrumbs">
-    トップページ > 書籍
+    {{ Breadcrumbs::render(Route::currentRouteName()) }}
   </div>
   <div class="book-header__menutab">
     <a href="/book">
