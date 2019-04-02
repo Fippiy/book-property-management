@@ -23,11 +23,11 @@ Breadcrumbs::for('book.show', function ($trail, $book) {
     $trail->push($book->title, url('book.show'));
 });
 
-// // トップページ / 書籍 / 編集
-// Breadcrumbs::for('book.edit', function ($trail, $book) {
-//     $trail->parent('book.index');
-//     $trail->push('編集:'.$book->title, url('book.edit'));
-// });
+// トップページ / 書籍 / 編集
+Breadcrumbs::for('book.edit', function ($trail, $book) {
+    $trail->parent('book.index');
+    $trail->push('編集:'.$book->title, url('book.edit'));
+});
 
 // // トップページ / 書籍 / 検索
 // Breadcrumbs::for('book.find', function ($trail) {
