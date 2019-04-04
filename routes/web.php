@@ -19,6 +19,10 @@ Route::get('/', function () {
 Route::get('/book/find', 'BookController@find')->middleware('auth');
 Route::post('/book/find', 'BookController@search')->middleware('auth');
 Route::resource('book', 'BookController')->middleware('auth');
+Route::post('/user/signup', 'UserController@postSignup');
+Route::get('/user/signup', 'UserController@getSignup');
+Route::post('/user/login', 'UserController@postLogin');
+Route::get('/user/login', 'UserController@getLogin');
 Route::resource('user', 'UserController')->middleware('auth');
 
 Auth::routes();
