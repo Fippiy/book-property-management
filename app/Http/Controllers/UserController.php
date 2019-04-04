@@ -98,7 +98,7 @@ class UserController extends Controller
         $password = $request->password;
         if (Auth::attempt(['email' => $email,
             'password' => $password])) {
-            $msg = 'ログインしました。(' . Auth::getUser()->name . ')';
+            return redirect()->route('book.index');
         } else {
             $msg = 'ログインに失敗しました。';
         }
