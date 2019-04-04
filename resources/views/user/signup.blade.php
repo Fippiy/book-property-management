@@ -5,9 +5,9 @@
 @section('content')
 <div class="auth-contents">
   <div class="auth-contents__message">
-    <p>{{$message}}</p>
+    <p class="auth-contents__message--message">{{$message}}</p>
     @foreach ($errors->all() as $error)
-        <p>{{ $error }}</p>
+        <p class="auth-contents__message--error">{{ $error }}</p>
     @endforeach
   </div>
   <div class="auth-contents__form">
