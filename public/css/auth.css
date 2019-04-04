@@ -26,6 +26,12 @@ a {
   margin: 10px;
   border-radius: 10px;
 }
+.auth-contents__message--message {
+  padding-bottom: 10px;
+}
+.auth-contents__message--error {
+  line-height: 25px;
+}
 .auth-contents__form {
   width: 70%;
   margin: 0 auto;

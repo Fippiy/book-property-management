@@ -28,6 +28,12 @@ a {
     padding: 10px;
     margin: 10px;
     border-radius: 10px;
+    &--message {
+      padding-bottom: 10px;
+    }
+    &--error {
+      line-height: 25px;
+    }
   }
   &__form {
     width: 70%;
