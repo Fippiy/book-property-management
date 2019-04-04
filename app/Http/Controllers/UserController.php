@@ -111,12 +111,17 @@ class UserController extends Controller
     }
     public function postSignup(Request $data)
     {
+        $this->validate($data,[
+            'name'=>'required',
+            'email'=>'email|required|unique:users',
+            'password' => 'required|min:8'
+        ]);
         if (User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ])) {
-            $msg = '新規登録しました。';
+            $msg = '新規登録しました。ログインページよりログインして下さい。';
         } else {
             $msg = '新規登録に失敗しました。';
         }
