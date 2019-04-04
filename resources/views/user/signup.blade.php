@@ -6,6 +6,9 @@
 <div class="auth-contents">
   <div class="auth-contents__message">
     <p>{{$message}}</p>
+    @foreach ($errors->all() as $error)
+        <p>{{ $error }}</p>
+    @endforeach
   </div>
   <div class="auth-contents__form">
     <form action="/user/signup" method="post">
