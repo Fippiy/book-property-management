@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -82,5 +84,47 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getLogin(Request $requet)
+    {
+        $param = ['message' => 'ログインして下さい。'];
+        return view('user.login', $param);
+    }
+
+    public function postLogin(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+        if (Auth::attempt(['email' => $email,
+            'password' => $password])) {
+            return redirect()->route('book.index');
+        } else {
+            $msg = 'ログインに失敗しました。';
+        }
+        return view('user.login', ['message' => $msg]);
+    }
+    public function getSignup()
+    {
+        $param = ['message' => '登録して下さい。'];
+        return view('user.signup', $param);
+    }
+    public function postSignup(Request $data)
+    {
+        $this->validate($data,[
+            'name'=>'required',
+            'email'=>'email|required|unique:users',
+            'password' => 'required|min:8'
+        ]);
+        if (User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ])) {
+            $msg = '新規登録しました。ログインページよりログインして下さい。';
+        } else {
+            $msg = '新規登録に失敗しました。';
+        }
+        return view('user.signup', ['message' => $msg]);
     }
 }
