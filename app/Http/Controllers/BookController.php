@@ -229,6 +229,39 @@ class BookController extends Controller
         return view('book.isbn');
     }
     public function postIsbn(Request $request){
+        unset($request['_token']);
+        $value = $request['isbn'];
 
+        // isbnコード桁数を確認
+        if (strlen($value) != 13) {
+          $msg = 'ISBNコードは13桁で入力してください';
+          return view('book.isbn',['msg'=>$msg]);
+        }
+
+
+        $isbn_url = 'https://api.openbd.jp/v1/get?isbn=';
+
+        $response = file_get_contents(
+                          $isbn_url.$value
+                    );
+
+        $result = json_decode($response, true);
+
+        $getdata = $result[0]["summary"];
+        foreach($getdata as $key => $value){
+            if($key == 'isbn') {
+                $savedata = \App\Bookdata::firstOrNew(['isbn' => $value]);
+
+                if (isset($savedata->id)){
+                    $msg = '作成済みのデータがあります';
+                } else {
+                    $msg = 'データを新規作成しました';
+                }
+            } else {
+                $savedata->$key = $value;
+            }
+        }
+        $savedata->save();
+        return view('book.isbn',['msg'=>$msg,'data'=>$savedata]);
     }
 }
