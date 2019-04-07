@@ -42,7 +42,7 @@
               </div>
               <div class="form-input">
                 <div class="form-label">詳細</div>
-                <div><textarea class="form-input__detail" type="text" name="detail">{{old('title')}}</textarea></div>
+                <div><textarea class="form-input__detail" type="text" name="detail">{{old('detail')}}</textarea></div>
               </div>
             </div>
           </div>
