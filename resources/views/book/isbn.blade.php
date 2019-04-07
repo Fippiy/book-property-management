@@ -30,7 +30,7 @@
             <div class="form-right">
               <div class="form-input">
                 <div class="form-label">ISBNコード</div>
-                <div><input class="form-input__title" type="text" name="isbn" value="{{old('isbn')}}"></div>
+                <div><input class="form-input__title" type="number" name="isbn" value="{{old('isbn')}}"></div>
                 @if (isset($msg))
                   <div>{{$msg}}</div>
                 @endif
