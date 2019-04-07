@@ -226,7 +226,8 @@ class BookController extends Controller
     }
 
     public function getIsbn(){
-        return view('book.isbn');
+        $msg = 'ISBNコードを入力して下さい。';
+        return view('book.isbn',['msg'=>$msg]);
     }
     public function postIsbn(Request $request){
         unset($request['_token']);
