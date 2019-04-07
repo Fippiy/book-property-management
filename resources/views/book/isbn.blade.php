@@ -27,28 +27,24 @@
         </div>
       @endif
       <div class="book-new">
-
         <form action="/book/isbn" method="post">
           {{ csrf_field() }}
           <div class="form-contents">
             <div class="form-input form-one-size">
               <div class="form-label">ISBNコード</div>
               <div><input class="form-input__detail" type="number" name="isbn" value="{{old('isbn')}}"></div>
-              @if (isset($data))
-                <div>{{$data->title}}</div>
-              @endif
             </div>
           </div>
           <div class="form-foot">
             <input class="send isbn" type="submit" value="登録">
           </div>
         </form>
-
-
-
       </div>
       <div class="book-new">
       </div>
+      @if (isset($book))
+        @include('components.book_detail')
+      @endif
     </div>
   </div>
 @endsection
