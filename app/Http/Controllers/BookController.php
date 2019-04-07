@@ -271,6 +271,6 @@ class BookController extends Controller
             }
         }
         $savedata->save();
-        return view('book.isbn',['msg'=>$msg,'data'=>$savedata]);
+        return view('book.isbn',['msg'=>$msg,'book'=>$savedata]);
     }
 }
