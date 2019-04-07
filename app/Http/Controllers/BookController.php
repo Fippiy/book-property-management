@@ -37,6 +37,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+      $this->validate($request, Bookdata::$rules);
       // 新規投稿レコード
       $book = new Bookdata;
       // リクエストデータ受取
@@ -111,6 +112,7 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
+      $this->validate($request, Bookdata::$rules);
       // 画像保存ディレクトリ設定
       $save_directory = "book_images";
       // 対象レコード取得
