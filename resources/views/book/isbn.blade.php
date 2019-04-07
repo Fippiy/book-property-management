@@ -22,7 +22,7 @@
         ISBNコード登録
       </div>
       <div class="book-new">
-        <form action="/book" method="post">
+        <form action="/book/isbn" method="post">
           {{ csrf_field() }}
           <div class="form-contents">
             <div class="form-left">
@@ -31,6 +31,12 @@
               <div class="form-input">
                 <div class="form-label">ISBNコード</div>
                 <div><input class="form-input__title" type="text" name="isbn" value="{{old('isbn')}}"></div>
+                @if (isset($msg))
+                  <div>{{$msg}}</div>
+                @endif
+                @if (isset($data))
+                  <div>{{$data->title}}</div>
+                @endif
               </div>
             </div>
           </div>
