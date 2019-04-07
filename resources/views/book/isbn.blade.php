@@ -21,29 +21,33 @@
       <div class="books-list__title">
         ISBNコード登録
       </div>
+      @if (isset($msg))
+        <div class="books-list__msg">
+            <span>{{$msg}}</span>
+        </div>
+      @endif
       <div class="book-new">
+
         <form action="/book/isbn" method="post">
           {{ csrf_field() }}
           <div class="form-contents">
-            <div class="form-left">
-            </div>
-            <div class="form-right">
-              <div class="form-input">
-                <div class="form-label">ISBNコード</div>
-                <div><input class="form-input__title" type="number" name="isbn" value="{{old('isbn')}}"></div>
-                @if (isset($msg))
-                  <div>{{$msg}}</div>
-                @endif
-                @if (isset($data))
-                  <div>{{$data->title}}</div>
-                @endif
-              </div>
+            <div class="form-input form-one-size">
+              <div class="form-label">ISBNコード</div>
+              <div><input class="form-input__detail" type="number" name="isbn" value="{{old('isbn')}}"></div>
+              @if (isset($data))
+                <div>{{$data->title}}</div>
+              @endif
             </div>
           </div>
           <div class="form-foot">
-            <input class="send" type="submit" value="登録">
+            <input class="send isbn" type="submit" value="登録">
           </div>
         </form>
+
+
+
+      </div>
+      <div class="book-new">
       </div>
     </div>
   </div>
