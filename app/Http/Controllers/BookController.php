@@ -224,4 +224,11 @@ class BookController extends Controller
       $param = ['input' => $title, 'books' => $books];
       return view('book.find', $param);
     }
+
+    public function getIsbn(){
+        return view('book.isbn');
+    }
+    public function postIsbn(Request $request){
+
+    }
 }
