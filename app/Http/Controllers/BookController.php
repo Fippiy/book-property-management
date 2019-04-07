@@ -267,7 +267,11 @@ class BookController extends Controller
                     $msg = 'データを新規作成しました';
                 }
             } else {
-                $savedata->$key = $value;
+                if(strlen($value) == 0){
+                  $savedata->$key = null;
+                } else {
+                  $savedata->$key = $value;
+                }
             }
         }
         $savedata->save();
