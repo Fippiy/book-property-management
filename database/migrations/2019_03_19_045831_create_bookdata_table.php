@@ -15,9 +15,19 @@ class CreateBookdataTable extends Migration
     {
         Schema::create('bookdata', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
+            // $table->string('title');
             $table->string('picture')->nullable();
             $table->text('detail')->nullable();
+
+            $table->string('isbn');
+            $table->string('title');
+            $table->string('volume');
+            $table->string('series');
+            $table->string('publisher');
+            $table->string('pubdate');
+            $table->string('cover');
+            $table->string('author');
+
             $table->timestamps();
         });
     }
