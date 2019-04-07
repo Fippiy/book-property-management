@@ -234,19 +234,26 @@ class BookController extends Controller
 
         // isbnコード桁数を確認
         if (strlen($value) != 13) {
+          // レコード数不一致時はエラーを返して終了
           $msg = 'ISBNコードは13桁で入力してください';
           return view('book.isbn',['msg'=>$msg]);
         }
 
-
+        // isbnコードから本情報を取得
         $isbn_url = 'https://api.openbd.jp/v1/get?isbn=';
-
         $response = file_get_contents(
                           $isbn_url.$value
                     );
-
         $result = json_decode($response, true);
 
+        // isbnレコード結果を確認
+        if($result[0]==null){
+          // 情報がない場合はエラーを返して終了
+          $msg = '該当するISBNコードは見つかりませんでした。';
+          return view('book.isbn',['msg'=>$msg]);
+        }
+
+        // 取得データのsummaryを扱う
         $getdata = $result[0]["summary"];
         foreach($getdata as $key => $value){
             if($key == 'isbn') {
@@ -254,6 +261,7 @@ class BookController extends Controller
 
                 if (isset($savedata->id)){
                     $msg = '作成済みのデータがあります';
+                    return view('book.isbn',['msg'=>$msg]);
                 } else {
                     $msg = 'データを新規作成しました';
                 }
