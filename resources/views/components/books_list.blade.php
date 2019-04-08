@@ -6,6 +6,8 @@
           <a href="/book/{{$book->id}}">
             @if (isset($book->picture))
               <img src="{{$book->picture}}">
+            @elseif (isset($book->cover))
+              <img src="{{$book->cover}}">
             @else
               <img src="../image/no-entry.jpg">
             @endif
