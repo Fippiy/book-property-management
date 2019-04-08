@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $property = Property::all();
+        $property = Property::first();
         return view('user.index',['user'=>$user,'property'=>$property]);
     }
 
