@@ -38,7 +38,7 @@
             <div class="form-right">
               <div class="form-input">
                 <div class="form-label">タイトル名</div>
-                <div><input class="form-input__title" type="text" name="title" value="{{old('title')}}"></div>
+                <div><input class="form-input__input" type="text" name="title" value="{{old('title')}}"></div>
               </div>
               <div class="form-input">
                 <div class="form-label">詳細</div>

@@ -32,7 +32,7 @@
           <div class="form-contents">
             <div class="form-input form-one-size">
               <div class="form-label">ISBNコード</div>
-              <div><input class="form-input__detail" type="number" name="isbn" value="{{old('isbn')}}"></div>
+              <div><input class="form-input__input" type="number" name="isbn" value="{{old('isbn')}}"></div>
             </div>
           </div>
           <div class="form-foot">
