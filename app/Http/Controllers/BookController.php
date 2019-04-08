@@ -235,46 +235,47 @@ class BookController extends Controller
         unset($request['_token']);
         $value = $request['isbn'];
 
-        // isbnコード桁数を確認
+        // ISBNコード桁数を確認
         if (strlen($value) != 13) {
           // レコード数不一致時はエラーを返して終了
           $msg = 'ISBNコードは13桁で入力してください';
           return view('book.isbn',['msg'=>$msg]);
         }
 
-        // isbnコードから本情報を取得
+        // ISBNコードが既に登録されているか確認
+        $isbn = \App\Bookdata::where('isbn', $value)->first();
+        if ($isbn != null){
+          $msg = '作成済みのデータがあります';
+          return view('book.isbn',['msg'=>$msg]);
+        }
+
+        // ISBNコードから本情報を取得
         $isbn_url = 'https://api.openbd.jp/v1/get?isbn=';
         $response = file_get_contents(
                           $isbn_url.$value
                     );
         $result = json_decode($response, true);
 
-        // isbnレコード結果を確認
+        // ISBNレコード結果を確認
         if($result[0]==null){
           // 情報がない場合はエラーを返して終了
           $msg = '該当するISBNコードは見つかりませんでした。';
           return view('book.isbn',['msg'=>$msg]);
         }
 
+        // ISBNレコードがあれば追加処理
+        $savedata = new Bookdata;
+
         // summaryData取得
         $getdata = $result[0]["summary"];
-        foreach($getdata as $key => $value){
-            if($key == 'isbn') {
-                $savedata = \App\Bookdata::firstOrNew(['isbn' => $value]);
 
-                if (isset($savedata->id)){
-                    $msg = '作成済みのデータがあります';
-                    return view('book.isbn',['msg'=>$msg]);
-                } else {
-                    $msg = 'データを新規作成しました';
-                }
-            } else {
-                if(strlen($value) == 0){
-                  $savedata->$key = null;
-                } else {
-                  $savedata->$key = $value;
-                }
-            }
+        // 要素毎にレコードに追加
+        foreach($getdata as $key => $value){
+          if(strlen($value) == 0){
+            $savedata->$key = null;
+          } else {
+            $savedata->$key = $value;
+          }
         }
 
         // detail取得
@@ -284,7 +285,11 @@ class BookController extends Controller
         } else {
           $savedata->detail = $result[0]["onix"]["DescriptiveDetail"]["Contributor"][0]["BiographicalNote"];
         }
+        // 保存
         $savedata->save();
+        // 保存完了メッセージ
+        $msg = 'データを新規作成しました';
+        // ビューに出力
         return view('book.isbn',['msg'=>$msg,'book'=>$savedata]);
     }
 }
