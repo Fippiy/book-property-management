@@ -16,6 +16,10 @@
       <div class="document-content__column">{{$book->title}}</div>
     </div>
     <div class="document-content">
+      <div class="document-content__label">シリーズ</div>
+      <div class="document-content__column">{{$book->series}}</div>
+    </div>
+    <div class="document-content">
       <div class="document-content__label">ISBN</div>
       <div class="document-content__column">{{$book->isbn}}</div>
     </div>
