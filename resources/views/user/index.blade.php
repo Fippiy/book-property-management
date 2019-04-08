@@ -37,7 +37,7 @@
           <img src="../image/no-entry.jpg">
         </div>
         <div class="my-book__list--detail">
-          <h3 class="book-title">{{$property->id}}</h3>
+          <h3 class="book-title">{{$property->bookdata->title}}</h3>
         </div>
       </div>
 
