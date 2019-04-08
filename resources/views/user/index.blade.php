@@ -32,16 +32,14 @@
         所有書籍一覧
       </div>
 
-      <!-- テンプレート化予定 -->
       <div class="my-book__list">
         <div class="my-book__list--picture">
           <img src="../image/no-entry.jpg">
         </div>
         <div class="my-book__list--detail">
-          <h3 class="book-title">仮置き一覧タイトルその1</h3>
+          <h3 class="book-title">{{$propety->id}}</h3>
         </div>
       </div>
-      <!-- テンプレート化予定ここまで -->
 
 
     </div>
