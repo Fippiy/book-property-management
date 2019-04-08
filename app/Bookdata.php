@@ -12,8 +12,8 @@ class Bookdata extends Model
     'title' => 'required',
     'picture' => 'file|image|mimes:jpeg,png,jpg,gif|max:2048'
   );
-  public function property()
+  public function properties()
   {
-      return $this->hasMany('app\Property');
+      return $this->hasMany('App\Property');
   }
 }
