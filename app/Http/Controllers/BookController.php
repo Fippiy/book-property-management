@@ -256,7 +256,7 @@ class BookController extends Controller
           return view('book.isbn',['msg'=>$msg]);
         }
 
-        // 取得データのsummaryを扱う
+        // summaryData取得
         $getdata = $result[0]["summary"];
         foreach($getdata as $key => $value){
             if($key == 'isbn') {
@@ -275,6 +275,14 @@ class BookController extends Controller
                   $savedata->$key = $value;
                 }
             }
+        }
+
+        // detail取得
+        $detail_datacheck = empty($result[0]["onix"]["DescriptiveDetail"]["Contributor"][0]["BiographicalNote"]);
+        if(strlen($detail_datacheck) == true){
+          $savedata->detail = null;
+        } else {
+          $savedata->detail = $result[0]["onix"]["DescriptiveDetail"]["Contributor"][0]["BiographicalNote"];
         }
         $savedata->save();
         return view('book.isbn',['msg'=>$msg,'book'=>$savedata]);
