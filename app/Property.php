@@ -10,5 +10,5 @@ class Property extends Model
   public static $rules = array(
     'user_id' => 'required',
     'bookdata_id' => 'required'
-  )
+  );
 }
