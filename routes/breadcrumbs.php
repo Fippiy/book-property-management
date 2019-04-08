@@ -17,6 +17,12 @@ Breadcrumbs::for('book.create', function ($trail) {
     $trail->push('新規登録', url('book.create'));
 });
 
+// トップページ / 書籍 / 新規登録(ISBN)
+Breadcrumbs::for('book.isbn', function ($trail) {
+    $trail->parent('book.index');
+    $trail->push('新規登録(ISBN)', url('book.isbn'));
+});
+
 // トップページ / 書籍 / 詳細
 Breadcrumbs::for('book.show', function ($trail, $book) {
     $trail->parent('book.index');

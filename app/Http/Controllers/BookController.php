@@ -37,6 +37,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+      $this->validate($request, Bookdata::$rules);
       // 新規投稿レコード
       $book = new Bookdata;
       // リクエストデータ受取
@@ -111,6 +112,7 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
+      $this->validate($request, Bookdata::$rules);
       // 画像保存ディレクトリ設定
       $save_directory = "book_images";
       // 対象レコード取得
@@ -223,5 +225,71 @@ class BookController extends Controller
       $books = Bookdata::where('title', 'like', "%{$title}%")->get();
       $param = ['input' => $title, 'books' => $books];
       return view('book.find', $param);
+    }
+
+    public function getIsbn(){
+        $msg = 'ISBNコードを入力して下さい。';
+        return view('book.isbn',['msg'=>$msg]);
+    }
+    public function postIsbn(Request $request){
+        unset($request['_token']);
+        $value = $request['isbn'];
+
+        // ISBNコード桁数を確認
+        if (strlen($value) != 13) {
+          // レコード数不一致時はエラーを返して終了
+          $msg = 'ISBNコードは13桁で入力してください';
+          return view('book.isbn',['msg'=>$msg]);
+        }
+
+        // ISBNコードが既に登録されているか確認
+        $isbn = \App\Bookdata::where('isbn', $value)->first();
+        if ($isbn != null){
+          $msg = '作成済みのデータがあります';
+          return view('book.isbn',['msg'=>$msg]);
+        }
+
+        // ISBNコードから本情報を取得
+        $isbn_url = 'https://api.openbd.jp/v1/get?isbn=';
+        $response = file_get_contents(
+                          $isbn_url.$value
+                    );
+        $result = json_decode($response, true);
+
+        // ISBNレコード結果を確認
+        if($result[0]==null){
+          // 情報がない場合はエラーを返して終了
+          $msg = '該当するISBNコードは見つかりませんでした。';
+          return view('book.isbn',['msg'=>$msg]);
+        }
+
+        // ISBNレコードがあれば追加処理
+        $savedata = new Bookdata;
+
+        // summaryData取得
+        $getdata = $result[0]["summary"];
+
+        // 要素毎にレコードに追加
+        foreach($getdata as $key => $value){
+          if(strlen($value) == 0){
+            $savedata->$key = null;
+          } else {
+            $savedata->$key = $value;
+          }
+        }
+
+        // detail取得
+        $detail_datacheck = empty($result[0]["onix"]["DescriptiveDetail"]["Contributor"][0]["BiographicalNote"]);
+        if(strlen($detail_datacheck) == true){
+          $savedata->detail = null;
+        } else {
+          $savedata->detail = $result[0]["onix"]["DescriptiveDetail"]["Contributor"][0]["BiographicalNote"];
+        }
+        // 保存
+        $savedata->save();
+        // 保存完了メッセージ
+        $msg = 'データを新規作成しました';
+        // ビューに出力
+        return view('book.isbn',['msg'=>$msg,'book'=>$savedata]);
     }
 }

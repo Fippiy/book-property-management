@@ -38,11 +38,11 @@
             <div class="form-right">
               <div class="form-input">
                 <div class="form-label">タイトル名</div>
-                <div><input class="form-input__title" type="text" name="title" value="{{old('title')}}"></div>
+                <div><input class="form-input__input" type="text" name="title" value="{{old('title')}}"></div>
               </div>
               <div class="form-input">
                 <div class="form-label">詳細</div>
-                <div><textarea class="form-input__detail" type="text" name="detail">{{old('title')}}</textarea></div>
+                <div><textarea class="form-input__detail" type="text" name="detail">{{old('detail')}}</textarea></div>
               </div>
             </div>
           </div>

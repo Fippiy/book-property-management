@@ -9,6 +9,11 @@
       書籍新規登録
     </div>
   </a>
+  <a href="/book/isbn">
+    <div class="tab book entry-isbn">
+      ISBNコード登録
+    </div>
+  </a>
   <a href="/book/find">
     <div class="tab book search">
       登録書籍検索

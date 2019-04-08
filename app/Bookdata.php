@@ -10,6 +10,6 @@ class Bookdata extends Model
   protected $guarded = array('id');
   public static $rules = array(
     'title' => 'required',
-    'picture' => 'required|file|image|mimes:jpeg,png,jpg,gif|max:2048'
+    'picture' => 'file|image|mimes:jpeg,png,jpg,gif|max:2048'
   );
 }

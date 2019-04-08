@@ -16,6 +16,8 @@ Route::get('/', function () {
   return view('index');
 });
 
+Route::get('/book/isbn', 'BookController@getIsbn')->middleware('auth');
+Route::post('/book/isbn', 'BookController@postIsbn')->middleware('auth');
 Route::get('/book/find', 'BookController@find')->middleware('auth');
 Route::post('/book/find', 'BookController@search')->middleware('auth');
 Route::resource('book', 'BookController')->middleware('auth');
@@ -28,3 +30,7 @@ Route::resource('user', 'UserController')->middleware('auth');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+// Route::get('/info', function () {
+//     phpinfo();
+// });

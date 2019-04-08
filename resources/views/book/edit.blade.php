@@ -49,7 +49,7 @@
             <div class="form-right">
               <div class="form-input">
                 <lavel class="form-label">タイトル名</lavel><span class="label__important">必須</span>
-                <input class="form-input__title" type="text" name="title" value="{{$form->title}}">
+                <input class="form-input__input" type="text" name="title" value="{{$form->title}}">
               </div>
               <div class="form-input">
                 <lavel class="form-label">詳細</lavel>
