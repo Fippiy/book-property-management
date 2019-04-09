@@ -3,7 +3,6 @@
 @section('title', 'TopPage')
 
 @section('stylesheet')
-  <link href="/css/sidebar.css" rel="stylesheet" type="text/css">
   <link href="/css/book-index.css" rel="stylesheet" type="text/css">
 @endsection
 
