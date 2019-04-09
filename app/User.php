@@ -40,4 +40,11 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Property');
     }
+    public function scopeUserBook()
+    {
+        $property = Property::select()
+                        ->join('bookdata','bookdata.id','=','properties.bookdata_id')
+                        ->get();
+g        return $property;
+    }
 }
