@@ -45,6 +45,6 @@ class User extends Authenticatable
         $property = Property::select()
                         ->join('bookdata','bookdata.id','=','properties.bookdata_id')
                         ->get();
-g        return $property;
+        return $property;
     }
 }
