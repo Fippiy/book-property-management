@@ -18,7 +18,7 @@
   @endcomponent
   <div class="index-content">
     <div class="books-list">
-      <div class="books-list__title">
+      <div class="books-list__title bookpage-color">
         ISBNコード登録
       </div>
       @if (isset($msg))
