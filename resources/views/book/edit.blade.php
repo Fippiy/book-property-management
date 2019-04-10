@@ -20,7 +20,7 @@
   @endcomponent
   <div class="index-content">
     <div class="books-list">
-      <div class="books-list__title">
+      <div class="books-list__title bookpage-color">
         編集
       </div>
       <div class="book-new">
