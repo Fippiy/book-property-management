@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -39,5 +40,12 @@ class User extends Authenticatable
     public function properties()
     {
         return $this->hasMany('App\Property');
+    }
+    public function scopeUserBook()
+    {
+        $property = Property::where('user_id', Auth::user()->id)
+                        ->join('bookdata','bookdata.id','=','properties.bookdata_id')
+                        ->get();
+        return $property;
     }
 }
