@@ -32,11 +32,16 @@
       </div>
       <!-- パンくずは各ページにて個別処理 -->
       @yield('breadcrumbs')
+    </header>
 
+    <!-- メニュー -->
+    <div class="menulist">
       <!-- サイト内全体メニュー（コンポーネント） -->
       @component('components.menu_grand')
       @endcomponent
-    </header>
+      <!-- 各ページメニュー -->
+      @yield('pagemenu')
+    </div>
 
     <!-- 各ページ内容表示 -->
     @yield('content')
