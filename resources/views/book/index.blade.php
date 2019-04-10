@@ -18,7 +18,7 @@
   @endcomponent
   <div class="index-content">
     <div class="books-list">
-      <div class="books-list__title">
+      <div class="books-list__title bookpage-color">
         登録書籍一覧
       </div>
       @include('components.books_list')
