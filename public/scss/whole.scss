@@ -1,8 +1,9 @@
+// リンク設定
 a {
   text-decoration: none;
   color: black;
 }
-
+// ページカラーリング
 .bookpage-color {
   border: 1px solid #5ba5c8;
   background: #5ba5c8;
@@ -10,4 +11,13 @@ a {
 .mypage-color {
   border: 1px solid pink;
   background: pink;
+}
+// ラベル設定
+.label {
+  &__important {
+    background: red;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+  }
 }

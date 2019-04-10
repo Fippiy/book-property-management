@@ -10,3 +10,9 @@ a {
   border: 1px solid pink;
   background: pink;
 }
+.label__important {
+  background: red;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
