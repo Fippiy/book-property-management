@@ -3,6 +3,7 @@
 @section('title', 'MyPage')
 
 @section('stylesheet')
+  <link href="/css/menulist.css" rel="stylesheet" type="text/css">
   <link href="/css/book-index.css" rel="stylesheet" type="text/css">
 @endsection
 
@@ -12,10 +13,11 @@
   </div>
 @endsection
 
+@section('pagemenu')
+  @include('components.menu_mypage')
+@endsection
+
 @section('content')
-  <!-- サブメニュー(コンポーネント) -->
-  @component('components.menu_mypage')
-  @endcomponent
   <div class="index-content">
     <div class="books-list">
       <div class="books-list__title mypage-color">

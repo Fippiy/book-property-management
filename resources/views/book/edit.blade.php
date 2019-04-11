@@ -5,6 +5,7 @@
 @section('stylesheet')
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="/js/update_book.js" type="text/javascript" charset="UTF-8"></script>
+  <link href="/css/menulist.css" rel="stylesheet" type="text/css">
   <link href="/css/book-index.css" rel="stylesheet" type="text/css">
 @endsection
 
@@ -14,10 +15,11 @@
   </div>
 @endsection
 
+@section('pagemenu')
+  @include('components.menu_book')
+@endsection
+
 @section('content')
-  <!-- サブメニュー(コンポーネント) -->
-  @component('components.menu_book')
-  @endcomponent
   <div class="index-content">
     <div class="books-list">
       <div class="books-list__title bookpage-color">
