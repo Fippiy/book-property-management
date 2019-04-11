@@ -5,6 +5,7 @@
 @section('stylesheet')
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="/js/update_book.js" type="text/javascript" charset="UTF-8"></script>
+  <link href="/css/menulist.css" rel="stylesheet" type="text/css">
   <link href="/css/book-index.css" rel="stylesheet" type="text/css">
 @endsection
 
