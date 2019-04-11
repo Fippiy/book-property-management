@@ -1,4 +1,4 @@
-<div class="book-header__menutab">
+<div class="menulist__menutab">
   <a href="/user">
     <div class="tab mypage-color">
       マイページトップ
