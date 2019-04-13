@@ -30,9 +30,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        $books = Bookdata::all();
+        // 所有書籍を除外して取得
+        $notProperties = User::userNothaveBook();
         $msg = '登録書籍を選択して下さい。';
-        return view('user.create',['books'=>$books, 'msg'=>$msg]);
+        return view('user.create',['books'=>$notProperties, 'msg'=>$msg]);
     }
 
     /**
@@ -57,8 +58,9 @@ class UserController extends Controller
       // 登録完了メッセージ
       $msg = "所有書籍を登録しました。";
       // 次の登録用フォームデータ取得
-      $books = Bookdata::all();
-      return view('user.create',['books'=>$books, 'property'=>$property, 'msg'=>$msg]);
+      // 所有書籍を除外して取得
+      $notProperties = User::userNothaveBook();
+      return view('user.create',['books'=>$notProperties, 'property'=>$property, 'msg'=>$msg]);
     }
 
     /**
