@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Bookdata;
+use App\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +20,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $property = User::userBook();
-        return view('user.index',['user'=>$user,'books'=>$property]);
+        return view('user.index',['user'=>$user, 'books'=>$property]);
     }
 
     /**
@@ -28,8 +30,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        $books = Bookdata::all();
         $msg = '登録書籍を選択して下さい。';
-        return view('user.create',['msg'=>$msg]);
+        return view('user.create',['books'=>$books, 'msg'=>$msg]);
     }
 
     /**
@@ -40,7 +43,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      // 新規レコード生成
+      $property = new Property;
+      // リクエストデータ受取
+      $form = $request->all();
+      // フォームトークン削除
+      unset($form['_token']);
+      // ユーザー情報追加
+      $user = Auth::user()->id;
+      $form = $form + array('user_id' => $user);
+      // DB保存
+      $property->fill($form)->save();
+      // 登録完了メッセージ
+      $msg = "本を登録しました。";
+      // 次の登録用フォームデータ取得
+      $books = Bookdata::all();
+      return view('user.create',['books'=>$books, 'property'=>$property, 'msg'=>$msg]);
     }
 
     /**
