@@ -55,7 +55,7 @@ class UserController extends Controller
       // DB保存
       $property->fill($form)->save();
       // 登録完了メッセージ
-      $msg = "本を登録しました。";
+      $msg = "所有書籍を登録しました。";
       // 次の登録用フォームデータ取得
       $books = Bookdata::all();
       return view('user.create',['books'=>$books, 'property'=>$property, 'msg'=>$msg]);
