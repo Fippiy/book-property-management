@@ -46,3 +46,9 @@ Breadcrumbs::for('user.index', function ($trail) {
     $trail->parent('toppage');
     $trail->push('マイページ', url('user.index'));
 });
+
+// トップページ / マイページ / 所有書籍登録
+Breadcrumbs::for('user.create', function ($trail) {
+    $trail->parent('user.index');
+    $trail->push('所有書籍登録', url('user.create'));
+});
