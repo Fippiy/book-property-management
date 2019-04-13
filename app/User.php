@@ -48,4 +48,11 @@ class User extends Authenticatable
                         ->get();
         return $property;
     }
+    public function scopeUserNothaveBook()
+    {
+        $haveProperties = Property::where('user_id', [Auth::user()->id])->get('bookdata_id');
+        $notProperties = Bookdata::whereNotIn('id', $haveProperties)
+                        ->get();
+        return $notProperties;
+    }
 }
