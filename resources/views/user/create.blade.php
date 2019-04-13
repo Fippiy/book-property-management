@@ -29,14 +29,17 @@
         </div>
       @endif
       <div class="book-new">
-        <form action="/user/store" method="post" enctype="multipart/form-data">
+        <form action="/user" method="post" enctype="multipart/form-data">
           {{ csrf_field() }}
           <div class="form-contents">
             <div class="form-one-size">
               <div class="form-input">
-                <select class="form-input__select" name="have-book">
-                  <option value="test1">テスト1</option>
-                  <option value="test2">テスト2</option>
+                <select class="form-input__select" name="bookdata_id">
+                @if (isset($books))
+                  @foreach ($books as $book)
+                    <option value="{{$book->id}}">{{$book->title}}</option>
+                  @endforeach
+                @endif
                 </select>
               </div>
             </div>
@@ -46,6 +49,9 @@
           </div>
         </form>
       </div>
+      @if (isset($property))
+        <div>{{$property->bookdata->title}}</div>
+      @endif
     </div>
   </div>
 @endsection
