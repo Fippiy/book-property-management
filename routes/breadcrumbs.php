@@ -58,3 +58,9 @@ Breadcrumbs::for('user.find', function ($trail) {
     $trail->parent('user.index');
     $trail->push('所有書籍検索', url('user.find'));
 });
+
+// トップページ / マイページ / 所有書籍詳細
+Breadcrumbs::for('user.show', function ($trail) {
+    $trail->parent('user.index');
+    $trail->push('所有書籍詳細', url('user.show'));
+});
