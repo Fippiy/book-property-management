@@ -29,25 +29,28 @@
         </div>
       @endif
       <div class="book-new">
-        <form action="/user" method="post" enctype="multipart/form-data">
-          {{ csrf_field() }}
-          <div class="form-contents">
-            <div class="form-one-size">
-              <div class="form-input">
-                <select class="form-input__select" name="bookdata_id">
-                @if (isset($books))
-                  @foreach ($books as $book)
-                    <option value="{{$book->id}}">{{$book->title}}</option>
-                  @endforeach
-                @endif
-                </select>
+        @if (isset($books) && count($books) != 0)
+          <form action="/user" method="post" enctype="multipart/form-data">
+            {{ csrf_field() }}
+            <div class="form-contents">
+              <div class="form-one-size">
+                <div class="form-input">
+                  <select class="form-input__select" name="bookdata_id">
+                    @foreach ($books as $book)
+                      <option value="{{$book->id}}">{{$book->title}}</option>
+                    @endforeach
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-foot">
-            <input class="send" type="submit" value="登録">
-          </div>
-        </form>
+            <div class="form-foot">
+              <input class="send" type="submit" value="登録">
+            </div>
+          </form>
+        @else
+          <span>全ての書籍が登録済みです。</span>
+        @endif
+
       </div>
       @if (isset($property))
         @component('components.book_detail',['book' => $property->bookdata])
