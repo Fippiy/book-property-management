@@ -19,7 +19,7 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $property = User::userBook();
+        $property = User::userGetBook();
         return view('user.index',['user'=>$user, 'books'=>$property]);
     }
 
@@ -71,8 +71,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $book = Bookdata::find($id);
-        return view('user.show', ['book' => $book]);
+        $property = Property::find($id);
+        return view('user.show', ['property' => $property]);
       }
 
     /**
