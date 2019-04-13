@@ -50,7 +50,8 @@
         </form>
       </div>
       @if (isset($property))
-        <div>{{$property->bookdata->title}}</div>
+        @component('components.book_detail',['book' => $property->bookdata])
+        @endcomponent
       @endif
     </div>
   </div>
