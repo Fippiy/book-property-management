@@ -23,6 +23,11 @@
       <div class="books-list__title mypage-color">
         所有書籍登録
       </div>
+      @if (isset($msg))
+        <div class="books-list__msg">
+            <span>{{$msg}}</span>
+        </div>
+      @endif
       <div class="book-new">
         <form action="/user/store" method="post" enctype="multipart/form-data">
           {{ csrf_field() }}
