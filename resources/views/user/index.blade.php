@@ -23,8 +23,13 @@
       <div class="books-list__title mypage-color">
         所有書籍一覧
       </div>
-      @include('components.books_list')
+      @if (isset($books))
+        @component('components.books_list',['books'=>$books])
+          @slot('page_path')
+            user
+          @endslot
+        @endcomponent
+      @endif
     </div>
-
   </div>
 @endsection

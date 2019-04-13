@@ -31,7 +31,13 @@
             <input type="submit" class="book-find__input--submit" value="検索">
           </div>
         </form>
-        @include('components.books_list')
+        @if (isset($books))
+          @component('components.books_list',['books'=>$books])
+            @slot('page_path')
+              user
+            @endslot
+          @endcomponent
+        @endif
     </div>
   </div>
 @endsection
