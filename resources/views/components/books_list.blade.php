@@ -3,7 +3,7 @@
     @foreach ($books as $book)
       <div class="book-table__list">
         <div class="book-table__list--picture">
-          <a href="/book/{{$book->id}}">
+          <a href="/{{Request::path()}}/{{$book->id}}">
             @if (isset($book->picture))
               <img src="{{$book->picture}}">
             @elseif (isset($book->cover))
