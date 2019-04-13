@@ -71,8 +71,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        $book = Bookdata::find($id);
+        return view('user.show', ['book' => $book]);
+      }
 
     /**
      * Show the form for editing the specified resource.
