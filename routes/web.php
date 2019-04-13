@@ -25,6 +25,8 @@ Route::post('/user/signup', 'UserController@postSignup');
 Route::get('/user/signup', 'UserController@getSignup');
 Route::post('/user/login', 'UserController@postLogin');
 Route::get('/user/login', 'UserController@getLogin');
+Route::get('/user/find', 'UserController@find')->middleware('auth');
+Route::post('/user/find', 'UserController@search')->middleware('auth');
 Route::resource('user', 'UserController')->middleware('auth');
 
 Auth::routes();

@@ -55,14 +55,14 @@
   height: 100%;
   font-size: 20px;
   padding: 8px;
-  border: 1px solid #5ba5c8;
   border-radius: 10px;
 }
 .index-content .books-list .book-find__input--submit {
   width: 100px;
   height: 100%;
   font-size: 15px;
-  background: #5ba5c8;
+  background: #080;
+  color: #fff;
   border-radius: 10px;
   border: 0;
   padding: 0;
