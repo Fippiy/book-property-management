@@ -28,7 +28,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user.create');
+        $msg = '登録書籍を選択して下さい。';
+        return view('user.create',['msg'=>$msg]);
     }
 
     /**
