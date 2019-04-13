@@ -12,7 +12,9 @@
       所有書籍登録
     </div>
   </a>
-  <div class="tab mypage-color">
-  所有書籍検索
-  </div>
+  <a href="/user/find">
+    <div class="tab mypage-color">
+    所有書籍検索
+    </div>
+  </a>
 </div>
