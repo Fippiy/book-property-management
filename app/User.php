@@ -41,10 +41,11 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Property');
     }
-    public function scopeUserBook()
+    public function scopeUserGetBook()
     {
         $property = Property::where('user_id', Auth::user()->id)
                         ->join('bookdata','bookdata.id','=','properties.bookdata_id')
+                        ->select('properties.id','title','picture','cover')
                         ->get();
         return $property;
     }
