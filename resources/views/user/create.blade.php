@@ -63,11 +63,9 @@
         @else
           <span>全ての書籍が登録済みです。</span>
         @endif
-
       </div>
       @if (isset($property))
-        @component('components.book_detail',['book' => $property->bookdata])
-        @endcomponent
+        @include('components.book_property_detail')
       @endif
     </div>
   </div>
