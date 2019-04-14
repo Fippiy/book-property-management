@@ -47,10 +47,10 @@ Breadcrumbs::for('property.index', function ($trail) {
     $trail->push('所有書籍トップ', url('property.index'));
 });
 
-// トップページ / マイページ
-Breadcrumbs::for('user.index', function ($trail) {
-    $trail->parent('toppage');
-    $trail->push('マイページ', url('user.index'));
+// トップページ / 所有書籍 / 所有書籍詳細
+Breadcrumbs::for('property.show', function ($trail) {
+    $trail->parent('property.index');
+    $trail->push('所有書籍詳細', url('property.show'));
 });
 
 // トップページ / マイページ / 所有書籍登録
@@ -63,12 +63,6 @@ Breadcrumbs::for('user.create', function ($trail) {
 Breadcrumbs::for('user.find', function ($trail) {
     $trail->parent('user.index');
     $trail->push('所有書籍検索', url('user.find'));
-});
-
-// トップページ / マイページ / 所有書籍詳細
-Breadcrumbs::for('user.show', function ($trail) {
-    $trail->parent('user.index');
-    $trail->push('所有書籍詳細', url('user.show'));
 });
 
 // トップページ / マイページ / 所有書籍編集
