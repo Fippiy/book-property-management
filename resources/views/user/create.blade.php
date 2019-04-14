@@ -35,11 +35,24 @@
             <div class="form-contents">
               <div class="form-one-size">
                 <div class="form-input">
+                  <div class="form-label">タイトル名</div>
                   <select class="form-input__select" name="bookdata_id">
                     @foreach ($books as $book)
                       <option value="{{$book->id}}">{{$book->title}}</option>
                     @endforeach
                   </select>
+                </div>
+                <div class="form-input">
+                  <div class="form-label">所持数</div>
+                  <div><input class="form-input__input" type="number" name="number" value="1"></div>
+                </div>
+                <div class="form-input">
+                  <div class="form-label">所持日</div>
+                  <div><input class="form-input__input" type="date" name="getdate" value="{{old('getdate')}}"></div>
+                </div>
+                <div class="form-input">
+                  <div class="form-label">フリーメモ</div>
+                  <div><textarea class="form-input__detail" type="text" name="freememo">{{old('freememo')}}</textarea></div>
                 </div>
               </div>
             </div>
@@ -50,11 +63,9 @@
         @else
           <span>全ての書籍が登録済みです。</span>
         @endif
-
       </div>
       @if (isset($property))
-        @component('components.book_detail',['book' => $property->bookdata])
-        @endcomponent
+        @include('components.book_property_detail')
       @endif
     </div>
   </div>
