@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'MyPage')
+@section('title', 'MyBook')
 
 @section('stylesheet')
   <link href="/css/menulist.css" rel="stylesheet" type="text/css">
@@ -9,24 +9,24 @@
 
 @section('breadcrumbs')
   <div class="book-header__breadcrumbs">
-    {{ Breadcrumbs::render('user.index') }}
+    {{ Breadcrumbs::render('property.index') }}
   </div>
 @endsection
 
 @section('pagemenu')
-  @include('components.menu_mypage')
+  @include('components.menu_property')
 @endsection
 
 @section('content')
   <div class="index-content">
     <div class="books-list">
-      <div class="books-list__title mypage-color">
+      <div class="books-list__title propertypage-color">
         所有書籍一覧
       </div>
       @if (isset($books))
         @component('components.books_list',['books'=>$books])
           @slot('page_path')
-            user
+            property
           @endslot
         @endcomponent
       @endif

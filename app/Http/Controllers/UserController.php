@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Bookdata;
-use App\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $property = User::userGetBook();
-        return view('user.index',['user'=>$user, 'books'=>$property]);
+        //
     }
 
     /**
@@ -30,10 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        // 所有書籍を除外して取得
-        $notProperties = User::userNothaveBook();
-        $msg = '登録書籍を選択して下さい。';
-        return view('user.create',['books'=>$notProperties, 'msg'=>$msg]);
+        //
     }
 
     /**
@@ -44,23 +37,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-      // 新規レコード生成
-      $property = new Property;
-      // リクエストデータ受取
-      $form = $request->all();
-      // フォームトークン削除
-      unset($form['_token']);
-      // ユーザー情報追加
-      $user = Auth::user()->id;
-      $form = $form + array('user_id' => $user);
-      // DB保存
-      $property->fill($form)->save();
-      // 登録完了メッセージ
-      $msg = "所有書籍を登録しました。";
-      // 次の登録用フォームデータ取得
-      // 所有書籍を除外して取得
-      $notProperties = User::userNothaveBook();
-      return view('user.create',['books'=>$notProperties, 'property'=>$property, 'msg'=>$msg]);
+      //
     }
 
     /**
@@ -71,8 +48,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $property = Property::find($id);
-        return view('user.show', ['property' => $property]);
+        //
       }
 
     /**
@@ -83,9 +59,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $property = Property::find($id);
-        return view('user.edit', ['form' => $property]);
-      }
+        //
+    }
 
     /**
      * Update the specified resource in storage.
@@ -96,16 +71,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-      // バリデーションルール設定適用がいる
-      // 対象レコード取得
-      $property = Property::find($id);
-      // リクエストデータ受取
-      $form = $request->all();
-      // フォームトークン削除
-      unset($form['_token']);
-      // レコードアップデート
-      $property->fill($form)->save();
-      return redirect('/user');
+      //
     }
 
     /**
@@ -116,28 +82,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-      // 削除レコード取得
-      $delete_book = Property::find($id);
-      // レコード削除
-      $delete_book->delete();
-      return redirect('/user');
-    }
-
-    public function find(Request $request)
-    {
-      return view('user.find', ['input' => '']);
-    }
-
-    public function search(Request $request)
-    {
-      $title = $request->input;
-      $properties = Property::where('user_id', Auth::user()->id)
-                        ->join('bookdata','bookdata.id','=','properties.bookdata_id')
-                        ->where('title', 'like', "%{$title}%")
-                        ->select('properties.id','title','picture','cover')
-                        ->get();
-      $param = ['input' => $title, 'books' => $properties];
-      return view('user.find', $param);
+      //
     }
 
     public function getLogin(Request $requet)

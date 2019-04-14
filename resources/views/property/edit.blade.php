@@ -9,18 +9,18 @@
 
 @section('breadcrumbs')
   <div class="book-header__breadcrumbs">
-    {{ Breadcrumbs::render('user.edit',$form) }}
+    {{ Breadcrumbs::render('property.edit',$form) }}
   </div>
 @endsection
 
 @section('pagemenu')
-  @include('components.menu_mypage')
+  @include('components.menu_property')
 @endsection
 
 @section('content')
 <div class="index-content">
     <div class="books-list">
-      <div class="books-list__title mypage-color">
+      <div class="books-list__title propertypage-color">
         所有書籍編集
       </div>
       @if (isset($msg))
@@ -29,7 +29,7 @@
         </div>
       @endif
       <div class="book-new">
-          <form action="/user/{{$form->id}}" method="post" enctype="multipart/form-data">
+          <form action="/property/{{$form->id}}" method="post" enctype="multipart/form-data">
             {{ csrf_field() }}
             <input type="hidden" name="_method" value="PUT">
             <div class="form-contents">

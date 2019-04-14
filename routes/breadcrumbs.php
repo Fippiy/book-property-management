@@ -41,32 +41,32 @@ Breadcrumbs::for('book.find', function ($trail) {
     $trail->push('書籍検索', url('book.find'));
 });
 
-// トップページ / マイページ
-Breadcrumbs::for('user.index', function ($trail) {
+// トップページ / 所有書籍
+Breadcrumbs::for('property.index', function ($trail) {
     $trail->parent('toppage');
-    $trail->push('マイページ', url('user.index'));
+    $trail->push('所有書籍トップ', url('property.index'));
 });
 
-// トップページ / マイページ / 所有書籍登録
-Breadcrumbs::for('user.create', function ($trail) {
-    $trail->parent('user.index');
-    $trail->push('所有書籍登録', url('user.create'));
+// トップページ / 所有書籍 / 所有書籍詳細
+Breadcrumbs::for('property.show', function ($trail) {
+    $trail->parent('property.index');
+    $trail->push('所有書籍詳細', url('property.show'));
 });
 
-// トップページ / マイページ / 所有書籍検索
-Breadcrumbs::for('user.find', function ($trail) {
-    $trail->parent('user.index');
-    $trail->push('所有書籍検索', url('user.find'));
+// トップページ / 所有書籍 / 所有書籍登録
+Breadcrumbs::for('property.create', function ($trail) {
+    $trail->parent('property.index');
+    $trail->push('所有書籍登録', url('property.create'));
 });
 
-// トップページ / マイページ / 所有書籍詳細
-Breadcrumbs::for('user.show', function ($trail) {
-    $trail->parent('user.index');
-    $trail->push('所有書籍詳細', url('user.show'));
+// トップページ / 所有書籍 / 所有書籍検索
+Breadcrumbs::for('property.find', function ($trail) {
+    $trail->parent('property.index');
+    $trail->push('所有書籍検索', url('property.find'));
 });
 
-// トップページ / マイページ / 所有書籍編集
-Breadcrumbs::for('user.edit', function ($trail, $property) {
-    $trail->parent('user.index');
-    $trail->push('所有書籍編集:'.$property->bookdata->title, url('user.edit'));
+// トップページ / 所有書籍 / 所有書籍編集
+Breadcrumbs::for('property.edit', function ($trail, $property) {
+    $trail->parent('property.index');
+    $trail->push('所有書籍編集:'.$property->bookdata->title, url('property.edit'));
 });

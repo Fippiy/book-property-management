@@ -4,9 +4,12 @@
       登録書籍
     </div>
   </a>
-  <a href="/user">
-    <div class="tab mypage-color">
-      マイページ
+  <a href="/property">
+    <div class="tab propertypage-color">
+      所有書籍
     </div>
   </a>
+  <div class="tab mypage-color">
+    マイページ
+  </div>
 </div>
