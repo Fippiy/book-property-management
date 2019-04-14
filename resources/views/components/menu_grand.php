@@ -9,9 +9,7 @@
       所有書籍
     </div>
   </a>
-  <a href="/user">
-    <div class="tab mypage-color">
-      マイページ
-    </div>
-  </a>
+  <div class="tab mypage-color">
+    マイページ
+  </div>
 </div>
