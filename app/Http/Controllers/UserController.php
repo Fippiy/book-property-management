@@ -28,10 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        // 所有書籍を除外して取得
-        $notProperties = User::userNothaveBook();
-        $msg = '登録書籍を選択して下さい。';
-        return view('user.create',['books'=>$notProperties, 'msg'=>$msg]);
+        //
     }
 
     /**
@@ -42,23 +39,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-      // 新規レコード生成
-      $property = new Property;
-      // リクエストデータ受取
-      $form = $request->all();
-      // フォームトークン削除
-      unset($form['_token']);
-      // ユーザー情報追加
-      $user = Auth::user()->id;
-      $form = $form + array('user_id' => $user);
-      // DB保存
-      $property->fill($form)->save();
-      // 登録完了メッセージ
-      $msg = "所有書籍を登録しました。";
-      // 次の登録用フォームデータ取得
-      // 所有書籍を除外して取得
-      $notProperties = User::userNothaveBook();
-      return view('user.create',['books'=>$notProperties, 'property'=>$property, 'msg'=>$msg]);
+      //
     }
 
     /**
