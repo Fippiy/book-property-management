@@ -9,18 +9,18 @@
 
 @section('breadcrumbs')
   <div class="book-header__breadcrumbs">
-    {{ Breadcrumbs::render('user.create') }}
+    {{ Breadcrumbs::render('property.create') }}
   </div>
 @endsection
 
 @section('pagemenu')
-  @include('components.menu_mypage')
+  @include('components.menu_property')
 @endsection
 
 @section('content')
   <div class="index-content">
     <div class="books-list">
-      <div class="books-list__title mypage-color">
+      <div class="books-list__title propertypage-color">
         所有書籍登録
       </div>
       @if (isset($msg))
@@ -30,7 +30,7 @@
       @endif
       <div class="book-new">
         @if (isset($books) && count($books) != 0)
-          <form action="/user" method="post" enctype="multipart/form-data">
+          <form action="/property" method="post" enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class="form-contents">
               <div class="form-one-size">
