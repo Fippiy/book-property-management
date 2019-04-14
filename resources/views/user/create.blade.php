@@ -44,11 +44,11 @@
                 </div>
                 <div class="form-input">
                   <div class="form-label">所持数</div>
-                  <div><input class="form-input__number" type="number" name="number" value="1"></div>
+                  <div><input class="form-input__input" type="number" name="number" value="1"></div>
                 </div>
                 <div class="form-input">
                   <div class="form-label">所持日</div>
-                  <div><input class="form-input__date" type="date" name="getdate" value="{{old('getdate')}}"></div>
+                  <div><input class="form-input__input" type="date" name="getdate" value="{{old('getdate')}}"></div>
                 </div>
                 <div class="form-input">
                   <div class="form-label">フリーメモ</div>
