@@ -64,3 +64,9 @@ Breadcrumbs::for('user.show', function ($trail) {
     $trail->parent('user.index');
     $trail->push('所有書籍詳細', url('user.show'));
 });
+
+// トップページ / マイページ / 所有書籍編集
+Breadcrumbs::for('user.edit', function ($trail, $property) {
+    $trail->parent('user.index');
+    $trail->push('所有書籍編集:'.$property->bookdata->title, url('user.edit'));
+});
