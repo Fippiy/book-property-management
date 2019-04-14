@@ -18,9 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $property = User::userGetBook();
-        return view('user.index',['user'=>$user, 'books'=>$property]);
+        //
     }
 
     /**
