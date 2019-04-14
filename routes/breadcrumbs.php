@@ -65,8 +65,8 @@ Breadcrumbs::for('property.find', function ($trail) {
     $trail->push('所有書籍検索', url('property.find'));
 });
 
-// トップページ / マイページ / 所有書籍編集
-Breadcrumbs::for('user.edit', function ($trail, $property) {
-    $trail->parent('user.index');
-    $trail->push('所有書籍編集:'.$property->bookdata->title, url('user.edit'));
+// トップページ / 所有書籍 / 所有書籍編集
+Breadcrumbs::for('property.edit', function ($trail, $property) {
+    $trail->parent('property.index');
+    $trail->push('所有書籍編集:'.$property->bookdata->title, url('property.edit'));
 });
