@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Bookdata;
-use App\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -84,11 +82,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-      // 削除レコード取得
-      $delete_book = Property::find($id);
-      // レコード削除
-      $delete_book->delete();
-      return redirect('/user');
+      //
     }
 
     public function getLogin(Request $requet)
