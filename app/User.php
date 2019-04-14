@@ -41,6 +41,7 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Property');
     }
+    // 移行完了後に削除
     public function scopeUserGetBook()
     {
         $property = Property::where('user_id', Auth::user()->id)
