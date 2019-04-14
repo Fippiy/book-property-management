@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +17,7 @@ class PropertyController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $property = User::userGetBook();
+        $property = Property::userGetBook();
         return view('property.index',['user'=>$user, 'books'=>$property]);
     }
 
