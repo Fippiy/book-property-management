@@ -80,7 +80,8 @@ class PropertyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $property = Property::find($id);
+        return view('property.edit', ['form' => $property]);
     }
 
     /**
@@ -92,7 +93,16 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      // バリデーションルール設定適用がいる
+      // 対象レコード取得
+      $property = Property::find($id);
+      // リクエストデータ受取
+      $form = $request->all();
+      // フォームトークン削除
+      unset($form['_token']);
+      // レコードアップデート
+      $property->fill($form)->save();
+      return redirect('/property');
     }
 
     /**
