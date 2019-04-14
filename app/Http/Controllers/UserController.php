@@ -116,7 +116,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+      // 削除レコード取得
+      $delete_book = Property::find($id);
+      // レコード削除
+      $delete_book->delete();
+      return redirect('/user');
     }
 
     public function find(Request $request)
