@@ -101,23 +101,6 @@ class UserController extends Controller
       return redirect('/user');
     }
 
-    public function find(Request $request)
-    {
-      return view('user.find', ['input' => '']);
-    }
-
-    public function search(Request $request)
-    {
-      $title = $request->input;
-      $properties = Property::where('user_id', Auth::user()->id)
-                        ->join('bookdata','bookdata.id','=','properties.bookdata_id')
-                        ->where('title', 'like', "%{$title}%")
-                        ->select('properties.id','title','picture','cover')
-                        ->get();
-      $param = ['input' => $title, 'books' => $properties];
-      return view('user.find', $param);
-    }
-
     public function getLogin(Request $requet)
     {
         $param = ['message' => 'ログインして下さい。'];
