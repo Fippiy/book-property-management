@@ -9,21 +9,21 @@
 
 @section('breadcrumbs')
   <div class="book-header__breadcrumbs">
-    {{ Breadcrumbs::render('user.find') }}
+    {{ Breadcrumbs::render('property.find') }}
   </div>
 @endsection
 
 @section('pagemenu')
-  @include('components.menu_mypage')
+  @include('components.menu_property')
 @endsection
 
 @section('content')
   <div class="index-content">
     <div class="books-list">
-      <div class="books-list__title mypage-color">
+      <div class="books-list__title propertypage-color">
         検索
       </div>
-        <form class="book-find" action="/user/find" method="post">
+        <form class="book-find" action="/property/find" method="post">
           {{ csrf_field() }}
           <h2 class="book-find__word">検索ワードを入力して下さい</h2>
           <div class="book-find__input">
@@ -34,7 +34,7 @@
         @if (isset($books))
           @component('components.books_list',['books'=>$books])
             @slot('page_path')
-              user
+              property
             @endslot
           @endcomponent
         @endif

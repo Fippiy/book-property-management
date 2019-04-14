@@ -59,10 +59,10 @@ Breadcrumbs::for('property.create', function ($trail) {
     $trail->push('所有書籍登録', url('property.create'));
 });
 
-// トップページ / マイページ / 所有書籍検索
-Breadcrumbs::for('user.find', function ($trail) {
-    $trail->parent('user.index');
-    $trail->push('所有書籍検索', url('user.find'));
+// トップページ / 所有書籍 / 所有書籍検索
+Breadcrumbs::for('property.find', function ($trail) {
+    $trail->parent('property.index');
+    $trail->push('所有書籍検索', url('property.find'));
 });
 
 // トップページ / マイページ / 所有書籍編集
