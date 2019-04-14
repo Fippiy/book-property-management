@@ -17,7 +17,7 @@ class CreatePropertiesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('user_id');
             $table->integer('bookdata_id');
-            $table->integer('number')->nullable();
+            $table->integer('number');
             $table->date('getdate')->nullable();
             $table->text('freememo')->nullable();
             $table->timestamps();
