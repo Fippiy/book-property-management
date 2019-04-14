@@ -41,6 +41,12 @@ Breadcrumbs::for('book.find', function ($trail) {
     $trail->push('書籍検索', url('book.find'));
 });
 
+// トップページ / 所有書籍
+Breadcrumbs::for('property.index', function ($trail) {
+    $trail->parent('toppage');
+    $trail->push('所有書籍トップ', url('property.index'));
+});
+
 // トップページ / マイページ
 Breadcrumbs::for('user.index', function ($trail) {
     $trail->parent('toppage');
