@@ -69,8 +69,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $property = Property::find($id);
-        return view('user.show', ['property' => $property]);
+        //
       }
 
     /**

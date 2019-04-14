@@ -50,7 +50,8 @@ class PropertyController extends Controller
      */
     public function show($id)
     {
-        //
+        $property = Property::find($id);
+        return view('property.show', ['property' => $property]);
     }
 
     /**
