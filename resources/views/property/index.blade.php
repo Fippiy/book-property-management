@@ -26,7 +26,7 @@
       @if (isset($books))
         @component('components.books_list',['books'=>$books])
           @slot('page_path')
-            user
+            property
           @endslot
         @endcomponent
       @endif
