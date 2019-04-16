@@ -23,7 +23,7 @@
       <div class="books-list__title propertypage-color">
         検索
       </div>
-        <form class="book-find" action="/property/find" method="post">
+        <form class="book-find" action="{{ route('property.find') }}" method="post">
           {{ csrf_field() }}
           <h2 class="book-find__word">検索ワードを入力して下さい</h2>
           <div class="book-find__input">
