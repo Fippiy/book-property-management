@@ -6,10 +6,10 @@
 <div class="auth-contents">
   <div class="auth-contents__message">
     @foreach ($errors->all() as $error)
-      {{ $error }}<br>
+      <p class="auth-contents__message--error">{{ $error }}</p>
     @endforeach
     @if (empty($error))
-      <p>ログイン情報を入力して下さい。</p>
+      <p class="auth-contents__message--message">ログイン情報を入力して下さい。</p>
     @endif
   </div>
   <div class="auth-contents__form">
