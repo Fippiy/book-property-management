@@ -11,6 +11,11 @@
 |
 */
 
+// トップページ
+Route::get('/', function () {
+  return view('index');
+});
+
 // ログインルート
 Auth::routes();
 
@@ -19,12 +24,6 @@ Route::post('/user/signup', 'UserController@postSignup');
 Route::get('/user/signup', 'UserController@getSignup');
 Route::post('/user/login', 'UserController@postLogin');
 Route::get('/user/login', 'UserController@getLogin');
-
-// 削除[ビューとコントローラ削除後]
-Route::get('/', function () {
-    // return view('welcome');
-  return view('index');
-});
 
 // ログイン必須ページ
 Route::group(['middleware' => ['auth']], function () {
