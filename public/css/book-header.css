@@ -16,11 +16,24 @@
   font-size: 26px;
 }
 .book-header__header--navbar {
+  border-radius: 0 0 50px 50px;
+  margin: 0 20px 20px 0;
+  background: #7dc7ea;
   text-align: right;
   height: 85px;
-  width: 480px;
   padding: 0 20px 0;
   line-height: 85px;
+}
+.book-header__header--navbar .nav {
+  display: flex;
+  align-items: center;
+}
+.book-header__header--navbar .nav div {
+  margin-right: 20px;
+}
+.book-header__header--navbar .nav .logout-form .form-group__submit {
+  border-radius: 20px;
+  background: #b8860b;
 }
 .book-header__breadcrumbs {
   font-size: 15px;
