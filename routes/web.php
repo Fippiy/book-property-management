@@ -39,8 +39,5 @@ Route::group(['middleware' => ['auth']], function () {
   Route::resource('user', 'UserController');
 });
 
-// 削除[ビューとコントローラ削除後]
-Route::get('/home', 'HomeController@index')->name('home');
-
 // info情報表示用
 // Route::get('/info', function () { phpinfo(); });
