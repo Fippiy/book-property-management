@@ -17,10 +17,10 @@
       <div class="toppage-contents__main--right-content">
         <div class="select-menu">
           <div class="select-menu__sign-up">
-            <a href="./user/signup">新規登録</a>
+            <a href="{{ route('register') }}">新規登録</a>
           </div>
           <div class="select-menu__sign-in">
-            <a href="./user/login">ログイン</a>
+            <a href="{{ route('login') }}">ログイン</a>
           </div>
         </div>
       </div>
