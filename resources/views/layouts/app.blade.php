@@ -11,8 +11,8 @@
     <div class="head-var">
       <h1 class="head-var__title"><a href="/">@yield('title')</a></h1>
       <div class="head-var__select">
-        <span class="head-var__select--box"><a href="/user/signup">新規登録</a></span>
-        <span class="head-var__select--box"><a href="/user/login">ログイン</a></span>
+        <span class="head-var__select--box"><a href="{{ route('register') }}">新規登録</a></span>
+        <span class="head-var__select--box"><a href="{{ route('login') }}">ログイン</a></span>
       </div>
     </div>
   </header>
