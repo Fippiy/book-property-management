@@ -19,12 +19,6 @@ Route::get('/', function () {
 // ログインルート
 Auth::routes();
 
-// ログインルートに巻き取り後削除
-// Route::post('/user/signup', 'UserController@postSignup');
-// Route::get('/user/signup', 'UserController@getSignup');
-// Route::post('/user/login', 'UserController@postLogin');
-// Route::get('/user/login', 'UserController@getLogin');
-
 // ログイン必須ページ
 Route::group(['middleware' => ['auth']], function () {
   Route::get('/book/isbn', 'BookController@getIsbn');
