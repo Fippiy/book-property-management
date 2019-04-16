@@ -23,11 +23,11 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
   Route::get('/book/isbn', 'BookController@getIsbn');
   Route::post('/book/isbn', 'BookController@postIsbn');
-  Route::get('/book/find', 'BookController@find');
-  Route::post('/book/find', 'BookController@search');
+  Route::get('/book/find', 'BookController@find')->name('book.find');
+  Route::post('/book/find', 'BookController@search')->name('book.find');
   Route::resource('book', 'BookController');
-  Route::get('/property/find', 'PropertyController@find');
-  Route::post('/property/find', 'PropertyController@search');
+  Route::get('/property/find', 'PropertyController@find')->name('property.find');
+  Route::post('/property/find', 'PropertyController@search')->name('property.find');
   Route::resource('property', 'PropertyController');
   Route::resource('user', 'UserController');
 });
