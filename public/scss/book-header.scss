@@ -16,11 +16,29 @@
       }
     }
     &--navbar {
+      border-radius: 0 0 50px 50px;
+      margin: 0 20px 20px 0;
+      background: #7dc7ea;
       text-align: right;
       height: 85px;
-      width: 480px;
+      // width: 480px;
       padding: 0 20px 0;
       line-height: 85px;
+      .nav {
+        div {
+          margin-right: 20px;
+        }
+        display: flex;
+        align-items: center;
+        .logout-form {
+          .form-group{
+            &__submit {
+              border-radius: 20px;
+              background: rgba(184,134,11,1);
+            }
+          }
+        }
+      }
     }
   }
   &__breadcrumbs {

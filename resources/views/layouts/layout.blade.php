@@ -20,14 +20,8 @@
           <a href="/book"><h1 class="title-name">Book-property</h1></a>
         </div>
         <div class="book-header__header--navbar">
-          <form id="logout-form" action="{{ route('logout') }}" method="POST">
-            @csrf
-            <a class="dropdown-item" href="{{ route('logout') }}"
-               onclick="event.preventDefault();
-                             document.getElementById('logout-form').submit();">
-                {{ __('Logout') }}
-            </a>
-          </form>
+          @component('components.user_nav')
+          @endcomponent
         </div>
       </div>
       <!-- パンくずは各ページにて個別処理 -->
