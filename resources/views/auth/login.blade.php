@@ -20,7 +20,7 @@
         <input class="form-group__input" type="text" name="email" value="{{ old('email') }}">
       </div>
       <div class="form-group">
-        <div class="form-group__lavel"><lavel>パスワード</lavel><span class="form-group__pass"><a href="{{ route('password.request') }}">パスワードを忘れた場合</a></span></div>
+        <div class="form-group__lavel"><lavel>パスワード</lavel><span class="form-group__pass"><a class="form-group__pass--color" href="{{ route('password.request') }}">パスワードを忘れた場合</a></span></div>
         <input class="form-group__input" type="password" name="password">
       </div>
       <div class="form-group">
