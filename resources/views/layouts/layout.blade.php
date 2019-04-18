@@ -20,16 +20,8 @@
           <a href="/book"><h1 class="title-name">Book-property</h1></a>
         </div>
         <div class="book-header__header--navbar">
-          <div class="nav">
-            <div class="nav__name">username</div>
-            <div class="nav__property">所有書籍数[1]</div>
-            <form class="logout-form" action="{{ route('logout') }}" method="POST">
-              {{ csrf_field() }}
-              <div class="form-group">
-                <input class="form-group__submit" type="submit" value="ログアウト">
-              </div>
-            </form>
-          </div>
+          @component('components.user_nav')
+          @endcomponent
         </div>
       </div>
       <!-- パンくずは各ページにて個別処理 -->
