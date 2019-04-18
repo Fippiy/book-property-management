@@ -60,3 +60,6 @@ a {
   font-size: 10px;
   margin-left: 20px;
 }
+.auth-contents__form .form-group__pass--color {
+  color: red;
+}

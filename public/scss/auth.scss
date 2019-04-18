@@ -63,6 +63,9 @@ a {
       &__pass {
         font-size: 10px;
         margin-left: 20px;
+        &--color {
+          color: red;
+        }
       }
     }
   }
