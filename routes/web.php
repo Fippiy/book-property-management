@@ -17,10 +17,10 @@ Route::get('/', function () {
 });
 
 // ログインルート
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 // ログイン必須ページ
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['verified']], function () {
   Route::get('/book/isbn', 'BookController@getIsbn');
   Route::post('/book/isbn', 'BookController@postIsbn');
   Route::get('/book/find', 'BookController@find')->name('book.find');
