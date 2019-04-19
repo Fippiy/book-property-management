@@ -60,6 +60,13 @@ a {
         font-size: 20px;
         padding: 10px;
       }
+      &__pass {
+        font-size: 10px;
+        margin-left: 20px;
+        &--color {
+          color: red;
+        }
+      }
     }
   }
 }
