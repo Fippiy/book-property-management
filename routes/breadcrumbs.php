@@ -44,13 +44,13 @@ Breadcrumbs::for('book.find', function ($trail) {
 // トップページ / 所有書籍
 Breadcrumbs::for('property.index', function ($trail) {
     $trail->parent('toppage');
-    $trail->push('所有書籍トップ', url('property.index'));
+    $trail->push('所有書籍', url('property.index'));
 });
 
 // トップページ / 所有書籍 / 所有書籍詳細
-Breadcrumbs::for('property.show', function ($trail) {
+Breadcrumbs::for('property.show', function ($trail, $property) {
     $trail->parent('property.index');
-    $trail->push('所有書籍詳細', url('property.show'));
+    $trail->push($property->bookdata->title, url('property.show'));
 });
 
 // トップページ / 所有書籍 / 所有書籍登録
