@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', '登録受付完了')
+
 @section('content')
 <div class="auth-contents">
   <div class="auth-contents__message">
