@@ -16,5 +16,13 @@
       することで、再送できます。
     </div>
   </div>
+  <div class="auth-contents__form">
+    <form action="{{ route('logout') }}" method="post">
+      {{ csrf_field() }}
+      <div class="form-group">
+        <input class="form-group__submit" type="submit" value="別のユーザーに切り替える">
+      </div>
+    </form>
+  </div>
 </div>
 @endsection
