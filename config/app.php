@@ -53,7 +53,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://protected-fortress-61913.herokuapp.com/'),
+    'url' => env('APP_URL', 'https://protected-fortress-61913.herokuapp.com'),
 
     'asset_url' => env('ASSET_URL', null),
 
