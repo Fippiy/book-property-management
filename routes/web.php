@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 // ログインルート
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 // ログイン必須ページ
 Route::group(['middleware' => ['auth']], function () {
