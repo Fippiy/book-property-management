@@ -91,6 +91,16 @@
   font-size: 20px;
   color: blue;
 }
+.index-content .books-list .book-table__profile-list .profile-group {
+  display: flex;
+  height: 10px;
+  padding: 10px 5px;
+  border-bottom: 1px solid #5ba5c8;
+}
+.index-content .books-list .book-table__profile-list .profile-group__title {
+  width: 100px;
+  padding-right: 30px;
+}
 .index-content .books-list .book-detail {
   width: 100%;
   display: flex;
