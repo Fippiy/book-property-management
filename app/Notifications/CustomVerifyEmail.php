@@ -6,8 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Auth\Notifications\VerifyEmail;
 
-class CustomVerifyEmail extends Notification
+class CustomVerifyEmail extends VerifyEmail
 {
     use Queueable;
 
@@ -41,9 +42,10 @@ class CustomVerifyEmail extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject('メールアドレス確認')
+            ->line('下のボタンをクリックしてメールアドレスの確認を完了してください。')
+            ->action('パスワード確認', $this->verificationUrl($notifiable))
+            ->line('もし心当たりがない場合は、本メッセージは破棄してください。');
     }
 
     /**
