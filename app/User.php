@@ -52,4 +52,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
     {
         $this->notify(new CustomVerifyEmail());
     }
+    public static $editRules = array(
+        'password' => 'confirmed'
+    );
 }
