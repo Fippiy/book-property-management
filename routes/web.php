@@ -29,7 +29,9 @@ Route::group(['middleware' => ['verified']], function () {
   Route::get('/property/find', 'PropertyController@find')->name('property.find');
   Route::post('/property/find', 'PropertyController@search')->name('property.find');
   Route::resource('property', 'PropertyController');
-  Route::resource('user', 'UserController');
+  Route::get('/user/{page}', 'UserController@useredit')->name('edit.user');
+  Route::post('/user/{page}', 'UserController@update')->name('update.user');
+  Route::resource('user', 'UserController',['except' => ['show', 'edit']]);
 });
 
 // info情報表示用
