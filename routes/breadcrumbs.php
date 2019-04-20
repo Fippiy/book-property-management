@@ -77,3 +77,8 @@ Breadcrumbs::for('user.index', function ($trail) {
     $trail->push('マイページ', url('user'));
 });
 
+// トップページ / マイページ / 編集：ユーザ
+Breadcrumbs::for('user.edit', function ($trail, $auth) {
+    $trail->parent('user.index');
+    $trail->push('編集:'.$auth->name, url('user.edit'));
+});
