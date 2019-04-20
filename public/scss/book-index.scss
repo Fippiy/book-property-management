@@ -101,7 +101,12 @@
             padding-right: 30px;
           }
           &__element {
-            
+            padding-right: 30px;
+          }
+          &__edit {
+            a{
+              color: blue;
+            }
           }
         }
       }

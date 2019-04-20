@@ -101,6 +101,12 @@
   width: 100px;
   padding-right: 30px;
 }
+.index-content .books-list .book-table__profile-list .profile-group__element {
+  padding-right: 30px;
+}
+.index-content .books-list .book-table__profile-list .profile-group__edit a {
+  color: blue;
+}
 .index-content .books-list .book-detail {
   width: 100%;
   display: flex;
