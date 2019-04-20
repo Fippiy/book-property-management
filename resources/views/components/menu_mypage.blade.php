@@ -4,11 +4,6 @@
       マイページトップ
     </div>
   </a>
-  <a href="{{ route('user.edit', $auth->id)}}">
-    <div class="tab mypage-color">
-      ユーザ情報編集
-    </div>
-  </a>
   <div class="tab mypage-color">
     ユーザー情報削除
   </div>
