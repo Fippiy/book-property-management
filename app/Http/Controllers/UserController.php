@@ -60,8 +60,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-      $auth = Auth::user();
-      return view('user.edit',[ 'auth' => $auth ]);
+      //
     }
 
     /**
@@ -73,23 +72,27 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-      // バリデーションルール
-      $this->validate($request, User::$editRules);
+      // 選択ページ情報取得
+      $page = $request->page;
+      // 選択ページでバリデーションを選ぶ
+      if ($page == 'name'){
+        $rule = User::$editNameRules;
+      } elseif ($page == 'email'){
+        $rule = User::$editEmailRules;
+      } elseif ($page == 'password'){
+        $rule = User::$editPasswordRules;
+      }
+      // バリデーションチェック
+      $this->validate($request, $rule);
       // 対象レコード取得
       $auth = User::find($id);
       // リクエストデータ受取
       $form = $request->all();
       // フォームトークン削除
       unset($form['_token']);
-      // フォーム要素の評価
-      foreach ($form as $key => $value) {
-        // nullの場合更新対象から除外する
-        if($value == null) {
-          unset($form[$key]);
-        }
-      }
-      // パスワード処理
-      // ハッシュ化
+      // ページ情報削除
+      unset($form['page']);
+      // パスワードハッシュ化
       if (isset($form['password'])) {
         $form['password'] = Hash::make($form['password']);
       }
@@ -107,5 +110,10 @@ class UserController extends Controller
     public function destroy($id)
     {
       //
+    }
+    public function useredit($page)
+    {
+      $auth = Auth::user();
+      return view('user.edit',[ 'auth' => $auth, 'page' => $page ]);
     }
 }
