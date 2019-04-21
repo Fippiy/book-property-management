@@ -90,6 +90,26 @@
           }
         }
       }
+      &__profile-list {
+        .profile-group {
+          display: flex;
+          height: 10px;
+          padding: 10px 5px;
+          border-bottom: 1px solid #5ba5c8;
+          &__title {
+            width: 100px;
+            padding-right: 30px;
+          }
+          &__element {
+            padding-right: 30px;
+          }
+          &__edit {
+            a{
+              color: blue;
+            }
+          }
+        }
+      }
     }
     .book-detail {
       width: 100%;

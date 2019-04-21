@@ -70,3 +70,15 @@ Breadcrumbs::for('property.edit', function ($trail, $property) {
     $trail->parent('property.index');
     $trail->push('所有書籍編集:'.$property->bookdata->title, url('property.edit'));
 });
+
+// トップページ / マイページトップ
+Breadcrumbs::for('user.index', function ($trail) {
+    $trail->parent('toppage');
+    $trail->push('マイページ', url('user'));
+});
+
+// トップページ / マイページ / 編集：ユーザ
+Breadcrumbs::for('user.edit', function ($trail) {
+    $trail->parent('user.index');
+    $trail->push('編集', url('user.edit'));
+});
