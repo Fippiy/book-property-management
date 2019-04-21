@@ -18,19 +18,19 @@
 @endsection
 
 @section('content')
-@foreach ($errors->all() as $error)
-  <p class="auth-contents__message--error">{{ $error }}</p>
-@endforeach
 <div class="index-content">
     <div class="books-list">
       <div class="books-list__title mypage-color">
         ユーザー情報編集
       </div>
-      @if (isset($msg))
-        <div class="books-list__msg">
-            <span>{{$msg}}</span>
-        </div>
-      @endif
+      <div class="books-list__msg">
+        @foreach ($errors->all() as $error)
+          <p class="auth-contents__message--error">{{ $error }}</p>
+        @endforeach
+        @if (empty($error))
+          <p class="auth-contents__message--message">変更するデータを入力してください。</p>
+        @endif
+      </div>
       <div class="book-new">
         <form action="{{ route('update.user', $auth->id)}}" method="post" enctype="multipart/form-data">
           {{ csrf_field() }}
