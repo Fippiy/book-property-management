@@ -52,6 +52,10 @@
               @endif
               @if ($page == 'password')
               <div class="form-input">
+                <div class="form-label">現在のパスワード</div>
+                <div><input class="form-input__input" type="password" name="old_password" value=""></div>
+              </div>
+              <div class="form-input">
                 <div class="form-label">新パスワード</div>
                 <div><input class="form-input__input" type="password" name="password" value=""></div>
               </div>
