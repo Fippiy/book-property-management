@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Validator;
 
 class UserController extends Controller
 {
@@ -92,8 +93,19 @@ class UserController extends Controller
       unset($form['_token']);
       // ページ情報削除
       unset($form['page']);
-      // パスワードハッシュ化
-      if (isset($form['password'])) {
+      // パスワード照合
+      if ($page == 'password') {
+        // 旧パスワードチェック
+        $passcheck = Hash::check($form['old_password'], $auth->password);
+        // old_passwordにチェック結果をいれて、バリデーションチェックする
+        $validator = Validator::make(['old_password' => $passcheck], ['old_password' => 'accepted'], ['現在のパスワードが一致しません']);
+        // NG時にエラーとして処理をかえす
+        if ($validator->fails()) {
+          return redirect('user/password')
+                      ->withErrors($validator)
+                      ->withInput();
+        }
+        // 新パスワードハッシュ化
         $form['password'] = Hash::make($form['password']);
       }
       // レコードアップデート
