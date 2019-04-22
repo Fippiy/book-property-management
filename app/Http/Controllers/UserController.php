@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use Mail;
 use DB;
+use App\ChangeEmail;
 
 class UserController extends Controller
 {
@@ -143,37 +144,36 @@ class UserController extends Controller
       $auth = Auth::user();
       // リクエストデータ受取
       $new_email = $request->input('email');
+      // 変更前後でメールアドレスが同じか確認
+      // 同じ時は処理不要で中止
+      // (----あとで作成----)
       // 同じメールアドレスで変更中ステータスがないか確認
-      // あれば、古い変更中データは削除
-      //
+      // あれば、古い変更中データは削除して再申請orNG?
+      // (----あとで作成----)
       // メール照合用トークン生成
       $update_token = hash_hmac(
         'sha256',
         str_random(40).$new_email,
         env('APP_KEY')
       );
-      // $domain = env('APP_DOMAIN');
-      //
       // 変更データ一時保存DBへレコード保存
-      DB::table('change_email')->insert([
-        [
-            'user_id' => $auth->id,
-            'new_email' => $new_email,
-            'update_token' => $update_token
-        ]
-      ]);
-      //
-      // eval(\Psy\sh());
+      $change_email = new ChangeEmail;
+      $change_email->user_id = $auth->id;
+      $change_email->new_email = $new_email;
+      $change_email->update_token = $update_token;
+      $change_email->save();
       // メール送付
       // !!!!一時保存DBのデータを引き渡してメールをおくる
       $user = Auth::user();
       $user['token'] = $update_token;
       // eval(\Psy\sh());
       // resources/views/vendor/notifications/email.blade.php
-      Mail::send('index', ['user' => $user], function ($message) use ($user, $new_email, $update_token) {
-          // $message->priority($level);
+      // メールフォーマット新規作成orテキストのみ送信？
+      // (----あとで作成----)
+      $domain =env('APP_URL');
+      Mail::send('index', ['url' => "{$domain}/user/userEmailUpdate/?token={$update_token}"], function ($message) use ($change_email) {
           $message->from('hello@app.com', 'Your Application');
-          $message->to($new_email)->subject('Your Reminder!');
+          $message->to($change_email->new_email)->subject('Your Reminder!');
       });
       // Mail::raw('test mail',function($message) {$message->to('fippiy04@gmail.com')->subject('test');});
       return redirect('user');
