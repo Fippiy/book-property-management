@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Mail;
+use DB;
 
 class UserController extends Controller
 {
@@ -141,33 +142,38 @@ class UserController extends Controller
       // 対象レコード取得
       $auth = Auth::user();
       // リクエストデータ受取
-      $address = $request->input('email');
+      $new_email = $request->input('email');
       // 同じメールアドレスで変更中ステータスがないか確認
       // あれば、古い変更中データは削除
       //
       // メール照合用トークン生成
-      $token = hash_hmac(
+      $update_token = hash_hmac(
         'sha256',
-        str_random(40).$address,
+        str_random(40).$new_email,
         env('APP_KEY')
       );
       // $domain = env('APP_DOMAIN');
       //
       // 変更データ一時保存DBへレコード保存
-      // $auth->fill($form)->save();
-      // return redirect('/user');
+      DB::table('change_email')->insert([
+        [
+            'user_id' => $auth->id,
+            'new_email' => $new_email,
+            'update_token' => $update_token
+        ]
+      ]);
       //
       // eval(\Psy\sh());
       // メール送付
       // !!!!一時保存DBのデータを引き渡してメールをおくる
       $user = Auth::user();
-      $user['token'] = $token;
+      $user['token'] = $update_token;
       // eval(\Psy\sh());
       // resources/views/vendor/notifications/email.blade.php
-      Mail::send('vendor/notifications/email', ['user' => $user], function ($message) use ($user, $address, $token) {
+      Mail::send('index', ['user' => $user], function ($message) use ($user, $new_email, $update_token) {
           // $message->priority($level);
           $message->from('hello@app.com', 'Your Application');
-          $message->to($address)->subject('Your Reminder!');
+          $message->to($new_email)->subject('Your Reminder!');
       });
       // Mail::raw('test mail',function($message) {$message->to('fippiy04@gmail.com')->subject('test');});
       return redirect('user');
