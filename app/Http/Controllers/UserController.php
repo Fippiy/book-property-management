@@ -164,25 +164,15 @@ class UserController extends Controller
       $change_email->save();
       // メール送付
       // !!!!一時保存DBのデータを引き渡してメールをおくる
-      $user = Auth::user();
-      $user['token'] = $update_token;
-      // eval(\Psy\sh());
-      // resources/views/vendor/notifications/email.blade.php
-      // メールフォーマット新規作成orテキストのみ送信？
-      // (----あとで作成----)
       $domain =env('APP_URL');
-      Mail::send('index', ['url' => "{$domain}/user/userEmailUpdate/?token={$update_token}"], function ($message) use ($change_email) {
-          $message->from('hello@app.com', 'Your Application');
-          $message->to($change_email->new_email)->subject('Your Reminder!');
+      Mail::send('email/change_email', ['url' => "{$domain}/user/userEmailUpdate/?token={$update_token}"], function ($message) use ($change_email) {
+          $message->to($change_email->new_email)->subject('メールアドレス確認');
       });
-      // Mail::raw('test mail',function($message) {$message->to('fippiy04@gmail.com')->subject('test');});
       return redirect('user');
     // return [$auth, $form];
     }
     public function userEmailUpdate(Request $request)
     {
-      // メールからのアクセス
-      // http://127.0.0.1:8000/user/userEmailUpdate/?token=038ae6fddd76de23aff48226396c0c750185a26a28384632a8be86e5a1468732
       // トークン受け取り
       $token = $request->input('token');
       // トークン照合
@@ -198,8 +188,10 @@ class UserController extends Controller
           ->where('update_token', '=', $token)
           ->delete();
       // 変更完了通知
-      // (----あとで作成----)
-      // リダイレクト
+      Mail::send('email/complete_email',[], function ($message) use ($user) {
+        $message->to($user->email)->subject('メールアドレス確認完了');
+      });
+    // リダイレクト
       return redirect('user');
     }
 }
