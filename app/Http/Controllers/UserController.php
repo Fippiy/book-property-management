@@ -145,11 +145,17 @@ class UserController extends Controller
       // リクエストデータ受取
       $new_email = $request->input('email');
       // 変更前後でメールアドレスが同じか確認
-      // 同じ時は処理不要で中止
-      // (----あとで作成----)
-      // 同じメールアドレスで変更中ステータスがないか確認
-      // あれば、古い変更中データは削除して再申請orNG?
-      // (----あとで作成----)
+      $email_check = true;
+      if ($auth->email == $new_email) {
+        $email_check = false;
+      }
+      // メールアドレスが変更されていない時にエラーとして処理をかえす
+      $validator = Validator::make(['email' => $email_check], ['email' => 'accepted'], ['メールアドレスが変更されていません']);
+      if ($validator->fails()) {
+        return redirect('user/email')
+                    ->withErrors($validator)
+                    ->withInput();
+      }
       // メール照合用トークン生成
       $update_token = hash_hmac(
         'sha256',
@@ -169,7 +175,6 @@ class UserController extends Controller
           $message->to($change_email->new_email)->subject('メールアドレス確認');
       });
       return redirect('user');
-    // return [$auth, $form];
     }
     public function userEmailUpdate(Request $request)
     {
