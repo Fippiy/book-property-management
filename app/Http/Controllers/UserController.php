@@ -182,10 +182,24 @@ class UserController extends Controller
     public function userEmailUpdate(Request $request)
     {
       // メールからのアクセス
+      // http://127.0.0.1:8000/user/userEmailUpdate/?token=038ae6fddd76de23aff48226396c0c750185a26a28384632a8be86e5a1468732
       // トークン受け取り
+      $token = $request->input('token');
       // トークン照合
+      $email_change = DB::table('change_email')
+          ->where('update_token', '=', $token)
+          ->first();
       // 照合一致で一時保存DBのメールアドレスをDBメールアドレスに上書
+      $user = User::find($email_change->user_id);
+      $user->email = $email_change->new_email;
+      $user->save();
       // 一時保存DBレコード削除
+      DB::table('change_email')
+          ->where('update_token', '=', $token)
+          ->delete();
       // 変更完了通知
+      // (----あとで作成----)
+      // リダイレクト
+      return redirect('user');
     }
 }
