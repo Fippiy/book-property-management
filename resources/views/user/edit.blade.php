@@ -9,7 +9,7 @@
 
 @section('breadcrumbs')
   <div class="book-header__breadcrumbs">
-    {{ Breadcrumbs::render('user.edit',$auth) }}
+    {{ Breadcrumbs::render('edit.user',$auth) }}
   </div>
 @endsection
 
@@ -32,8 +32,8 @@
         @endif
       </div>
       <div class="book-new">
-        <form action="{{ route('update.user', $auth->id)}}" method="post" enctype="multipart/form-data">
-          {{ csrf_field() }}
+        <form action="{{ route('user.update', $auth->id)}}" method="post" enctype="multipart/form-data">
+        {{ csrf_field() }}
           <input type="hidden" name="_method" value="PUT">
           <input type="hidden" name="page" value="{{$page}}">
           <div class="form-contents">
@@ -42,12 +42,6 @@
               <div class="form-input">
                 <div class="form-label">ユーザー名</div>
                 <div><input class="form-input__input" type="text" name="name" value="{{$auth->name}}"></div>
-              </div>
-              @endif
-              @if ($page == 'email')
-              <div class="form-input">
-                <div class="form-label">メールアドレス</div>
-                <div><input class="form-input__input" type="text" name="email" value="{{$auth->email}}"></div>
               </div>
               @endif
               @if ($page == 'password')
