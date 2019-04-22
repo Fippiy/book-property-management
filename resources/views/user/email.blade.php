@@ -32,7 +32,6 @@
         @endif
       </div>
       <div class="book-new">
-        {{ route('email.change')}}
         <form action="{{ route('email.change')}}" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
           <div class="form-contents">
