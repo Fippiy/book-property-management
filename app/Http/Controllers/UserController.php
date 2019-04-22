@@ -128,4 +128,41 @@ class UserController extends Controller
       $auth = Auth::user();
       return view('user.edit',[ 'auth' => $auth, 'page' => $page ]);
     }
+    public function userEmailEdit()
+    {
+      $auth = Auth::user();
+      return view('user.email',[ 'auth' => $auth ]);
+    }
+    public function userEmailChange(Request $request)
+    {
+      // バリデーションチェック
+      $this->validate($request, User::$editEmailRules);
+      // 対象レコード取得
+      $auth = Auth::user();
+      // リクエストデータ受取
+      $form = $request->all();
+      // フォームトークン削除
+      unset($form['_token']);
+      // 同じメールアドレスで変更中ステータスがないか確認
+      // あれば、古い変更中データは削除
+      //
+      // メール照合用トークン生成
+      //
+      // 変更データ一時保存DBへレコード保存
+      // $auth->fill($form)->save();
+      // return redirect('/user');
+      //
+      // メール送付
+      //
+      return [$auth, $form];
+    }
+    public function userEmailUpdate(Request $request)
+    {
+      // メールからのアクセス
+      // トークン受け取り
+      // トークン照合
+      // 照合一致で一時保存DBのメールアドレスをDBメールアドレスに上書
+      // 一時保存DBレコード削除
+      // 変更完了通知
+    }
 }
