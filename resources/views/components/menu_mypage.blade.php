@@ -4,7 +4,9 @@
       マイページトップ
     </div>
   </a>
-  <div class="tab mypage-color">
-    ユーザー情報削除
-  </div>
+  <a href="/user/delete">
+    <div class="tab mypage-color">
+      ユーザー情報削除
+    </div>
+  </a>
 </div>

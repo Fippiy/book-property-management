@@ -10,6 +10,7 @@ use Validator;
 use Mail;
 use DB;
 use App\ChangeEmail;
+use App\Property;
 
 class UserController extends Controller
 {
@@ -124,7 +125,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-      //
+      User::destroy($id);
+      return redirect('/');
     }
     public function useredit($page)
     {
@@ -198,5 +200,10 @@ class UserController extends Controller
       });
     // リダイレクト
       return redirect('user');
+    }
+    public function delete()
+    {
+      $auth = Auth::user();
+      return view('user.delete',[ 'auth' => $auth ]);
     }
 }

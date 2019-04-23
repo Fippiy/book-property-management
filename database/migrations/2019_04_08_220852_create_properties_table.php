@@ -15,12 +15,16 @@ class CreatePropertiesTable extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
-            $table->integer('bookdata_id');
+            $table->unsignedBigInteger('user_id');
+            $table->integer('bookdata_id')->unsigned();
             $table->integer('number');
             $table->date('getdate')->nullable();
             $table->text('freememo')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
         });
     }
 

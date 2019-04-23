@@ -9,7 +9,7 @@
 
 @section('breadcrumbs')
   <div class="book-header__breadcrumbs">
-    {{ Breadcrumbs::render('edit.user',$auth) }}
+    {{ Breadcrumbs::render('user.edit',$auth) }}
   </div>
 @endsection
 
