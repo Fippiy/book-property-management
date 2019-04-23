@@ -125,9 +125,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-      // 所有書籍削除
-      Property::where('user_id',$id)->delete();
-      // ユーザー削除
       User::destroy($id);
       return redirect('/');
     }
