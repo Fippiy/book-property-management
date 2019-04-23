@@ -78,7 +78,13 @@ Breadcrumbs::for('user.index', function ($trail) {
 });
 
 // トップページ / マイページ / 編集：ユーザ
-Breadcrumbs::for('edit.user', function ($trail) {
+Breadcrumbs::for('user.edit', function ($trail) {
     $trail->parent('user.index');
-    $trail->push('編集', url('edit.user'));
+    $trail->push('編集', url('user.edit'));
+});
+
+// トップページ / マイページ / ユーザ削除
+Breadcrumbs::for('user.delete', function ($trail) {
+    $trail->parent('user.index');
+    $trail->push('削除', url('user.delete'));
 });
