@@ -32,6 +32,7 @@ Route::group(['middleware' => ['verified']], function () {
   Route::get('/user/email', 'UserController@userEmailEdit')->name('email.edit');
   Route::post('/user/email', 'UserController@userEmailChange')->name('email.change');
   Route::get('/user/userEmailUpdate/', 'UserController@userEmailUpdate');
+  Route::get('/user/delete', 'UserController@delete');
   Route::get('/user/{page}', 'UserController@useredit')->name('user.edit');
   Route::post('/user/{page}', 'UserController@update')->name('user.update');
   Route::resource('user', 'UserController',['except' => ['show', 'edit']]);
