@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserTest extends TestCase
 {
@@ -16,24 +17,31 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function testAccess()
-    {
-        $this->assertTrue(true);
 
+     // ログイン時のルート確認
+    public function testLoginRoute()
+    {
+        // トップページにアクセス
         $response = $this->get('/'); // ルートにアクセス
         $response->assertStatus(200); // 200ステータスであること
 
+        // ログイン
+        // ログインせずに/userにアクセス
         $response = $this->get('/user'); // ~/userにアクセス
         $response->assertStatus(302);  // 302ステータスであること
 
+        // ログインして/userにアクセス
         $user = factory(User::class)->create(); // User作成
         $response = $this->actingAs($user)->get('/user'); // 作成ユーザーでログインして~/userにアクセス
         $response->assertStatus(200); // 200ステータスであること
 
+        // ページなしアドレス
         $response = $this->get('/no_route'); // ページのないアドレスへアクセス
         $response->assertStatus(404); // 404ステータスであること
     }
-    public function testDatabase()
+
+    // DBが扱えることの確認
+    public function testDatabaseFirstCheck()
     {
         factory(User::class)->create([
             'name' => 'AAA',
