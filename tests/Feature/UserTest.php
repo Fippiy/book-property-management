@@ -56,4 +56,21 @@ class UserTest extends TestCase
             'password' => 'ABCABC',
         ]); //DBに配列で指定したユーザーがいること
     }
+
+    // ログイン成功テスト
+    public function testLoginOK()
+    {
+    $user = factory(User::class)->create(); // ユーザーを作成
+
+    $this->assertFalse(Auth::check()); // Auth認証前であることを確認
+
+    $response = $this->post('login', [
+        'email'    => $user->email,
+        'password' => '12345678'
+    ]); // ログイン実施 正しい情報のユーザー
+
+    $this->assertTrue(Auth::check()); // Auth認証後であることを確認
+
+    $response->assertRedirect('book'); // ログイン後にリダイレクトされるのを確認
+    }
 }
