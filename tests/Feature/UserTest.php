@@ -73,4 +73,39 @@ class UserTest extends TestCase
 
     $response->assertRedirect('book'); // ログイン後にリダイレクトされるのを確認
     }
+
+    // ログイン失敗テスト
+    public function testLoginNgNotPass()
+    {
+        $user = factory(User::class)->create(); // ユーザーを作成
+
+        $this->assertFalse(Auth::check()); // Auth認証前であることを確認
+    
+        $response = $this->post('login', [
+            'email'    => $user->email,
+            'password' => '123456789'
+        ]); // ログイン実施 パスワードが異なるユーザー
+    
+        $this->assertFalse(Auth::check()); // Auth認証されていないことを確認
+        $test = $response->assertSessionHasErrors(['email']); // emailエラーを確認
+        $this->assertEquals('認証情報が記録と一致しません。',
+        session('errors')->first('email')); // エラメッセージを確認
+    }
+    public function testLoginNgNotName()
+    {
+        $user = factory(User::class)->create(); // ユーザーを作成
+
+        $this->assertFalse(Auth::check()); // Auth認証前であることを確認
+    
+        $response = $this->post('login', [
+            'email'    => 'testuser',
+            'password' => '12345678'
+        ]); // ログイン実施 名前が異なるユーザー
+    
+        $this->assertFalse(Auth::check()); // Auth認証されていないことを確認
+        $response->assertSessionHasErrors(['email']); // emailエラーを確認
+
+        $this->assertEquals('認証情報が記録と一致しません。',
+        session('errors')->first('email')); // エラメッセージを確認
+    }
 }
