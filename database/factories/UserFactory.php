@@ -17,10 +17,10 @@ use Faker\Generator as Faker;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
+        'name' => $faker->name, // 名前を自動生成
+        'email' => $faker->unique()->safeEmail, // emailを自動生成、ユニーク重複なし設定付き
+        'email_verified_at' => now(), // verifiedの日付を現在時刻設定
+        'password' => bcrypt('12345678'), // ハッシュ化パスワード
+        'remember_token' => Str::random(10), // ランダム生成
     ];
 });
