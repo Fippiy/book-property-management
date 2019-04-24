@@ -73,11 +73,30 @@ class UserTest extends TestCase
       ]); // ログイン実施 正しい情報のユーザー
 
       $this->assertTrue(Auth::check()); // Auth認証後であることを確認
+      $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
 
       $response->assertRedirect('book'); // ログイン後にリダイレクトされるのを確認
     }
 
-    // ログイン失敗パスワードNG
+    // ログイン失敗パスワード未入力
+    public function test_login_ng_password_notInput()
+    {
+      $user = factory(User::class)->create(); // ユーザーを作成
+
+      $this->assertFalse(Auth::check()); // Auth認証前であることを確認
+  
+      $response = $this->post('login', [
+          'email'    => $user->email,
+          'password' => ''
+      ]); // ログイン実施 パスワード未入力
+  
+      $this->assertFalse(Auth::check()); // Auth認証されていないことを確認
+      $response->assertSessionHasErrors(['password']); // passwordエラーを確認
+      $this->assertEquals('パスワードは必須です。',
+      session('errors')->first('password')); // エラメッセージを確認
+    }
+
+    // ログイン失敗パスワードアンマッチ
     public function test_login_ng_password_unMatch()
     {
       $user = factory(User::class)->create(); // ユーザーを作成
@@ -95,7 +114,26 @@ class UserTest extends TestCase
       session('errors')->first('email')); // エラメッセージを確認
     }
 
-    // ログイン失敗emailNG
+    // ログイン失敗email未入力
+    public function test_login_ng_email_notInput()
+    {
+      $user = factory(User::class)->create(); // ユーザーを作成
+
+      $this->assertFalse(Auth::check()); // Auth認証前であることを確認
+  
+      $response = $this->post('login', [
+          'email'    => '',
+          'password' => '12345678'
+      ]); // ログイン実施 名前が異なるユーザー
+  
+      $this->assertFalse(Auth::check()); // Auth認証されていないことを確認
+      $response->assertSessionHasErrors(['email']); // emailエラーを確認
+
+      $this->assertEquals('メールアドレスは必須です。',
+      session('errors')->first('email')); // エラメッセージを確認
+    }
+
+    // ログイン失敗emailアンマッチ
     public function test_login_ng_email_unMatch()
     {
       $user = factory(User::class)->create(); // ユーザーを作成
@@ -103,7 +141,7 @@ class UserTest extends TestCase
       $this->assertFalse(Auth::check()); // Auth認証前であることを確認
   
       $response = $this->post('login', [
-          'email'    => 'testuser',
+          'email'    => 'test@test.com',
           'password' => '12345678'
       ]); // ログイン実施 名前が異なるユーザー
   
@@ -160,6 +198,7 @@ class UserTest extends TestCase
      $response->assertRedirect('/login');  // ログインページに遷移
 
      $this->assertTrue(Auth::check()); // 認証されていることを確認
+     $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
 
      $this->assertTrue(Hash::check($new, $user->fresh()->password)); // 変更されたパスワードが保存されていることを確認
     }
@@ -491,7 +530,7 @@ class UserTest extends TestCase
        ]); // ユーザーが変更されていないことを確認
     }
 
-    // リセットパスワード、再登録、確認パス不一致
+    // リセットパスワード、再登録、パスワード（確認）不一致
     public function test_resetPassword_ng_confirmationPassword_unMatch()
     {
       Notification::fake(); // 通知機能使用、実際には通知しない
