@@ -145,5 +145,4 @@ class BookdataTest extends TestCase
             $response->assertSeeText($value);
         }; // savebookデータが表示されていること
     }
-    // 検索できること
 }
