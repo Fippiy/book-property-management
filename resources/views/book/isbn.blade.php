@@ -24,9 +24,7 @@
         ISBNコード登録
       </div>
       <div class="books-list__msg">
-        @if (isset($msg))
-          <p class="auth-contents__message--message">{{ $msg }}</p>
-        @endif
+        <p class="auth-contents__message--message">{{ $msg }}</p>
         @foreach ($errors->all() as $error)
         <p class="auth-contents__message--error">{{ $error }}</p>
         @endforeach
