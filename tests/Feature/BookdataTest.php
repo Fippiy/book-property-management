@@ -145,4 +145,27 @@ class BookdataTest extends TestCase
             $response->assertSeeText($value);
         }; // savebookデータが表示されていること
     }
+    // 検索
+    public function test_findTitle_ok()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // faker book自動生成
+        $bookdata = factory(Bookdata::class)->create();
+
+        //// 検索
+        // 検索の実施(findページ)
+        $find_post = 'book/find'; // 検索パス
+        $savebook = Bookdata::all()->first(); // 保存されたデータを取得
+        $response = $this->get($find_post); // 編集ページへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('book.find'); // book.editビューであること
+        $response = $this->from($find_post)->post($find_post, ['title' => $bookdata->title]); // 検索実施
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertSeeText($bookdata->title); // bookdataタイトルが表示されていること
+    }
 }
