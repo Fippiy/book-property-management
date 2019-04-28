@@ -153,13 +153,9 @@ class BookdataTest extends TestCase
         $this->actingAs($user); // ログイン済み
         $this->assertTrue(Auth::check()); // Auth認証済であることを確認
 
-        // 検索用isbn登録
-        $isbn = ['isbn' => 9784798052588]; // 新規登録コード
-        $response = $this->from('book/isbn')->post('book/isbn', $isbn); // isbn情報保存
-        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
-        $response->assertStatus(200); // 200ステータスであること
-        $response->assertSeeText('データを新規作成しました'); // メッセージが出力されていること
-        
+        // faker book自動生成
+        $bookdata = factory(Bookdata::class)->create();
+
         //// 検索
         // 検索の実施(findページ)
         $find_post = 'book/find'; // 検索パス
@@ -167,14 +163,9 @@ class BookdataTest extends TestCase
         $response = $this->get($find_post); // 編集ページへアクセス
         $response->assertStatus(200); // 200ステータスであること
         $response->assertViewIs('book.find'); // book.editビューであること
-
-        // 編集内容
-        $findbookdata = [
-            'title' => 'PHPフレームワークLaravel入門',
-        ];
-        $response = $this->from($find_post)->post($find_post, $findbookdata); // 編集実施
+        $response = $this->from($find_post)->post($find_post, ['title' => $bookdata->title]); // 検索実施
         $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
-        $response->assertStatus(200); // 200ステータスであること        
-        $response->assertSeeText($findbookdata['title']); // bookdataタイトルが表示されていること
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertSeeText($bookdata->title); // bookdataタイトルが表示されていること
     }
 }
