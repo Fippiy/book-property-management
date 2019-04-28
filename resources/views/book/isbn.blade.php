@@ -23,11 +23,14 @@
       <div class="books-list__title bookpage-color">
         ISBNコード登録
       </div>
-      @if (isset($msg))
-        <div class="books-list__msg">
-            <span>{{$msg}}</span>
-        </div>
-      @endif
+      <div class="books-list__msg">
+        @if (isset($msg))
+          <p class="auth-contents__message--message">{{ $msg }}</p>
+        @endif
+        @foreach ($errors->all() as $error)
+        <p class="auth-contents__message--error">{{ $error }}</p>
+        @endforeach
+      </div>
       <div class="book-new">
         <form action="/book/isbn" method="post">
           {{ csrf_field() }}
