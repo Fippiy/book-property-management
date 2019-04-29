@@ -219,14 +219,23 @@ class BookController extends Controller
 
     public function find(Request $request)
     {
-      return view('book.find', ['input' => '']);
+      $msg = '検索ワードを入力して下さい';
+      return view('book.find', ['input' => '','msg'=>$msg]);
     }
 
     public function search(Request $request)
     {
-      $title = $request->input;
+      // バリデーションチェック
+      $this->validate($request, Bookdata::$searchRules);
+      $title = $request->find;
       $books = Bookdata::where('title', 'like', "%{$title}%")->get();
-      $param = ['input' => $title, 'books' => $books];
+      $count = count($books);
+      if ($count==0) {
+        $msg = '書籍がみつかりませんでした。';
+      } else {
+        $msg = $count.'件の書籍がみつかりました。';
+      }
+      $param = ['input' => $title, 'books' => $books, 'msg' => $msg];
       return view('book.find', $param);
     }
 
