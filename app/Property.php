@@ -35,7 +35,7 @@ class Property extends Model
                       ->get();
       return $notProperties;
   }
-  public function scopePropertyRules()
+  public function scopeCreatePropertyRules()
   {
     $createPropertyRules = array(
       'bookdata_id' => 'required|unique:properties,bookdata_id,NULL,user_id,user_id,'.Auth::user()->id,
