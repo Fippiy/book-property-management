@@ -23,11 +23,12 @@
       <div class="books-list__title propertypage-color">
         所有書籍登録
       </div>
-      @if (isset($msg))
-        <div class="books-list__msg">
-            <span>{{$msg}}</span>
+      <div class="books-list__msg">
+      <p class="auth-contents__message--message">{{$msg}}</p>
+        @foreach ($errors->all() as $error)
+          <p class="auth-contents__message--error">{{ $error }}</p>
+        @endforeach
         </div>
-      @endif
       <div class="book-new">
         @if (isset($books) && count($books) != 0)
           <form action="/property" method="post" enctype="multipart/form-data">
