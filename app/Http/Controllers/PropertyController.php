@@ -42,6 +42,9 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
+      // バリデーションチェック
+      $createPropertyRules = Property::PropertyRules();
+      $this->validate($request, $createPropertyRules);
       // 新規レコード生成
       $property = new Property;
       // リクエストデータ受取
