@@ -124,18 +124,27 @@ class PropertyController extends Controller
     }
     public function find(Request $request)
     {
-      return view('property.find', ['input' => '']);
+      $msg = '検索ワードを入力して下さい';
+      return view('property.find', ['input' => '','msg'=>$msg]);
     }
 
     public function search(Request $request)
     {
-      $title = $request->input;
+      // バリデーションチェック
+      $this->validate($request, Property::$searchRules);
+      $title = $request->find;
       $properties = Property::where('user_id', Auth::user()->id)
                         ->join('bookdata','bookdata.id','=','properties.bookdata_id')
                         ->where('title', 'like', "%{$title}%")
                         ->select('properties.id','title','picture','cover')
                         ->get();
-      $param = ['input' => $title, 'books' => $properties];
+      $count = count($properties);
+      if ($count==0) {
+        $msg = '書籍がみつかりませんでした。';
+      } else {
+        $msg = $count.'件の書籍がみつかりました。';
+      }
+      $param = ['input' => $title, 'books' => $properties, 'msg' => $msg];
       return view('property.find', $param);
     }
 
