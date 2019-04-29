@@ -14,7 +14,8 @@
           </a>
         </div>
         <div class="book-table__list--detail">
-          <h3 class="book-title">{{$book->title}}</h3>
+          <a href="/{{$page_path}}/{{$book->id}}"><h3 class="list-book-title">{{$book->title}}</h3></a>
+          <p class="list-book-detail">{{ str_limit($book->$detail, $limit = 300, $end = '...') }}</p>
         </div>
       </div>
     @endforeach
