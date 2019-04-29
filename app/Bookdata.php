@@ -16,4 +16,7 @@ class Bookdata extends Model
   {
       return $this->hasMany('App\Property');
   }
+  public static $isbnEntryRules = array(
+    'isbn' => 'required|digits:13|unique:bookdata,isbn'
+  );
 }

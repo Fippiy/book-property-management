@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Bookdata;
 use Illuminate\Http\Request;
 use Aws\S3\S3Client;
+use Validator;
 
 class BookController extends Controller
 {
@@ -228,26 +229,15 @@ class BookController extends Controller
     }
 
     public function getIsbn(){
-        $msg = 'ISBNコードを入力して下さい。';
-        return view('book.isbn',['msg'=>$msg]);
-    }
+      $msg = 'ISBNコードを入力して下さい。';
+      return view('book.isbn',['msg'=>$msg]);
+  }
     public function postIsbn(Request $request){
+        // バリデーションチェック
+        $this->validate($request, Bookdata::$isbnEntryRules);
+
         unset($request['_token']);
         $value = $request['isbn'];
-
-        // ISBNコード桁数を確認
-        if (strlen($value) != 13) {
-          // レコード数不一致時はエラーを返して終了
-          $msg = 'ISBNコードは13桁で入力してください';
-          return view('book.isbn',['msg'=>$msg]);
-        }
-
-        // ISBNコードが既に登録されているか確認
-        $isbn = \App\Bookdata::where('isbn', $value)->first();
-        if ($isbn != null){
-          $msg = '作成済みのデータがあります';
-          return view('book.isbn',['msg'=>$msg]);
-        }
 
         // ISBNコードから本情報を取得
         $isbn_url = 'https://api.openbd.jp/v1/get?isbn=';
@@ -256,11 +246,23 @@ class BookController extends Controller
                     );
         $result = json_decode($response, true);
 
+
         // ISBNレコード結果を確認
-        if($result[0]==null){
-          // 情報がない場合はエラーを返して終了
-          $msg = '該当するISBNコードは見つかりませんでした。';
-          return view('book.isbn',['msg'=>$msg]);
+        // result[0]の情報有り無しで判定
+        if($result[0] == null)
+        {
+          $isbndata = false;
+        } else {
+          $isbndata = true;
+        }
+
+        // isbnレコード結果チェック
+        // false時は検索結果なしで未登録とし、バリデーションエラーを返す
+        $validator = Validator::make(['isbn' => $isbndata], ['isbn' => 'accepted'], ['該当するISBNコードは見つかりませんでした。']);
+        if ($validator->fails()) {
+          return redirect('book/isbn')
+                      ->withErrors($validator)
+                      ->withInput();
         }
 
         // ISBNレコードがあれば追加処理
@@ -288,7 +290,7 @@ class BookController extends Controller
         // 保存
         $savedata->save();
         // 保存完了メッセージ
-        $msg = 'データを新規作成しました';
+        $msg = 'データを新規作成しました。続けてISBNコードを登録できます。';
         // ビューに出力
         return view('book.isbn',['msg'=>$msg,'book'=>$savedata]);
     }
