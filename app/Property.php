@@ -42,4 +42,7 @@ class Property extends Model
     );
     return $createPropertyRules;
   } 
+  public static $searchRules = array(
+    'find' => 'required'
+  );
 }
