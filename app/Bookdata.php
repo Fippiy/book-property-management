@@ -19,4 +19,7 @@ class Bookdata extends Model
   public static $isbnEntryRules = array(
     'isbn' => 'required|digits:13|unique:bookdata,isbn'
   );
+  public static $searchRules = array(
+    'find' => 'required'
+  );
 }
