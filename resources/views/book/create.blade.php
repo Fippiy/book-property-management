@@ -25,6 +25,12 @@
       <div class="books-list__title bookpage-color">
         新規登録
       </div>
+      <div class="books-list__msg">
+        <p class="auth-contents__message--message">{{ $msg }}</p>
+        @foreach ($errors->all() as $error)
+        <p class="auth-contents__message--error">{{ $error }}</p>
+        @endforeach
+      </div>
       <div class="book-new">
         <form action="/book" method="post" enctype="multipart/form-data">
           {{ csrf_field() }}
@@ -52,6 +58,9 @@
           </div>
         </form>
       </div>
+      @if (isset($book))
+        @include('components.book_detail')
+      @endif
     </div>
   </div>
 @endsection
