@@ -27,7 +27,8 @@ class BookController extends Controller
      */
     public function create()
     {
-      return view('book.create');
+      $msg = '登録する本の情報を入力して下さい。';
+      return view('book.create',['msg'=>$msg]);
     }
 
     /**
@@ -77,7 +78,8 @@ class BookController extends Controller
       }
       // DB保存
       $book->fill($form)->save();
-      return redirect('/book');
+      $msg = '本を登録しました。続けて登録できます。';
+      return view('book.create',['msg'=>$msg, 'book'=>$book]);
     }
 
     /**
