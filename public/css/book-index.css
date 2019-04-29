@@ -43,10 +43,6 @@
 .index-content .books-list .book-find input {
   height: 50px;
 }
-.index-content .books-list .book-find__word {
-  padding-left: 10px;
-  font-size: 18px;
-}
 .index-content .books-list .book-find__input {
   height: 60px;
 }
