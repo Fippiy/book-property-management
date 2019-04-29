@@ -24,7 +24,7 @@ class Property extends Model
   {
       $property = Property::where('user_id', Auth::user()->id)
                       ->join('bookdata','bookdata.id','=','properties.bookdata_id')
-                      ->select('properties.id','title','picture','cover')
+                      ->select('properties.id','title','picture','cover','freememo')
                       ->get();
       return $property;
   }
