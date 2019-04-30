@@ -159,9 +159,9 @@ class BookdataTest extends TestCase
         // 検索の実施(findページ)
         $find_post = 'book/find'; // 検索パス
         $savebook = Bookdata::all()->first(); // 保存されたデータを取得
-        $response = $this->get($find_post); // 編集ページへアクセス
+        $response = $this->get($find_post); // 検索ページへアクセス
         $response->assertStatus(200); // 200ステータスであること
-        $response->assertViewIs('book.find'); // book.editビューであること
+        $response->assertViewIs('book.find'); // book.findビューであること
         $response = $this->from($find_post)->post($find_post, ['find' => $bookdata->title]); // 検索実施
         $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
         $response->assertStatus(200); // 200ステータスであること
@@ -187,7 +187,7 @@ class BookdataTest extends TestCase
         $response = $this->from('book/create')->post('book', $bookdata); // 本情報保存
         $response->assertSessionHasErrors(['title']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
-        $response->assertRedirect('book/create');  // トップページ表示
+        $response->assertRedirect('book/create');  // 同ページへリダイレクト
         $this->assertEquals('titleは必須です。',
         session('errors')->first('title')); // エラメッセージを確認
     }
@@ -202,7 +202,7 @@ class BookdataTest extends TestCase
         //// 登録
         $bookdata = [
             'isbn' => ''
-        ];
+        ]; // コード未入力
         $response = $this->from('book/isbn')->post('book/isbn', $bookdata); // isbn登録
         $response->assertSessionHasErrors(['isbn']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
@@ -221,7 +221,7 @@ class BookdataTest extends TestCase
         //// 登録
         $bookdata = [
             'isbn' => '123456789012'
-        ];
+        ]; // 12桁コード
         $response = $this->from('book/isbn')->post('book/isbn', $bookdata); // isbn登録
         $response->assertSessionHasErrors(['isbn']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
@@ -240,7 +240,7 @@ class BookdataTest extends TestCase
         //// 登録
         $bookdata = [
             'isbn' => '12345678901234'
-        ];
+        ]; // 14桁コード
         $response = $this->from('book/isbn')->post('book/isbn', $bookdata); // isbn登録
         $response->assertSessionHasErrors(['isbn']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
@@ -258,7 +258,7 @@ class BookdataTest extends TestCase
         //// 登録
         $newbookdata = [
             'isbn' => '1234567890123'
-        ];
+        ]; // 13桁コード
         $response = $this->from('book/isbn')->post('book/isbn', $newbookdata); // isbn登録
         $response->assertSessionHasErrors(['isbn']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
@@ -301,22 +301,7 @@ class BookdataTest extends TestCase
         $bookdata = factory(Bookdata::class)->create(); // 書籍を作成
         $bookpath = 'book/2/edit'; // 書籍編集パス(存在しないID)
 
-        $response = $this->get($bookpath); // ~/userにアクセス
-        $response->assertStatus(500);  // 500ステータスであること
-    }
-    // 書籍情報削除NG、未登録id
-    public function test_bookControll_ng_notTitleEdit()
-    {
-        //// ユーザー生成
-        $user = factory(User::class)->create(); // ユーザーを作成
-        $this->actingAs($user); // ログイン済み
-        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
-
-        //// 仮本新規登録
-        $bookdata = factory(Bookdata::class)->create(); // 書籍を作成
-        $bookpath = 'book/2/edit'; // 書籍編集パス(存在しないID)
-
-        $response = $this->get($bookpath); // ~/userにアクセス
+        $response = $this->get($bookpath); // ページにアクセス
         $response->assertStatus(500);  // 500ステータスであること
     }
 }
