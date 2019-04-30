@@ -41,6 +41,9 @@
           @slot('page_path')
             book
           @endslot
+          @slot('detail')
+            detail
+          @endslot
         @endcomponent
       @endif
     </div>

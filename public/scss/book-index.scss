@@ -80,9 +80,14 @@
           }
         }
         &--detail {
-          .book-title {
+          padding-left: 10px;
+          .list-book-title {
             font-size: 20px;
             color: blue;
+            margin-bottom: 10px;
+          }
+          .list-book-detail{
+            margin-left: 10px;
           }
         }
       }

@@ -83,9 +83,16 @@
   height: 90px;
   width: 90px;
 }
-.index-content .books-list .book-table__list--detail .book-title {
+.index-content .books-list .book-table__list--detail {
+  padding-left: 10px;
+}
+.index-content .books-list .book-table__list--detail .list-book-title {
   font-size: 20px;
   color: blue;
+  margin-bottom: 10px;
+}
+.index-content .books-list .book-table__list--detail .list-book-detail {
+  margin-left: 10px;
 }
 .index-content .books-list .book-table__profile-list .profile-group {
   display: flex;

@@ -136,7 +136,7 @@ class PropertyController extends Controller
       $properties = Property::where('user_id', Auth::user()->id)
                         ->join('bookdata','bookdata.id','=','properties.bookdata_id')
                         ->where('title', 'like', "%{$title}%")
-                        ->select('properties.id','title','picture','cover')
+                        ->select('properties.id','title','picture','cover','freememo')
                         ->get();
       $count = count($properties);
       if ($count==0) {

@@ -28,6 +28,9 @@
           @slot('page_path')
             property
           @endslot
+          @slot('detail')
+            freememo
+          @endslot
         @endcomponent
       @endif
     </div>
