@@ -256,14 +256,67 @@ class BookdataTest extends TestCase
         $this->assertTrue(Auth::check()); // Auth認証済であることを確認
 
         //// 登録
-        $bookdata = [
+        $newbookdata = [
             'isbn' => '1234567890123'
         ];
-        $response = $this->from('book/isbn')->post('book/isbn', $bookdata); // isbn登録
+        $response = $this->from('book/isbn')->post('book/isbn', $newbookdata); // isbn登録
         $response->assertSessionHasErrors(['isbn']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
         $response->assertRedirect('book/isbn');  // 同ページ表示
         $this->assertEquals('該当するISBNコードは見つかりませんでした。',
         session('errors')->first('isbn')); // エラメッセージを確認
+    }
+
+    // 書籍情報編集NG、タイトルなし
+    public function test_bookControll_ng_notTitleEdit()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 仮本新規登録
+        $bookdata = factory(Bookdata::class)->create(); // 書籍を作成
+        $bookpath = 'book/'.$bookdata->id.'/edit'; // 書籍編集パス
+        //// 登録
+        $editbookdata = [
+            'title' => '',
+        ]; // タイトルなしに編集
+        $response = $this->from($bookpath)->post('book', $editbookdata); // 本情報保存
+        $response->assertSessionHasErrors(['title']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect($bookpath);  // トップページ表示
+        $this->assertEquals('titleは必須です。',
+        session('errors')->first('title')); // エラメッセージを確認
+    }
+    // 書籍情報編集NG、未登録id
+    public function test_bookControll_ng_notIdEdit()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 仮本新規登録
+        $bookdata = factory(Bookdata::class)->create(); // 書籍を作成
+        $bookpath = 'book/2/edit'; // 書籍編集パス(存在しないID)
+
+        $response = $this->get($bookpath); // ~/userにアクセス
+        $response->assertStatus(500);  // 500ステータスであること
+    }
+    // 書籍情報削除NG、未登録id
+    public function test_bookControll_ng_notTitleEdit()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 仮本新規登録
+        $bookdata = factory(Bookdata::class)->create(); // 書籍を作成
+        $bookpath = 'book/2/edit'; // 書籍編集パス(存在しないID)
+
+        $response = $this->get($bookpath); // ~/userにアクセス
+        $response->assertStatus(500);  // 500ステータスであること
     }
 }
