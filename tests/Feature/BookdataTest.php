@@ -51,8 +51,7 @@ class BookdataTest extends TestCase
         ];
         $response = $this->from('book/create')->post('book', $bookdata); // 本情報保存
         $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
-        $response->assertStatus(302); // リダイレクト
-        $response->assertRedirect('/book');  // トップページ表示
+        $response->assertStatus(200); // 200ステータスであること
 
         // 登録されていることの確認(indexページ)
         $response = $this->get('book'); // bookへアクセス
@@ -163,9 +162,108 @@ class BookdataTest extends TestCase
         $response = $this->get($find_post); // 編集ページへアクセス
         $response->assertStatus(200); // 200ステータスであること
         $response->assertViewIs('book.find'); // book.editビューであること
-        $response = $this->from($find_post)->post($find_post, ['title' => $bookdata->title]); // 検索実施
+        $response = $this->from($find_post)->post($find_post, ['find' => $bookdata->title]); // 検索実施
         $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
         $response->assertStatus(200); // 200ステータスであること
         $response->assertSeeText($bookdata->title); // bookdataタイトルが表示されていること
+    }
+
+
+
+    //// NGパターン調査
+    // 手動登録タイトル未入力
+    public function test_bookControll_ng_notNameEntry()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 登録
+        $bookdata = [
+            'title' => '',
+            'detail' => '詳細はこちら',
+        ];
+        $response = $this->from('book/create')->post('book', $bookdata); // 本情報保存
+        $response->assertSessionHasErrors(['title']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect('book/create');  // トップページ表示
+        $this->assertEquals('titleは必須です。',
+        session('errors')->first('title')); // エラメッセージを確認
+    }
+    // ISBN登録未入力
+    public function test_bookControll_ng_notIsbnEntry()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 登録
+        $bookdata = [
+            'isbn' => ''
+        ];
+        $response = $this->from('book/isbn')->post('book/isbn', $bookdata); // isbn登録
+        $response->assertSessionHasErrors(['isbn']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect('book/isbn');  // 同ページ表示
+        $this->assertEquals('isbnは必須です。',
+        session('errors')->first('isbn')); // エラメッセージを確認
+    }
+    // ISBN登録桁数誤り小
+    public function test_bookControll_ng_IsbnSmallEntry()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 登録
+        $bookdata = [
+            'isbn' => '123456789012'
+        ];
+        $response = $this->from('book/isbn')->post('book/isbn', $bookdata); // isbn登録
+        $response->assertSessionHasErrors(['isbn']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect('book/isbn');  // 同ページ表示
+        $this->assertEquals('isbnは13桁にしてください',
+        session('errors')->first('isbn')); // エラメッセージを確認
+    }
+    // ISBN登録桁数誤り大
+    public function test_bookControll_ng_IsbnBigEntry()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 登録
+        $bookdata = [
+            'isbn' => '12345678901234'
+        ];
+        $response = $this->from('book/isbn')->post('book/isbn', $bookdata); // isbn登録
+        $response->assertSessionHasErrors(['isbn']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect('book/isbn');  // 同ページ表示
+        $this->assertEquals('isbnは13桁にしてください',
+        session('errors')->first('isbn')); // エラメッセージを確認
+    }
+    public function test_bookControll_ng_notIsbnData()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 登録
+        $bookdata = [
+            'isbn' => '1234567890123'
+        ];
+        $response = $this->from('book/isbn')->post('book/isbn', $bookdata); // isbn登録
+        $response->assertSessionHasErrors(['isbn']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect('book/isbn');  // 同ページ表示
+        $this->assertEquals('該当するISBNコードは見つかりませんでした。',
+        session('errors')->first('isbn')); // エラメッセージを確認
     }
 }
