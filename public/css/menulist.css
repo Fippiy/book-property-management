@@ -6,7 +6,8 @@
   display: flex;
 }
 .menulist__menutab .tab {
-  width: 133px;
+  width: 200px;
+  font-size: 16px;
   height: 18px;
   margin: 3px 8px 0 0;
   padding: 9px 12px 5px 8px;
