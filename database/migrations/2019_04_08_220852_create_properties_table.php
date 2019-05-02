@@ -25,6 +25,8 @@ class CreatePropertiesTable extends Migration
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
+            $table->foreign('bookdata_id')
+                ->references('id')->on('bookdata');
         });
     }
 

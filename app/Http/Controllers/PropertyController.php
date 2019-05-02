@@ -61,7 +61,8 @@ class PropertyController extends Controller
       // 次の登録用フォームデータ取得
       // 所有書籍を除外して取得
       $notProperties = Property::userNothaveBook();
-      return view('property.create',['books'=>$notProperties, 'property'=>$property, 'msg'=>$msg]);    }
+      return view('property.create',['books'=>$notProperties, 'property'=>$property, 'msg'=>$msg]);
+    }
 
     /**
      * Display the specified resource.

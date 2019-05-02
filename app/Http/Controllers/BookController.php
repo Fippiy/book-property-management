@@ -6,6 +6,7 @@ use App\Bookdata;
 use Illuminate\Http\Request;
 use Aws\S3\S3Client;
 use Validator;
+use App\Property;
 
 class BookController extends Controller
 {
@@ -189,6 +190,18 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
+      $have_property = Property::where('bookdata_id', $id)->first();
+      if (count($have_property) > 0) {
+        $have_book = false;
+      } else {
+        $have_book = true;
+      }
+      $validator = Validator::make(['bookdata_id' => $have_book], ['bookdata_id' => 'accepted'], ['所有者がいるため削除できません']);
+      if ($validator->fails()) {
+        return redirect('book/'.$id)
+                    ->withErrors($validator)
+                    ->withInput();
+      }
       // 画像保存ディレクトリ設定
       $save_directory = "book_images";
       // 削除レコード取得
