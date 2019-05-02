@@ -31,6 +31,11 @@
           </form>
         </div>
       </div>
+      @foreach ($errors->all() as $error)
+      <div class="books-list__msg">
+        <p class="auth-contents__message--error">{{ $error }}</p>
+      </div>
+      @endforeach
       @include('components.book_detail')
     </div>
   </div>
