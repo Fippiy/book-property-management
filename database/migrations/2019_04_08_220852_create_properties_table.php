@@ -16,7 +16,7 @@ class CreatePropertiesTable extends Migration
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('bookdata_id')->unsigned();
+            $table->unsignedInteger('bookdata_id');
             $table->integer('number');
             $table->date('getdate')->nullable();
             $table->text('freememo')->nullable();
