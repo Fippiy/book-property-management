@@ -49,10 +49,6 @@ class PropertyController extends Controller
       $property = new Property;
       // リクエストデータ受取
       $form = $request->all();
-      // $formdata = $form['bookdata_id'];
-      // $getdata = gettype($formdata);
-      // $form['bookdata_id'] = intval($form['bookdata_id']); 
-      // $form['number'] = intval($form['number']); 
       // フォームトークン削除
       unset($form['_token']);
       // ユーザー情報追加
