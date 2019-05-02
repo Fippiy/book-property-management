@@ -43,8 +43,8 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
       // バリデーションチェック
-      $createPropertyRules = Property::createPropertyRules();
-      $this->validate($request, $createPropertyRules);
+      // $createPropertyRules = Property::createPropertyRules();
+      // $this->validate($request, $createPropertyRules);
       // 新規レコード生成
       $property = new Property;
       // リクエストデータ受取
@@ -55,8 +55,8 @@ class PropertyController extends Controller
       $user = Auth::user()->id;
       $form = $form + array('user_id' => $user);
       // DB保存前に型変換
-      $form["bookdata_id"] = intval($form["bookdata_id"]);
-      $form["number"] = intval($form["number"]);
+      // $form["bookdata_id"] = intval($form["bookdata_id"]);
+      // $form["number"] = intval($form["number"]);
       // DB保存
       $property->fill($form)->save();
       // 登録完了メッセージ
