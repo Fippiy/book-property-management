@@ -49,11 +49,18 @@ class PropertyController extends Controller
       $property = new Property;
       // リクエストデータ受取
       $form = $request->all();
+      // $formdata = $form['bookdata_id'];
+      // $getdata = gettype($formdata);
+      // $form['bookdata_id'] = intval($form['bookdata_id']); 
+      // $form['number'] = intval($form['number']); 
       // フォームトークン削除
       unset($form['_token']);
       // ユーザー情報追加
       $user = Auth::user()->id;
       $form = $form + array('user_id' => $user);
+      // DB保存前に型変換
+      $form["bookdata_id"] = intval($form["bookdata_id"]);
+      $form["number"] = intval($form["number"]);
       // DB保存
       $property->fill($form)->save();
       // 登録完了メッセージ
