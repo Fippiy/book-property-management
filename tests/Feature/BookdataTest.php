@@ -146,7 +146,7 @@ class BookdataTest extends TestCase
         }; // savebookデータが表示されていること
     }
     // 検索
-    public function test_findTitle_ok()
+    public function test_findTitle_ok_yesMatchFindTitle()
     {
         //// ユーザー生成
         $user = factory(User::class)->create(); // ユーザーを作成
@@ -168,7 +168,31 @@ class BookdataTest extends TestCase
         $response->assertStatus(200); // 200ステータスであること
         $response->assertSeeText($bookdata->title); // bookdataタイトルが表示されていること
     }
+    public function test_findTitle_ok_noMatchFindTitle()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
 
+        // faker book自動生成
+        $bookdata = factory(Bookdata::class)->create([
+            'title' => 'a'
+        ]); // タイトル名aで作成
+
+        //// 検索
+        // 検索の実施(findページ)
+        $find_post = 'book/find'; // 検索パス
+        $savebook = Bookdata::all()->first(); // 保存されたデータを取得
+        $response = $this->get($find_post); // 検索ページへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('book.find'); // book.findビューであること
+        $response = $this->from($find_post)->post($find_post, ['find' => 'b']); // bで検索実施
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200 ステータスであること
+        $response->assertViewIs('book.find'); // book.findビューであること
+        $response->assertSeeText('書籍がみつかりませんでした。'); // タイトルなしメッセージが表示されていること
+    }
 
 
     //// NGパターン調査
@@ -348,5 +372,26 @@ class BookdataTest extends TestCase
         $response->assertRedirect($bookpath);  // 編集ページ表示
         $this->assertEquals('所有者がいるため削除できません',
         session('errors')->first('bookdata_id')); // エラメッセージを確認
+    }
+    public function test_findTitle_ng_noTitle()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 検索
+        // 検索の実施(findページ)
+        $find_post = 'book/find'; // 検索パス
+        $savebook = Bookdata::all()->first(); // 保存されたデータを取得
+        $response = $this->get($find_post); // 検索ページへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('book.find'); // book.findビューであること
+        $response = $this->from($find_post)->post($find_post, ['find' => '']); // 検索実施
+        $response->assertSessionHasErrors('find'); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect('book/find');  // 同ページへリダイレクト
+        $this->assertEquals('検索ワードは必須です。',
+        session('errors')->first('find')); // エラメッセージを確認
     }
 }
