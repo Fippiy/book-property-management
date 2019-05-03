@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\User;
 use App\Bookdata;
+use App\Property;
 use Illuminate\Support\Facades\Auth;
 
 class BookdataTest extends TestCase
@@ -303,5 +304,49 @@ class BookdataTest extends TestCase
 
         $response = $this->get($bookpath); // ページにアクセス
         $response->assertStatus(500);  // 500ステータスであること
+    }
+    public function test_bookControll_ng_notIdDelete()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 仮本新規登録
+        $bookdata = factory(Bookdata::class)->create(); // 書籍を作成
+        $bookpath = 'book/2'; // 書籍編集パス(存在しないID)
+
+        // アクセス不可
+        $response = $this->get($bookpath); // ページにアクセス
+        $response->assertStatus(500);  // 500ステータスであること
+
+        //// 削除
+        $response = $this->from($bookpath)->post($bookpath, [
+            '_method' => 'DELETE',
+            ]); // 削除実施
+        $response->assertStatus(500);  // 500ステータスであること
+    }
+    public function test_bookControll_ng_haveProrpertyDelete()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 仮本新規登録
+        $bookdata = factory(Bookdata::class)->create(); // 書籍を作成
+        $bookpath = 'book/'.$bookdata->id; // 書籍削除パス
+
+        //// 所有情報登録
+        $havebookdata = factory(Property::class)->create(); // 書籍を作成
+        //// 削除
+        $response = $this->from($bookpath)->post($bookpath, [
+            '_method' => 'DELETE',
+            ]); // 削除実施
+        $response->assertSessionHasErrors(['bookdata_id']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect($bookpath);  // 編集ページ表示
+        $this->assertEquals('所有者がいるため削除できません',
+        session('errors')->first('bookdata_id')); // エラメッセージを確認
     }
 }
