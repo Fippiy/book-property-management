@@ -304,4 +304,25 @@ class BookdataTest extends TestCase
         $response = $this->get($bookpath); // ページにアクセス
         $response->assertStatus(500);  // 500ステータスであること
     }
+    public function test_bookControll_ng_notIdDelete()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 仮本新規登録
+        $bookdata = factory(Bookdata::class)->create(); // 書籍を作成
+        $bookpath = 'book/2'; // 書籍編集パス(存在しないID)
+
+        // アクセス不可
+        $response = $this->get($bookpath); // ページにアクセス
+        $response->assertStatus(500);  // 500ステータスであること
+
+        //// 削除
+        $response = $this->from($bookpath)->post($bookpath, [
+            '_method' => 'DELETE',
+            ]); // 削除実施
+        $response->assertStatus(500);  // 500ステータスであること
+    }
 }
