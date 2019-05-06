@@ -113,4 +113,51 @@ class PropertyTest extends TestCase
         $response->assertViewIs('property.index'); // property.indexビューであること
         $response->assertDontSeeText($editproperty->bookdata->title); // 削除タイトルが表示されていないこと
     }
+    // 検索
+    public function test_findTitle_ok_yesMatchFindTitle()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // faker 自動生成
+        $bookdata = factory(Bookdata::class)->create();
+        $propertydata = factory(Property::class)->create();
+        //// 検索
+        // 検索の実施(findページ)
+        $find_post = 'property/find'; // 検索パス
+        $response = $this->get($find_post); // 検索ページへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('property.find'); // property.findビューであること
+        $response = $this->from($find_post)->post($find_post, ['find' => $propertydata->bookdata->title]); // 検索実施
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertSeeText($propertydata->bookdata->title); // bookdataタイトルが表示されていること
+    }
+    public function test_findTitle_ok_noMatchFindTitle()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // faker 自動生成
+        $bookdata = factory(Bookdata::class)->create([
+            'title' => 'a'
+        ]); // タイトル名aで作成
+        $propertydata = factory(Property::class)->create();
+
+        //// 検索
+        // 検索の実施(findページ)
+        $find_post = 'property/find'; // 検索パス
+        $response = $this->get($find_post); // 検索ページへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('property.find'); // property.findビューであること
+        $response = $this->from($find_post)->post($find_post, ['find' => 'b']); // bで検索実施
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200 ステータスであること
+        $response->assertViewIs('property.find'); // property.findビューであること
+        $response->assertSeeText('書籍がみつかりませんでした。'); // タイトルなしメッセージが表示されていること
+    }
 }
