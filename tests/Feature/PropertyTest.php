@@ -247,4 +247,26 @@ class PropertyTest extends TestCase
         $this->assertEquals('bookdata idは既に存在します。',
         session('errors')->first('bookdata_id')); // エラメッセージを確認
     }
+    // 別のユーザーで登録
+    public function test_propertyControll_ng_unMatchUserEntry()
+    {
+        // 書籍情報作成
+        $bookdata = factory(Bookdata::class)->create();
+
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        $otheruser = factory(User::class)->create(); // 別のユーザーを作成
+
+        //// 登録
+        $propertydata = [
+            'bookdata_id' => $bookdata->id,
+            'user_id' => $otheruser->id,
+        ]; // ログインユーザー以外で強制登録
+        $propertydatapath = 'property/create';
+        $response = $this->from($propertydatapath)->post('property', $propertydata); // 本情報保存
+        $response->assertStatus(500); // 500エラーであること
+    }
 }
