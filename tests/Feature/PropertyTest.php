@@ -123,7 +123,12 @@ class PropertyTest extends TestCase
 
         // faker 自動生成
         $bookdata = factory(Bookdata::class)->create();
-        $propertydata = factory(Property::class)->create();
+        $propertydata = factory(Property::class)->make([
+            'user_id' => 1,
+            'bookdata_id' => 1,
+        ]);
+        $propertydata->save();
+        // eval(\Psy\sh());
         //// 検索
         // 検索の実施(findページ)
         $find_post = 'property/find'; // 検索パス
@@ -159,5 +164,41 @@ class PropertyTest extends TestCase
         $response->assertStatus(200); // 200 ステータスであること
         $response->assertViewIs('property.find'); // property.findビューであること
         $response->assertSeeText('書籍がみつかりませんでした。'); // タイトルなしメッセージが表示されていること
+    }
+    // 複数ユーザーによる複数書籍登録時のデータ表示確認
+    public function test_propertySomeControll_ok()
+    {
+        // 設定
+        $usernumber = 10;// ユーザー数
+        $booknumber = 10;// 所有書籍数
+
+        // ユーザー情報
+        factory(User::class, $usernumber)->create(); // 複数ユーザー作成
+        $user = User::find(mt_rand(1,$usernumber)); // ランダムでユーザー情報取得
+        $this->actingAs($user); // 選択ユーザーでログイン
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 所有書籍情報登録
+        // 複数ユーザー分の所有書籍情報
+        for ($usercount = 1; $usercount <= $usernumber; $usercount++) {
+            // 各ユーザーに対して複数書籍所持情報を作成
+            for ($i = 1; $i <= $booknumber; $i++) {
+                $propertydata = factory(Property::class)->create([
+                    'user_id' => $usercount,
+                ]);
+            }
+        }
+
+        // 選択ユーザーの所有書籍情報を取得
+        $savebooks = Property::where('user_id', $user->id)->get();
+
+        // 選択ユーザーの所有書籍が登録されていることの確認
+        $response = $this->get('property'); // bookへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('property.index'); // book.indexビューであること
+        
+        foreach ($savebooks as $savebook) {
+            $response->assertSeeText($savebook->bookdata->title);
+        } // 登録タイトルが表示されていること
     }
 }
