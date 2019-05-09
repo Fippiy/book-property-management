@@ -212,7 +212,7 @@ class PropertyTest extends TestCase
         $this->actingAs($user); // ログイン済み
         $this->assertTrue(Auth::check()); // Auth認証済であることを確認
 
-        //// 登録
+        //// タイトル情報なしで登録
         $propertydata = [
             'bookdata_id' => null,
         ];
@@ -223,6 +223,25 @@ class PropertyTest extends TestCase
         $response->assertRedirect($propertydatapath);  // 同ページへリダイレクト
         $this->assertEquals('bookdata idは必須です。',
         session('errors')->first('bookdata_id')); // エラメッセージを確認
+    }
+    // 未登録書籍
+    public function test_propertyControll_ng_notBookEntryToProperty()
+    {
+        // property 自動生成 // 関連 user,bookdataも作成
+        $propertydata = factory(Property::class)->create();
+        
+        // ユーザーログイン
+        $user = User::first(); // 作成済みユーザー情報取得
+        $this->actingAs($user); // 選択ユーザーでログイン
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 未登録書籍を登録
+        $propertydata = [
+            'bookdata_id' => 2,
+        ];
+        $propertydatapath = 'property/create';
+        $response = $this->from($propertydatapath)->post('property', $propertydata); // 本情報保存
+        $response->assertStatus(500); // 500エラーであること
     }
     // タイトルユニーク
     public function test_propertyControll_ng_uniqueNameEntry()
