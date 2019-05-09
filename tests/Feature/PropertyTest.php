@@ -202,6 +202,7 @@ class PropertyTest extends TestCase
         } // 登録タイトルが表示されていること
     }
 
+
     //// NGパターン調査
     // タイトル未入力
     public function test_propertyControll_ng_notNameEntry()
@@ -221,6 +222,29 @@ class PropertyTest extends TestCase
         $response->assertStatus(302); // リダイレクト
         $response->assertRedirect($propertydatapath);  // 同ページへリダイレクト
         $this->assertEquals('bookdata idは必須です。',
+        session('errors')->first('bookdata_id')); // エラメッセージを確認
+    }
+    // タイトルユニーク
+    public function test_propertyControll_ng_uniqueNameEntry()
+    {
+        // property 自動生成 // 関連 user,bookdataも作成
+        $propertydata = factory(Property::class)->create();
+        
+        // ユーザーログイン
+        $user = User::first(); // 作成済みユーザー情報取得
+        $this->actingAs($user); // 選択ユーザーでログイン
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 重複登録
+        $propertydata = [
+            'bookdata_id' => $propertydata->bookdata_id,
+        ];
+        $savepropertypath = 'property/create'; // 新規作成パス
+        $response = $this->from($savepropertypath)->post('property', $propertydata); // 保存
+        $response->assertSessionHasErrors(['bookdata_id']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect($savepropertypath);  // 同ページへリダイレクト
+        $this->assertEquals('bookdata idは既に存在します。',
         session('errors')->first('bookdata_id')); // エラメッセージを確認
     }
 }
