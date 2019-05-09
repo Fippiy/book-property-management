@@ -201,4 +201,26 @@ class PropertyTest extends TestCase
             $response->assertSeeText($savebook->bookdata->title);
         } // 登録タイトルが表示されていること
     }
+
+    //// NGパターン調査
+    // タイトル未入力
+    public function test_propertyControll_ng_notNameEntry()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 登録
+        $propertydata = [
+            'bookdata_id' => null,
+        ];
+        $propertydatapath = 'property/create';
+        $response = $this->from($propertydatapath)->post('property', $propertydata); // 本情報保存
+        $response->assertSessionHasErrors(['bookdata_id']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect($propertydatapath);  // 同ページへリダイレクト
+        $this->assertEquals('bookdata idは必須です。',
+        session('errors')->first('bookdata_id')); // エラメッセージを確認
+    }
 }
