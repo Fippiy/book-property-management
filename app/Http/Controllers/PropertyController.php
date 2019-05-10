@@ -96,16 +96,21 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $id)
     {
-      // バリデーションルール設定適用がいる
+      // バリデーションチェック
+      $createPropertyRules = Property::createPropertyRules();
+      $this->validate($request, $createPropertyRules);
       // 対象レコード取得
       $property = Property::find($id);
-      // リクエストデータ受取
-      $form = $request->all();
-      // フォームトークン削除
-      unset($form['_token']);
-      // レコードアップデート
-      $property->fill($form)->save();
-      return redirect('/property');
+      // 本人認証の上、更新処理
+      if ($property['user_id'] == Auth::user()->id){
+        // リクエストデータ受取
+        $form = $request->all();
+        // フォームトークン削除
+        unset($form['_token']);
+        // レコードアップデート
+        $property->fill($form)->save();
+      }
+        return redirect('/property');
     }
 
     /**
