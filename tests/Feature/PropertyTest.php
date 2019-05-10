@@ -303,14 +303,15 @@ class PropertyTest extends TestCase
         $propertypath = 'property/'.$propertydata->id.'/edit'; // 書籍編集パス
         //// 編集
         $editpropertydata = [
-            'title' => '',
+            'bookdata_id' => '',
+            '_method' => 'PUT',
         ]; // タイトルなしに編集
         $response = $this->from($propertypath)->post('property/'.$propertydata->id, $editpropertydata); // 本情報保存
-        // $response->assertSessionHasErrors(['title']); // エラーメッセージがあること
-        // $response->assertStatus(302); // リダイレクト
-        // $response->assertRedirect($propertypath);  // トップページ表示
-        // $this->assertEquals('titleは必須です。',
-        // session('errors')->first('title')); // エラメッセージを確認
+        $response->assertSessionHasErrors(['bookdata_id']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect($propertypath);  // トップページ表示
+        $this->assertEquals('bookdata idは必須です。',
+        session('errors')->first('bookdata_id')); // エラメッセージを確認
     }
     // 所有書籍情報編集NG、未登録id
     public function test_propertyControll_ng_notIdEdit()
@@ -364,18 +365,18 @@ class PropertyTest extends TestCase
             '_method' => 'PUT',
         ]; // タイトルを編集
         $response = $this->from($propertypath)->post('property/11', $editpropertydata); // 本情報保存
-        // $response->assertSessionHasErrors(['title']); // エラーメッセージがあること
+        $response->assertSessionHasErrors(['bookdata_id']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
-        $response->assertRedirect('property');  // トップページ表示
-        // $this->assertEquals('titleは必須です。',
-        // session('errors')); // エラメッセージを確認
+        $response->assertRedirect('property/11/edit');  // トップページ表示
+        $this->assertEquals('bookdata idは既に存在します。',
+        session('errors')->first('bookdata_id')); // エラメッセージを確認
 
         // 登録されていることの確認(indexページ)
         $response = $this->get('property'); // propertyへアクセス
         $response->assertStatus(200); // 200ステータスであること
         $response->assertViewIs('property.index'); // property.indexビューであること
         $savebook = Property::find(11);
-        $response->assertSeeText($savebook->bookdata->title); // 登録タイトルが表示されていること
+        $response->assertDontSeeText($savebook->bookdata->title); // 登録タイトルが表示されていること
     }
     // 未登録id削除
     public function test_propertyControll_ng_notIdDelete()
