@@ -288,4 +288,28 @@ class PropertyTest extends TestCase
         $response = $this->from($propertydatapath)->post('property', $propertydata); // 本情報保存
         $response->assertStatus(500); // 500エラーであること
     }
+    // 所有書籍情報編集NG、タイトルなし
+    public function test_propertyControll_ng_notTitleEdit()
+    {
+        // property 自動生成 // 関連 user,bookdataも作成
+        $propertydata = factory(Property::class)->create();
+        
+        // ユーザーログイン
+        $user = User::first(); // 作成済みユーザー情報取得
+        $this->actingAs($user); // 選択ユーザーでログイン
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 仮本新規登録
+        $propertypath = 'property/'.$propertydata->id.'/edit'; // 書籍編集パス
+        //// 登録
+        $editpropertydata = [
+            'title' => '',
+        ]; // タイトルなしに編集
+        $response = $this->from($propertypath)->post('book', $editpropertydata); // 本情報保存
+        $response->assertSessionHasErrors(['title']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect($propertypath);  // トップページ表示
+        $this->assertEquals('titleは必須です。',
+        session('errors')->first('title')); // エラメッセージを確認
+    }
 }
