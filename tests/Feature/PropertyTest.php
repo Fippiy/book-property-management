@@ -330,6 +330,7 @@ class PropertyTest extends TestCase
         $response = $this->get($propertypath); // ページにアクセス
         $response->assertStatus(500);  // 500ステータスであること
     }
+    // 未登録id削除
     public function test_propertyControll_ng_notIdDelete()
     {
         // property 自動生成 // 関連 user,bookdataも作成
