@@ -44,7 +44,7 @@ class PropertyController extends Controller
     {
       // バリデーションチェック
       $createPropertyRules = Property::createPropertyRules();
-      $this->validate($request, $createPropertyRules);
+      // $this->validate($request, $createPropertyRules);
       // 新規レコード生成
       $property = new Property;
       // リクエストデータ受取
