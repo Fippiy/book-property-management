@@ -96,7 +96,9 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $id)
     {
-      // バリデーションルール設定適用がいる
+      // バリデーションチェック
+      $createPropertyRules = Property::createPropertyRules();
+      $this->validate($request, $createPropertyRules);
       // 対象レコード取得
       $property = Property::find($id);
       // リクエストデータ受取
