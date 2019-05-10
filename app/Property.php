@@ -38,7 +38,7 @@ class Property extends Model
   public function scopeCreatePropertyRules()
   {
     $createPropertyRules = array(
-      'bookdata_id' => 'required|unique:properties,bookdata_id,NULL,user_id,user_id,'.Auth::user()->id,
+      'bookdata_id' => 'filled|unique:properties,bookdata_id,NULL,user_id,user_id,'.Auth::user()->id,
     );
     return $createPropertyRules;
   } 
