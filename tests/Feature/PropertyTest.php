@@ -323,11 +323,34 @@ class PropertyTest extends TestCase
         $this->actingAs($user); // 選択ユーザーでログイン
         $this->assertTrue(Auth::check()); // Auth認証済であることを確認
 
-        //// 仮本新規登録
+        // 編集パス
         $propertypath = 'property/2/edit'; // 書籍編集パス(存在しないID)
 
         // アクセス不可
         $response = $this->get($propertypath); // ページにアクセス
+        $response->assertStatus(500);  // 500ステータスであること
+    }
+    public function test_propertyControll_ng_notIdDelete()
+    {
+        // property 自動生成 // 関連 user,bookdataも作成
+        factory(Property::class)->create();
+        
+        // ユーザーログイン
+        $user = User::first(); // 作成済みユーザー情報取得
+        $this->actingAs($user); // 選択ユーザーでログイン
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 編集パス
+        $propertypath = 'property/2'; // 書籍編集パス(存在しないID)
+
+        // アクセス不可
+        $response = $this->get($propertypath); // ページにアクセス
+        $response->assertStatus(500);  // 500ステータスであること
+
+        //// 削除
+        $response = $this->from($propertypath)->post($propertypath, [
+            '_method' => 'DELETE',
+            ]); // 削除実施
         $response->assertStatus(500);  // 500ステータスであること
     }
 }
