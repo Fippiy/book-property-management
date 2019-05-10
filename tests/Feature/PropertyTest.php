@@ -312,4 +312,22 @@ class PropertyTest extends TestCase
         $this->assertEquals('titleは必須です。',
         session('errors')->first('title')); // エラメッセージを確認
     }
+    // 所有書籍情報編集NG、未登録id
+    public function test_propertyControll_ng_notIdEdit()
+    {
+        // property 自動生成 // 関連 user,bookdataも作成
+        $propertydata = factory(Property::class)->create();
+        
+        // ユーザーログイン
+        $user = User::first(); // 作成済みユーザー情報取得
+        $this->actingAs($user); // 選択ユーザーでログイン
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        //// 仮本新規登録
+        $propertypath = 'property/2/edit'; // 書籍編集パス(存在しないID)
+
+        // アクセス不可
+        $response = $this->get($propertypath); // ページにアクセス
+        $response->assertStatus(500);  // 500ステータスであること
+    }
 }
