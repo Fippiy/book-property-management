@@ -357,22 +357,18 @@ class PropertyTest extends TestCase
         $propertypath = 'property/11/edit'; // 書籍編集パス
         //// 登録
         $editpropertydata = [
-            'bookdata_id' => 1,
             'number' => 11,
             '_method' => 'PUT',
         ]; // タイトルを編集
         $response = $this->from($propertypath)->post('property/11', $editpropertydata); // 本情報保存
-        $response->assertSessionHasErrors(['bookdata_id']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
-        $response->assertRedirect('property/11/edit');  // トップページ表示
-        $this->assertEquals('bookdata idは既に存在します。',
-        session('errors')->first('bookdata_id')); // エラメッセージを確認
+        $response->assertRedirect('property');  // indexへリダイレクト
 
-        // 登録されていることの確認(indexページ)
-        $response = $this->get('property'); // indexへアクセス
-        $response->assertStatus(200); // 200ステータスであること
-        $response->assertViewIs('property.index'); // indexビューであること
+        // DBが変更されていないこと
         $savebook = Property::find(11);
-        $response->assertDontSeeText($savebook->bookdata->title); // 登録タイトルが表示されていること
+        $this->assertDatabaseHas('properties', [
+            'id' => $savebook->id,
+            'number' => $savebook->number,
+        ]); //DBに配列で指定した情報が残っていること
     }
 }
