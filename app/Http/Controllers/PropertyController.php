@@ -44,7 +44,7 @@ class PropertyController extends Controller
     {
       // バリデーションチェック
       $createPropertyRules = Property::createPropertyRules();
-      // $this->validate($request, $createPropertyRules);
+      $this->validate($request, $createPropertyRules);
       // 新規レコード生成
       $property = new Property;
       // リクエストデータ受取
@@ -123,8 +123,11 @@ class PropertyController extends Controller
     {
       // 削除レコード取得
       $delete_book = Property::find($id);
-      // レコード削除
-      $delete_book->delete();
+      // 本人の場合のみ削除実施
+      if ($delete_book['user_id'] == Auth::user()->id){
+        // レコード削除
+        $delete_book->delete();
+      }
       return redirect('/property');
     }
     public function find(Request $request)
