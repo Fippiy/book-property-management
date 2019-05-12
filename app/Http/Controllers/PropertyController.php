@@ -43,8 +43,8 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
       // バリデーションチェック
-      $createPropertyRules = Property::createPropertyRules();
-      $this->validate($request, $createPropertyRules);
+      // $createPropertyRules = Property::createPropertyRules();
+      // $this->validate($request, $createPropertyRules);
       // 新規レコード生成
       $property = new Property;
       // リクエストデータ受取
@@ -97,8 +97,8 @@ class PropertyController extends Controller
     public function update(Request $request, $id)
     {
       // バリデーションチェック
-      $createPropertyRules = Property::createPropertyRules();
-      $this->validate($request, $createPropertyRules);
+      // $createPropertyRules = Property::createPropertyRules();
+      // $this->validate($request, $createPropertyRules);
       // 対象レコード取得
       $property = Property::find($id);
       // 本人認証の上、更新処理
