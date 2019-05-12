@@ -371,4 +371,66 @@ class PropertyTest extends TestCase
             'number' => $savebook->number,
         ]); //DBに配列で指定した情報が残っていること
     }
+    // 未登録id削除
+    public function test_propertyControll_ng_notIdDelete()
+    {
+        // property 自動生成 // 関連 user,bookdataも作成
+        factory(Property::class)->create();
+        
+        // ユーザーログイン
+        $user = User::first(); // 作成済みユーザー情報取得
+        $this->actingAs($user); // 選択ユーザーでログイン
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 編集パス
+        $propertypath = 'property/2'; // 書籍編集パス(存在しないID)
+
+        //// 削除
+        $response = $this->from($propertypath)->post($propertypath, [
+            '_method' => 'DELETE',
+            ]); // 削除実施
+        $response->assertStatus(302);  // 302ステータスであること
+    }
+    //他人の所有書籍を削除する
+    public function test_propertySomeControll_ng_otherUserDataDelete()
+    {
+        // 設定
+        $usernumber = 2;// ユーザー数
+        $booknumber = 10;// 所有書籍数
+
+        // ユーザー情報
+        factory(User::class, $usernumber)->create(); // 複数ユーザー作成
+        $user = User::find(1); // ユーザー情報取得
+        $this->actingAs($user); // 選択ユーザーでログイン
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 所有書籍情報登録
+        // 複数ユーザー分の所有書籍情報
+        for ($usercount = 1; $usercount <= $usernumber; $usercount++) {
+            // 各ユーザーに対して複数書籍所持情報を作成
+            for ($i = 1; $i <= $booknumber; $i++) {
+                $propertydata = factory(Property::class)->create([
+                    'user_id' => $usercount,
+                ]);
+            }
+        }
+        //// 編集パス
+        $propertypath = 'property/11'; // 書籍編集パス
+
+        //// 登録
+        $deletepropertydata = [
+            'id' => 11,
+            '_method' => 'DELETE',
+        ]; // タイトルを編集
+        $response = $this->from($propertypath)->post($propertypath, $deletepropertydata); // 本情報削除
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect('property');  // index表示
+
+        // 登録されていることの確認(indexページ)
+        $response = $this->get('property'); // indexへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('property.index'); // indexビューであること
+        $savebook = Property::find(11);
+        $response->assertDontSeeText($savebook->bookdata->title); // 登録タイトルが表示されていないこと
+    }
 }
