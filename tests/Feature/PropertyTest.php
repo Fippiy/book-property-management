@@ -262,7 +262,7 @@ class PropertyTest extends TestCase
         $response->assertSessionHasErrors(['bookdata_id']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
         $response->assertRedirect($savepropertypath);  // 同ページへリダイレクト
-        $this->assertEquals('bookdata idは既に存在します。',
+        $this->assertEquals('書籍は登録済みです',
         session('errors')->first('bookdata_id')); // エラーメッセージを確認
     }
     // 別のユーザーで登録
