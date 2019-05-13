@@ -123,9 +123,6 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $id)
     {
-      // バリデーションチェック
-      $createPropertyRules = Property::createPropertyRules();
-      $this->validate($request, $createPropertyRules);
       // 対象レコード取得
       $property = Property::find($id);
       // 本人認証の上、更新処理
@@ -134,6 +131,8 @@ class PropertyController extends Controller
         $form = $request->all();
         // フォームトークン削除
         unset($form['_token']);
+        // bookdataは変更しないので、送信されても削除
+        unset($form['bookdata_id']);
         // レコードアップデート
         $property->fill($form)->save();
       }
