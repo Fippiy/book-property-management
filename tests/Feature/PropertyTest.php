@@ -262,7 +262,7 @@ class PropertyTest extends TestCase
         $response->assertSessionHasErrors(['bookdata_id']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
         $response->assertRedirect($savepropertypath);  // 同ページへリダイレクト
-        $this->assertEquals('bookdata idは既に存在します。',
+        $this->assertEquals('書籍は登録済みです',
         session('errors')->first('bookdata_id')); // エラーメッセージを確認
     }
     // 別のユーザーで登録
@@ -287,7 +287,7 @@ class PropertyTest extends TestCase
         $response = $this->from($propertydatapath)->post('property', $propertydata); // 本情報保存
         $response->assertStatus(500); // 500エラーであること
     }
-    // 所有書籍情報編集NG、タイトルなし
+    // 所有書籍情報編集、bookdata_idを送信しても反映させない(他のカラムは反映)
     public function test_propertyControll_ng_notTitleEdit()
     {
         // property 自動生成 // 関連 user,bookdataも作成
@@ -303,14 +303,24 @@ class PropertyTest extends TestCase
         //// 編集
         $editpropertydata = [
             'bookdata_id' => '',
+            'number' => '100',
             '_method' => 'PUT',
         ]; // タイトルなしに編集
         $response = $this->from($propertypath)->post('property/'.$propertydata->id, $editpropertydata); // 本情報保存
-        $response->assertSessionHasErrors(['bookdata_id']); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
-        $response->assertRedirect($propertypath);  // トップページ表示
-        $this->assertEquals('bookdata idは必須です。',
-        session('errors')->first('bookdata_id')); // エラメッセージを確認
+        $response->assertRedirect('property');  // index表示
+
+        $response = $this->get('property'); // indexへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('property.index'); // indexビューであること
+        $savebook = Property::find(1);
+        $response->assertSeeText($savebook->bookdata->title); // 登録タイトルが表示されていること
+        
+        $response = $this->get('property/1'); // showへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('property.show'); // showビューであること
+        $response->assertSeeText('100'); // numberが反映されていること
+
     }
     // 所有書籍情報編集NG、未登録id
     public function test_propertyControll_ng_notIdEdit()

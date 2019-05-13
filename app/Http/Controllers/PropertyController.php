@@ -6,6 +6,7 @@ use App\User;
 use App\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Validator;
 
 class PropertyController extends Controller
 {
@@ -42,21 +43,47 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-      // バリデーションチェック
-      $createPropertyRules = Property::createPropertyRules();
-      $this->validate($request, $createPropertyRules);
+      $user = Auth::user()->id; // ユーザー情報取得
+      $form = $request->all(); // リクエストデータ受取
+
+      // 書籍情報nullチェック
+      $validator = Validator::make($form, [
+        'bookdata_id' => 'required',
+      ])->validate();
+
+      // ユーザーの所有書籍に登録済みか確認
+      // ユーザー書籍取得
+      $entry_property = Property::where('user_id', $user)
+                        ->where('bookdata_id', $form['bookdata_id'])
+                        ->first();
+      // 書籍があればFalse
+      if (count($entry_property) == 0) {
+        $have_property = true;
+      } else {
+        $have_property = false;
+      }
+      // False時にエラーとして返す
+      $validator = Validator::make(['bookdata_id' => $have_property], ['bookdata_id' => 'accepted'], ['書籍は登録済みです']);
+      if ($validator->fails()) {
+        return redirect('property/create')
+                    ->withErrors($validator)
+                    ->withInput();
+      }
+
+      // バリデーションエラーなしで新規登録を実施
       // 新規レコード生成
       $property = new Property;
-      // リクエストデータ受取
-      $form = $request->all();
       // フォームトークン削除
       unset($form['_token']);
+
       // ユーザー情報追加
-      $form = $form + array('user_id' => strval(Auth::user()->id));
+      $form = $form + array('user_id' => strval($user));
+
       // DB保存
       $property->fill($form)->save();
       // 登録完了メッセージ
       $msg = "所有書籍を登録しました。";
+
       // 次の登録用フォームデータ取得
       // 所有書籍を除外して取得
       $notProperties = Property::userNothaveBook();
@@ -96,9 +123,6 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $id)
     {
-      // バリデーションチェック
-      $createPropertyRules = Property::createPropertyRules();
-      $this->validate($request, $createPropertyRules);
       // 対象レコード取得
       $property = Property::find($id);
       // 本人認証の上、更新処理
@@ -107,6 +131,8 @@ class PropertyController extends Controller
         $form = $request->all();
         // フォームトークン削除
         unset($form['_token']);
+        // bookdataは変更しないので、送信されても削除
+        unset($form['bookdata_id']);
         // レコードアップデート
         $property->fill($form)->save();
       }
