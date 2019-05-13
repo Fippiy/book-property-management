@@ -46,9 +46,9 @@ class PropertyController extends Controller
       $user = Auth::user()->id; // ユーザー情報取得
       $form = $request->all(); // リクエストデータ受取
 
-      // 書籍情報nullチェック(登録時は必須、変更時は送信されないので除外)
+      // 書籍情報nullチェック
       $validator = Validator::make($form, [
-        'bookdata_id' => 'filled',
+        'bookdata_id' => 'required',
       ])->validate();
 
       // ユーザーの所有書籍に登録済みか確認
