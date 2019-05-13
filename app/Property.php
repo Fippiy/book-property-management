@@ -35,13 +35,6 @@ class Property extends Model
                       ->get();
       return $notProperties;
   }
-  // public function scopeCreatePropertyRules()
-  // {
-  //   $createPropertyRules = array(
-  //     'bookdata_id' => 'filled|unique:properties,bookdata_id,NULL,user_id,user_id,'.Auth::user()->id,
-  //   );
-  //   return $createPropertyRules;
-  // } 
   public static $searchRules = array(
     'find' => 'required'
   );
