@@ -57,11 +57,12 @@ class PropertyController extends Controller
                         ->where('bookdata_id', $form['bookdata_id'])
                         ->first();
       // 書籍があればFalse
-      if (count($entry_property) > 0) {
-        $have_property = false;
-      } else {
+      if (count($entry_property) == null) {
         $have_property = true;
+      } else {
+        $have_property = false;
       }
+      eval(\Psy\sh());
       // False時にエラーとして返す
       $validator = Validator::make(['bookdata_id' => $have_property], ['bookdata_id' => 'accepted'], ['書籍は登録済みです']);
       if ($validator->fails()) {
