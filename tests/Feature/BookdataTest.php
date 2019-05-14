@@ -352,18 +352,14 @@ class BookdataTest extends TestCase
     }
     public function test_bookControll_ng_haveProrpertyDelete()
     {
-        //// ユーザー生成
-        $user = factory(User::class)->create(); // ユーザーを作成
+        // property 自動生成 // 関連 user,bookdataも作成
+        $bookdata = factory(Property::class)->create();
+        $bookpath = 'book/'.$bookdata->id; // 書籍削除パス指定
+        $user = User::find(1); // ユーザー指定
         $this->actingAs($user); // ログイン済み
         $this->assertTrue(Auth::check()); // Auth認証済であることを確認
 
-        //// 仮本新規登録
-        $bookdata = factory(Bookdata::class)->create(); // 書籍を作成
-        $bookpath = 'book/'.$bookdata->id; // 書籍削除パス
-
-        //// 所有情報登録
-        $havebookdata = factory(Property::class)->create(); // 書籍を作成
-        //// 削除
+        //// 所持ユーザーありで削除実施
         $response = $this->from($bookpath)->post($bookpath, [
             '_method' => 'DELETE',
             ]); // 削除実施
