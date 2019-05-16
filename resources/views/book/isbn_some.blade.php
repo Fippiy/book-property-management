@@ -9,7 +9,7 @@
 
 @section('breadcrumbs')
   <div class="book-header__breadcrumbs">
-    {{ Breadcrumbs::render('book.isbn') }}
+    {{ Breadcrumbs::render('book.isbn_some') }}
   </div>
 @endsection
 
