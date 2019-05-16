@@ -351,7 +351,7 @@ class BookController extends Controller
         // } 
         for ($i = 0; $i < $count; $i++){
           $isbnrecords[] = array(
-            // 'number' => $i,
+            'number' => $i+1,
             'isbn' => $isbns['isbn'.$i],
             'msg' => null,
           );
@@ -473,6 +473,7 @@ class BookController extends Controller
             }
             // 保存
             $savedata->save();
+            // eval(\Psy\sh());
             data_set($isbnrecords[$i], 'result', $savedata); // 未登録時はメッセージ格納
             // 保存完了メッセージ
             data_set($isbnrecords[$i], 'msg', '登録しました'); // 未登録時はメッセージ格納
@@ -487,8 +488,8 @@ class BookController extends Controller
         // ビューに出力
         // return view('book.isbn',['msg'=>$msg,'book'=>$savedata]);
         // return $isbnrecords;
-
-        return view('book.isbn_some',['answers' => $isbnrecords,'msg' => null, 'book' => null]);
+        // return view('book.isbn_some',['answers' => $isbnrecords,'msg' => null, 'book' => null]);
+        return view('book.isbn_result',['answers' => $isbnrecords]);
         // return view('book.isbn',compact($isbnrecords));
         // return view('book.isbn',['answer' => $isbnrecords,'msg' => null, 'book' => null]);
     }
