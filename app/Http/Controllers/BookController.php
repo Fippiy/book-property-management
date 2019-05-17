@@ -261,11 +261,11 @@ class BookController extends Controller
       return view('book.isbn_some',['msg'=>$msg]);
     }
     public function postIsbn(Request $request){
-              // バリデーションチェック
-              $this->validate($request, Bookdata::$isbnEntryRules);
+        // バリデーションチェック
+        $this->validate($request, Bookdata::$isbnEntryRules);
 
-              unset($request['_token']);
-              $value = $request['isbn'];
+        unset($request['_token']);
+        $value = $request['isbn'];
 
         // ISBNコードから本情報を取得
         $isbn_url = 'https://api.openbd.jp/v1/get?isbn=';
@@ -381,8 +381,7 @@ class BookController extends Controller
         // eval(\Psy\sh());
 
         // ISBNコードから本情報を取得
-        $isbn_url = 'https://api.openbd.jp/v1/get?isbn=';
-
+        $isbn_url = 'https://api.openbd.jp/v1/get?isbn='; // API設定
         // 検索該当レコードのみデータ取得を実施
         // foreach ($isbns as $isbn) {
         for ($i = 0; $i < $count; $i++){
