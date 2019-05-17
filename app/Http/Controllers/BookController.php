@@ -329,33 +329,52 @@ class BookController extends Controller
         unset($request['_token']); // トークン削除
         $isbns = $request->all(); // isbnコードをフォームから取得
         $count = count($isbns); // 取得件数
+        $isbnrecords = []; // データ格納用配列
 
         // 処理用配列へ追加
         for ($i = 0; $i < $count; $i++){
-          $isbnrecords[] = array(
-            'number' => $i+1,
-            'isbn' => $isbns['isbn'.$i],
-            'msg' => null,
-          );
+          if ($isbns['isbn'.$i] != null){
+            $isbnrecords[] = array(
+              'process' => 'processing',
+              'number' => $i+1,
+              'isbn' => $isbns['isbn'.$i],
+              'msg' => null,
+            );
+          }
         }
+
+        // ISBN登録がない場合はバリデーションエラー
+        if ($isbnrecords == null) {
+          $isbnvalid = false;
+        } else {
+          $isbnvalid = true;
+        }
+        $validator = Validator::make(['isbnrecords' => $isbnvalid], ['isbnrecords' => 'accepted'], ['ISBNコードが入力されていません']);
+        if ($validator->fails()) {
+          return redirect('book/isbn_some')
+                      ->withErrors($validator)
+                      ->withInput();
+        }
+        $count = count($isbnrecords);
 
         // フォームデータ評価
         for ($i = 0; $i < $count; $i++){
-          if ($isbnrecords[$i]['msg'] == null){ // メッセージ格納済みは対象外
-            if (mb_strlen($isbnrecords[$i]['isbn']) == null){
-              data_set($isbnrecords[$i], 'msg', 'ISBNが登録されていません'); // 未登録時はメッセージ格納
-            } elseif (mb_strlen($isbnrecords[$i]['isbn']) != 13){
+          if ($isbnrecords[$i]['process'] == 'processing'){ // 処理変数が処理中の場合は処理を実施する
+            if (mb_strlen($isbnrecords[$i]['isbn']) != 13){
               data_set($isbnrecords[$i], 'msg', '桁数が13桁ではありません。'); // 13桁でない場合はメッセージ格納
+              data_set($isbnrecords[$i], 'process', 'error'); // 処理ステータスエラー
             } else {
               for ($j = $i+1; $j < $count; $j++){
                 if ($isbnrecords[$i]['isbn'] == $isbnrecords[$j]['isbn']) {
                   data_set($isbnrecords[$j], 'msg', ($i+1)."件目のデータと同じです。"); // フォームデータ重複チェック
+                  data_set($isbnrecords[$j], 'process', 'error'); // 処理ステータスエラー
                 }
               }
             }
             // DBユニークチェック
             if (Bookdata::where('isbn', $isbnrecords[$i]['isbn'])->first() != null){
               data_set($isbnrecords[$i], 'msg', '既に登録されています。'); // DB存在時はメッセージ格納
+              data_set($isbnrecords[$i], 'process', 'error'); // 処理ステータスエラー
             }
           }
         }
@@ -364,7 +383,7 @@ class BookController extends Controller
         $isbn_url = 'https://api.openbd.jp/v1/get?isbn='; // API設定
         // 検索該当レコードのみデータ取得を実施
         for ($i = 0; $i < $count; $i++){
-          if ($isbnrecords[$i]['msg'] == null){ // メッセージ格納済みは対象外
+          if ($isbnrecords[$i]['process'] == 'processing'){ // 処理変数が処理中の場合は処理を実施する
             $isbn = $isbnrecords[$i]['isbn'];
             $response = file_get_contents($isbn_url.$isbn);
             $result = json_decode($response, true);
@@ -374,14 +393,14 @@ class BookController extends Controller
             // result[0]の情報有り無しで判定
             if($isbnrecords[$i]['result'][0] == null) {
               data_set($isbnrecords[$i], 'msg', '該当するISBNコードは見つかりませんでした。'); // 未登録時はメッセージ格納
+              data_set($isbnrecords[$i], 'process', 'error'); // 処理ステータスエラー
             }
           }
         }
 
         // msgがnullのままの状態の物のみ登録する
         for ($i = 0; $i < $count; $i++){
-          if ($isbnrecords[$i]['msg'] == null){ // メッセージ格納済みは対象外
-
+          if ($isbnrecords[$i]['process'] == 'processing'){ // 処理変数が処理中の場合は処理を実施する
             // ISBNレコードがあれば追加処理
             $savedata = new Bookdata;
 
@@ -407,9 +426,9 @@ class BookController extends Controller
             data_set($isbnrecords[$i], 'result', $savedata); // 未登録時はメッセージ格納
             // 保存完了メッセージ
             data_set($isbnrecords[$i], 'msg', '登録しました'); // 未登録時はメッセージ格納
+            data_set($isbnrecords[$i], 'process', 'completion'); // 処理ステータス完了
           }
         }
-
         // ビューに出力
         return view('book.isbn_result',['answers' => $isbnrecords]);
     }
