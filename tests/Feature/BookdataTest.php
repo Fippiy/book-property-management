@@ -423,4 +423,21 @@ class BookdataTest extends TestCase
         $this->assertEquals('検索ワードは必須です。',
         session('errors')->first('find')); // エラメッセージを確認
     }
+    // 複数isbn登録エラー、登録なし
+    public function test_someIsbnCreate_ng_notEntry()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $bookpath = 'book/isbn_some';
+        $response = $this->from($bookpath)->post($bookpath, []); // isbn情報保存
+        $response->assertSessionHasErrors(['isbnrecords']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect($bookpath);  // トップページ表示
+        $this->assertEquals('ISBNコードが入力されていません',
+        session('errors')->first('isbnrecords')); // エラメッセージを確認
+    }
 }
