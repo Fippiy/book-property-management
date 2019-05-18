@@ -387,18 +387,17 @@ class BookController extends Controller
             $isbn = $isbnrecords[$i]['isbn'];
             $response = file_get_contents($isbn_url.$isbn);
             $result = json_decode($response, true);
-            data_set($isbnrecords[$i], 'result', $result); // 結果を格納
-            
             // ISBNレコード結果を確認
             // result[0]の情報有り無しで判定
-            if($isbnrecords[$i]['result'][0] == null) {
+            if($result[0] == null) {
               data_set($isbnrecords[$i], 'msg', '該当するISBNコードは見つかりませんでした。'); // 未登録時はメッセージ格納
               data_set($isbnrecords[$i], 'process', 'error'); // 処理ステータスエラー
+            } else {
+              data_set($isbnrecords[$i], 'result', $result); // 結果を格納
             }
           }
         }
 
-        // msgがnullのままの状態の物のみ登録する
         for ($i = 0; $i < $count; $i++){
           if ($isbnrecords[$i]['process'] == 'processing'){ // 処理変数が処理中の場合は処理を実施する
             // ISBNレコードがあれば追加処理
