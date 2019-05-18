@@ -38,16 +38,6 @@
               @for ($i = 0; $i < 10; $i++)
                 <div><input class="form-input__input" type="number" name="isbn{{$i}}"></div>
               @endfor
-              <!-- <div><input class="form-input__input" type="number" name="isbn0" value="9784797398892"></div>
-              <div><input class="form-input__input" type="number" name="isbn1" value="9784756918765"></div>
-              <div><input class="form-input__input" type="number" name="isbn2" value="9784844366454"></div>
-              <div><input class="form-input__input" type="number" name="isbn3" value="9784798052588"></div>
-              <div><input class="form-input__input" type="number" name="isbn4" value="9784863542174"></div>
-              <div><input class="form-input__input" type="number" name="isbn5" value="9784054066892"></div>
-              <div><input class="form-input__input" type="number" name="isbn6" value="9784756918765"></div>
-              <div><input class="form-input__input" type="number" name="isbn7" value="9784756918765"></div>
-              <div><input class="form-input__input" type="number" name="isbn8" value=""></div>
-              <div><input class="form-input__input" type="number" name="isbn9" value=""></div> -->
             </div>
           </div>
           <div class="form-foot">
