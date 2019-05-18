@@ -23,6 +23,8 @@ Auth::routes(['verify' => true]);
 Route::group(['middleware' => ['verified']], function () {
   Route::get('/book/isbn', 'BookController@getIsbn');
   Route::post('/book/isbn', 'BookController@postIsbn');
+  Route::get('/book/isbn_some', 'BookController@getIsbnSome');
+  Route::post('/book/isbn_some', 'BookController@postIsbnSome');
   Route::get('/book/find', 'BookController@find')->name('book.find');
   Route::post('/book/find', 'BookController@search')->name('book.find');
   Route::resource('book', 'BookController');

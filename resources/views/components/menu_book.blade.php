@@ -11,7 +11,12 @@
   </a>
   <a href="/book/isbn">
     <div class="tab bookpage-color">
-      ISBNコード登録
+      ISBNコード登録(単体)
+    </div>
+  </a>
+  <a href="/book/isbn_some">
+    <div class="tab bookpage-color">
+      ISBNコード登録(複数)
     </div>
   </a>
   <a href="/book/find">
