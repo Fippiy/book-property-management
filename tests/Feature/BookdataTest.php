@@ -484,6 +484,30 @@ class BookdataTest extends TestCase
         $response->assertSeeText($isbn0); // 入力番号が反映されていること
         $response->assertSeeText('桁数が13桁ではありません。'); // 取得できていない旨のメッセージが表示されること
     }
+    // 複数isbn登録エラー、フォーム重複
+    public function test_someIsbnCreate_ng_formEntryDouble()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $isbn0 = 9784798052588;
+        $isbn1 = 9784798052588;
+        $isbns = [
+            'isbn0' => $isbn0,
+            'isbn1' => $isbn1,
+        ]; // 新規登録コード
+        $bookpath = 'book/isbn_some';
+        $response = $this->from($bookpath)->post($bookpath, $isbns); // isbn情報保存
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $response->assertSeeText($isbn0); // 入力番号が反映されていること
+        $response->assertSeeText("1件目のデータと同じです。"); // 重複メッセージが表示されること
+    }
     // 複数isbn登録エラー、API検索結果なし
     public function test_someIsbnCreate_ng_findNotData()
     {
