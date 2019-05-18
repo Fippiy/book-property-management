@@ -145,6 +145,39 @@ class BookdataTest extends TestCase
             $response->assertSeeText($value);
         }; // savebookデータが表示されていること
     }
+    // 複数isbn登録と表示確認
+    public function test_someIsbnCreate_ok()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // isbnページアクセス
+        $response = $this->get('/book/isbn_some'); // isbnへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('book.isbn_some'); // book.isbnビューであること
+
+        // 登録
+        $isbn0 = 9784798052588;
+        $isbn1 = 9784756918765;
+        $isbns = [
+            'isbn0' => $isbn0,
+            'isbn1' => $isbn1,
+        ]; // 新規登録コード
+        $response = $this->from('book/isbn_some')->post('book/isbn_some', $isbns); // isbn情報保存
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $response->assertSeeText($isbn0); // 入力番号が反映されていること
+        $response->assertSeeText($isbn1); // 入力番号が反映されていること
+        $savebook = Bookdata::first();
+        $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
+        $bookcount = count(Bookdata::all());
+        $savebook = Bookdata::find($bookcount);
+        $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
+    }
     // 検索
     public function test_findTitle_ok_yesMatchFindTitle()
     {
