@@ -33,7 +33,7 @@
               <span class="isbn-result__box--isbn">{{$answer['isbn']}}</span>
               <span class="isbn-result__box--msg">{{$answer['msg']}}</span>
             </div>
-            @if (isset($answer['result']))
+            @if ($answer['process'] == 'completion')
             <div class="isbn-result__box--bottom">
               <div class="isbn-result__box--image">
               @if (isset($answer['result']['cover']) == null)
