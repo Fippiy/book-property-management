@@ -145,6 +145,39 @@ class BookdataTest extends TestCase
             $response->assertSeeText($value);
         }; // savebookデータが表示されていること
     }
+    // 複数isbn登録と表示確認
+    public function test_someIsbnCreate_ok()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // isbnページアクセス
+        $response = $this->get('/book/isbn_some'); // isbnへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('book.isbn_some'); // book.isbnビューであること
+
+        // 登録
+        $isbn0 = 9784798052588;
+        $isbn1 = 9784756918765;
+        $isbns = [
+            'isbn0' => $isbn0,
+            'isbn1' => $isbn1,
+        ]; // 新規登録コード
+        $response = $this->from('book/isbn_some')->post('book/isbn_some', $isbns); // isbn情報保存
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $response->assertSeeText($isbn0); // 入力番号が反映されていること
+        $response->assertSeeText($isbn1); // 入力番号が反映されていること
+        $savebook = Bookdata::first();
+        $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
+        $bookcount = count(Bookdata::all());
+        $savebook = Bookdata::find($bookcount);
+        $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
+    }
     // 検索
     public function test_findTitle_ok_yesMatchFindTitle()
     {
@@ -389,5 +422,139 @@ class BookdataTest extends TestCase
         $response->assertRedirect('book/find');  // 同ページへリダイレクト
         $this->assertEquals('検索ワードは必須です。',
         session('errors')->first('find')); // エラメッセージを確認
+    }
+    // 複数isbn登録エラー、登録なし
+    public function test_someIsbnCreate_ng_notEntry()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $bookpath = 'book/isbn_some';
+        $response = $this->from($bookpath)->post($bookpath, []); // isbn情報保存
+        $response->assertSessionHasErrors(['isbnrecords']); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect($bookpath);  // トップページ表示
+        $this->assertEquals('ISBNコードが入力されていません',
+        session('errors')->first('isbnrecords')); // エラメッセージを確認
+    }
+    // 複数isbn登録エラー、コード12桁
+    public function test_someIsbnCreate_ng_isbn12()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $isbn0 = 123456789012;
+        $isbns = [
+            'isbn0' => $isbn0,
+        ]; // 新規登録コード
+        $bookpath = 'book/isbn_some';
+        $response = $this->from($bookpath)->post($bookpath, $isbns); // isbn情報保存
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $response->assertSeeText($isbn0); // 入力番号が反映されていること
+        $response->assertSeeText('桁数が13桁ではありません。'); // 取得できていない旨のメッセージが表示されること
+    }
+    // 複数isbn登録エラー、コード14桁
+    public function test_someIsbnCreate_ng_isbn14()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $isbn0 = 12345678901234;
+        $isbns = [
+            'isbn0' => $isbn0,
+        ]; // 新規登録コード
+        $bookpath = 'book/isbn_some';
+        $response = $this->from($bookpath)->post($bookpath, $isbns); // isbn情報保存
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $response->assertSeeText($isbn0); // 入力番号が反映されていること
+        $response->assertSeeText('桁数が13桁ではありません。'); // 取得できていない旨のメッセージが表示されること
+    }
+    // 複数isbn登録エラー、フォーム重複
+    public function test_someIsbnCreate_ng_formEntryDouble()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $isbn0 = 9784798052588;
+        $isbn1 = 9784798052588;
+        $isbns = [
+            'isbn0' => $isbn0,
+            'isbn1' => $isbn1,
+        ]; // 新規登録コード
+        $bookpath = 'book/isbn_some';
+        $response = $this->from($bookpath)->post($bookpath, $isbns); // isbn情報保存
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $response->assertSeeText($isbn0); // 入力番号が反映されていること
+        $response->assertSeeText("1件目のデータと同じです。"); // 重複メッセージが表示されること
+    }
+    // 複数isbn登録エラー、DB重複
+    public function test_someIsbnCreate_ng_InDbEntry()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+        // faker book自動生成
+        $bookdata = factory(Bookdata::class)->create([
+            'title' => 'a',
+            'isbn' => '9784798052588'
+        ]); // DBにISBNを登録しておく
+
+        // 登録
+        $isbn0 = 9784798052588;
+        $isbns = [
+            'isbn0' => $isbn0,
+        ]; // 新規登録コード
+        $bookpath = 'book/isbn_some';
+        $response = $this->from($bookpath)->post($bookpath, $isbns); // isbn情報保存
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $response->assertSeeText($isbn0); // 入力番号が反映されていること
+        $response->assertSeeText("既に登録されています。"); // 重複メッセージが表示されること
+    }
+    // 複数isbn登録エラー、API検索結果なし
+    public function test_someIsbnCreate_ng_findNotData()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $isbn0 = 1234567890123;
+        $isbns = [
+            'isbn0' => $isbn0,
+        ]; // 新規登録コード
+        $bookpath = 'book/isbn_some';
+        $response = $this->from($bookpath)->post($bookpath, $isbns); // isbn情報保存
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $response->assertSeeText($isbn0); // 入力番号が反映されていること
+        $response->assertSeeText('該当するISBNコードは見つかりませんでした。'); // 取得できていない旨のメッセージが表示されること
     }
 }
