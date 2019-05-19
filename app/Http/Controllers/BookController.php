@@ -191,10 +191,10 @@ class BookController extends Controller
     public function destroy($id)
     {
       $have_property = Property::where('bookdata_id', $id)->first();
-      if (count($have_property) > 0) {
-        $have_book = false;
-      } else {
+      if ($have_property == null) {
         $have_book = true;
+      } else {
+        $have_book = false;
       }
       $validator = Validator::make(['bookdata_id' => $have_book], ['bookdata_id' => 'accepted'], ['所有者がいるため削除できません']);
       if ($validator->fails()) {
