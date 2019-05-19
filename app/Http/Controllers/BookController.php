@@ -332,23 +332,31 @@ class BookController extends Controller
         // フォームデータ取得
         unset($request['_token']); // トークン削除
         $isbns = $request->all(); // isbnコードをフォームから取得
+        // isbnsキーが設定されている場合は指定キーで区切る
         if(array_key_exists('isbns', $isbns)){
           $data = $isbns['isbns'];
-          $isbns = preg_split("/[\s,]+/", $data);
+          $isbns = preg_split("/[\s,]+/", $data); // カンマと空文字列で区切る
         }
         $count = count($isbns); // 取得件数
         $isbnrecords = []; // データ格納用配列
-
         // 処理用配列へ追加
-        for ($i = 0; $i < $count; $i++){
-          if ($isbns[$i] != null){
+        $i = 1; // 結果出力番号
+        foreach($isbns as $isbn){
+          if ($isbn != null){ 
+            if ($i > 20){ // 一度に登録できる上限
+              break;
+            }
+            // isbn設定
+            $setisbn = str_replace('-', '', $isbn); // ハイフンを含んでいる場合は取り除く
+            // 配列格納
             $isbnrecords[] = array(
               'process' => 'processing',
-              'number' => $i+1,
-              'isbn' => $isbns[$i],
+              'number' => $i,
+              'isbn' => $setisbn,
               'msg' => null,
             );
           }
+          $i++;
         }
 
         // ISBN登録がない場合はバリデーションエラー
@@ -368,7 +376,10 @@ class BookController extends Controller
         // フォームデータ評価
         for ($i = 0; $i < $count; $i++){
           if ($isbnrecords[$i]['process'] == 'processing'){ // 処理変数が処理中の場合は処理を実施する
-            if (mb_strlen($isbnrecords[$i]['isbn']) != 13){
+            if (ctype_digit($isbnrecords[$i]['isbn']) == false) {
+              data_set($isbnrecords[$i], 'msg', '数値ではありません'); // 数値でない場合はメッセージ格納
+              data_set($isbnrecords[$i], 'process', 'error'); // 処理ステータスエラー
+            } elseif (mb_strlen($isbnrecords[$i]['isbn']) != 13){
               data_set($isbnrecords[$i], 'msg', '桁数が13桁ではありません。'); // 13桁でない場合はメッセージ格納
               data_set($isbnrecords[$i], 'process', 'error'); // 処理ステータスエラー
             } else {
