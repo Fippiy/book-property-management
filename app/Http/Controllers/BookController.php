@@ -260,6 +260,10 @@ class BookController extends Controller
       $msg = 'ISBNコードを入力して下さい。';
       return view('book.isbn_some',['msg'=>$msg]);
     }
+    public function getIsbnSomeInput(){
+      $msg = 'ISBNコードを入力して下さい。';
+      return view('book.isbn_some_input',['msg'=>$msg]);
+    }
     public function postIsbn(Request $request){
         // バリデーションチェック
         $this->validate($request, Bookdata::$isbnEntryRules);
@@ -328,16 +332,20 @@ class BookController extends Controller
         // フォームデータ取得
         unset($request['_token']); // トークン削除
         $isbns = $request->all(); // isbnコードをフォームから取得
+        if(array_key_exists('isbns', $isbns)){
+          $data = $isbns['isbns'];
+          $isbns = preg_split("/[\s,]+/", $data);
+        }
         $count = count($isbns); // 取得件数
         $isbnrecords = []; // データ格納用配列
 
         // 処理用配列へ追加
         for ($i = 0; $i < $count; $i++){
-          if ($isbns['isbn'.$i] != null){
+          if ($isbns[$i] != null){
             $isbnrecords[] = array(
               'process' => 'processing',
               'number' => $i+1,
-              'isbn' => $isbns['isbn'.$i],
+              'isbn' => $isbns[$i],
               'msg' => null,
             );
           }
