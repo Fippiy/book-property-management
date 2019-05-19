@@ -19,6 +19,11 @@
       ISBNコード登録(複数)
     </div>
   </a>
+  <a href="/book/isbn_some_input">
+    <div class="tab bookpage-color">
+      ISBNコード登録(一括)
+    </div>
+  </a>
   <a href="/book/find">
     <div class="tab bookpage-color">
       登録書籍検索
