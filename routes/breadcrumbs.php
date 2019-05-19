@@ -17,16 +17,22 @@ Breadcrumbs::for('book.create', function ($trail) {
     $trail->push('新規登録', url('book.create'));
 });
 
-// トップページ / 書籍 / ISBN登録(単体)
+// トップページ / 書籍 / ISBN登録
 Breadcrumbs::for('book.isbn', function ($trail) {
     $trail->parent('book.index');
-    $trail->push('ISBN登録(単体)', url('book.isbn'));
+    $trail->push('ISBN登録', url('book.isbn'));
 });
 
 // トップページ / 書籍 / ISBN登録(複数)
 Breadcrumbs::for('book.isbn_some', function ($trail) {
-    $trail->parent('book.index');
-    $trail->push('ISBN登録(複数)', url('book.isbn_some'));
+    $trail->parent('book.isbn');
+    $trail->push('複数登録', url('book.isbn_some'));
+});
+
+// トップページ / 書籍 / ISBN登録(一括)
+Breadcrumbs::for('book.isbn_some_input', function ($trail) {
+    $trail->parent('book.isbn');
+    $trail->push('一括登録', url('book.isbn_some_input'));
 });
 
 // トップページ / 書籍 / 詳細
