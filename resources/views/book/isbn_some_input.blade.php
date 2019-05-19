@@ -34,7 +34,7 @@
           {{ csrf_field() }}
           <div class="form-contents">
             <div class="form-input form-one-size">
-              <div class="form-label">ISBNコード</div>
+              <div class="form-label">ISBNコード[20件まで]（カンマ区切り、改行で連続投入可能）</div>
               <div><textarea class="form-input__detail" type="numbers" name="isbns"></textarea></div>
             </div>
           </div>
