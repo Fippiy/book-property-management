@@ -211,7 +211,54 @@ class BookdataTest extends TestCase
             $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
         }
     }
-    // 検索
+    // 一括isbn登録、ハイフン解除確認
+    public function test_someIsbnCommaHyphenCreate_ok()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $testisbn = '978-4756918765'; // テスト用ISBNコード
+        $inputform = ['isbns' => $testisbn]; // フォーム送信用データ生成
+        $response = $this->from('book/isbn_some')->post('book/isbn_some', $inputform); // フォームよりpost送信
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $data = str_replace('-', '', $testisbn); // 表示確認コード生成、ハイフンを取り除く
+        $response->assertSeeText($data); // 入力番号が反映されていること
+        $savebook = Bookdata::first();
+        // eval(\Psy\sh());
+        $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
+    }
+    // 一括isbn登録、空文字削除対応確認
+    public function test_someIsbnCommaSpaceCreate_ok()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $testisbn = 
+            "9784756918765\n9784844366454"; // テスト用ISBNコード
+        $inputform = ['isbns' => $testisbn]; // フォーム送信用データ生成
+        $response = $this->from('book/isbn_some')->post('book/isbn_some', $inputform); // フォームよりpost送信
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $datas = preg_split("/[\s,]+/", $testisbn); // 確認用データを抽出
+        foreach ($datas as $data){
+            $response->assertSeeText($data); // 入力番号が反映されていること
+        }
+        $savebooks = Bookdata::all();
+        foreach($savebooks as $savebook){
+            $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
+        }
+    }    // 検索
     public function test_findTitle_ok_yesMatchFindTitle()
     {
         //// ユーザー生成
