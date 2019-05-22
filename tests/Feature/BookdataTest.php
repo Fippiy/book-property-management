@@ -178,6 +178,87 @@ class BookdataTest extends TestCase
         $savebook = Bookdata::find($bookcount);
         $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
     }
+    // 一括isbn登録と表示確認
+    public function test_someIsbnCommaCreate_ok()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // isbnページアクセス
+        $response = $this->get('/book/isbn_some_input'); // isbnへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('book.isbn_some_input'); // book.isbnビューであること
+
+        // 登録
+        $datas = [ 
+            9784756918765,9784844366454,9784798052588,9784863542174,9784822282516,
+            9784054066892,9784046023919,9784046023919,9784797397390,9784023332591,
+        ]; // 登録用データ
+        $isbns = implode(",", $datas); // フォーム入力用一括登録テキスト（カンマ区切り）
+        $inputform = ['isbns' => $isbns]; // フォーム送信用データ生成
+        $response = $this->from('book/isbn_some')->post('book/isbn_some', $inputform); // フォームよりpost送信
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        foreach($datas as $data){
+            $response->assertSeeText($data); // 入力番号が反映されていること
+        }
+        $savebooks = Bookdata::all();
+        foreach($savebooks as $savebook){
+            $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
+        }
+    }
+    // 一括isbn登録、ハイフン解除確認
+    public function test_someIsbnCommaHyphenCreate_ok()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $testisbn = '978-4756918765'; // テスト用ISBNコード
+        $inputform = ['isbns' => $testisbn]; // フォーム送信用データ生成
+        $response = $this->from('book/isbn_some')->post('book/isbn_some', $inputform); // フォームよりpost送信
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $data = str_replace('-', '', $testisbn); // 表示確認コード生成、ハイフンを取り除く
+        $response->assertSeeText($data); // 入力番号が反映されていること
+        $savebook = Bookdata::first();
+        // eval(\Psy\sh());
+        $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
+    }
+    // 一括isbn登録、空文字削除対応確認
+    public function test_someIsbnCommaSpaceCreate_ok()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $testisbn = 
+            "9784756918765\n9784844366454"; // テスト用ISBNコード
+        $inputform = ['isbns' => $testisbn]; // フォーム送信用データ生成
+        $response = $this->from('book/isbn_some')->post('book/isbn_some', $inputform); // フォームよりpost送信
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        $datas = preg_split("/[\s,]+/", $testisbn); // 確認用データを抽出
+        foreach ($datas as $data){
+            $response->assertSeeText($data); // 入力番号が反映されていること
+        }
+        $savebooks = Bookdata::all();
+        foreach($savebooks as $savebook){
+            $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
+        }
+    }
     // 検索
     public function test_findTitle_ok_yesMatchFindTitle()
     {
@@ -556,5 +637,79 @@ class BookdataTest extends TestCase
         $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
         $response->assertSeeText($isbn0); // 入力番号が反映されていること
         $response->assertSeeText('該当するISBNコードは見つかりませんでした。'); // 取得できていない旨のメッセージが表示されること
+    }
+    // 一括isbn登録エラー、タイトル0件
+    public function test_someIsbnCommaCreate_ng_notEntry()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        $bookpath ='book/isbn_some';
+        $inputform = ['isbns' => null]; // フォーム送信用データ生成
+        $response = $this->from($bookpath)->post($bookpath, $inputform); // フォームよりpost送信
+        $response->assertSessionHasErrors(); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect($bookpath);  // トップページ表示
+        $this->assertEquals('ISBNコードが入力されていません',
+        session('errors')->first('isbnrecords')); // エラメッセージを確認
+    }
+    // 一括isbn登録エラー、上限登録超過
+    public function test_someIsbnCommaCreate_ng_limitNumber()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録用配列生成（上限＋1生成）
+        $count = 20; // 上限数
+        for ($i = 0; $i < $count+1; $i++){ // 上限数+1個生成
+            $datas[] = 1234567890123 + $i; // 13桁コード作成(重複なし)
+        }
+        $bookpath ='book/isbn_some';
+        $isbns = implode(",", $datas); // フォーム入力用一括登録テキスト（カンマ区切り）
+        $inputform = ['isbns' => $isbns]; // フォーム送信用データ生成
+        $response = $this->from($bookpath)->post($bookpath, $inputform); // フォームよりpost送信
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+        // 編集ISBN番号結果確認
+        for ($i = 0; $i < $count+1; $i++){
+            if ($i < $count){ // 上限数まで結果表示されること
+                $response->assertSeeText($datas[$i]); // 入力番号が反映されていること
+            } else { // 上限超過データは扱われていないこと
+                $response->assertDontSeeText($datas[$i]); // 入力番号が反映されていないこと
+            }
+        }
+    }
+    // 一括isbnエラー、数値以外入力
+    public function test_someIsbnCommaCreate_ng_notNumber()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 登録
+        $datas = [
+            '978ー4756918765', // 全角文字あり
+            '97847@56918765', // 記号あり
+            '９７８４７５６９１８７６５', // 全角数字
+            '9784756i18765', // 半角英字あり
+        ]; 
+        foreach ($datas as $data){
+            $inputform = ['isbns' => $data]; // フォーム送信用データ生成
+            $bookpath ='book/isbn_some';
+            $response = $this->from($bookpath)->post($bookpath, $inputform); // フォームよりpost送信
+            $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+            $response->assertStatus(200); // 200ステータスであること
+    
+            $response->assertSeeText('ISBNコード登録結果'); // 登録結果ページが出力されていること
+            $response->assertSeeText($data); // 入力番号が反映されていること
+            $response->assertSeeText('数値ではありません'); // エラー名が表示されていること
+        }
     }
 }
