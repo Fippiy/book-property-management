@@ -450,4 +450,89 @@ class BookController extends Controller
         // ビューに出力
         return view('book.isbn_result',['answers' => $isbnrecords]);
     }
+
+    public function somedelete(Request $request){
+      // フォームデータ取得
+      unset($request['_token']); // トークン削除
+      $datas = $request->all(); // 削除書籍情報をフォームから取得
+      $count = count($datas); // 取得件数
+      $datas = array_keys($datas);
+
+      // 取得データなければ処理中止
+      if ($count == 0) {
+        // 削除情報が1件もないときはバリデーションエラーにする
+        $validator = Validator::make(['deletebook' => false], ['deletebook' => 'accepted'], ['削除する本が選択されていません']);
+        if ($validator->fails()) {
+          return redirect('book')
+                      ->withErrors($validator)
+                      ->withInput();
+        }
+      }
+
+      // 複数登録同様に結果配列をつくる
+      // 処理用配列へ追加
+      $i = 1; // 結果出力番号
+      foreach($datas as $data){
+        // 一度に削除できる上限数で処理を停止
+        if ($i > 20){
+          break;
+        }
+        // 配列格納
+        $deletebooks[] = array(
+          'process' => 'processing', // 処理中ステータス
+          'number' => $i, // 番号
+          'bookdata_id' => $data, // 削除する本のid
+          'msg' => null, // 処理テキスト
+        );
+        $i++;
+      }
+
+      // 所有者がいないか確認
+      for ($i = 0; $i < $count; $i++){
+          $have_property = Property::where('bookdata_id', $deletebooks[$i]['bookdata_id'])->first();
+          if ($have_property != null) {
+            data_set($deletebooks[$i], 'title', $have_property->bookdata->title); // 表示タイトル名を追加
+            data_set($deletebooks[$i], 'msg', "所有者がいるため削除できません"); // フォームデータ重複チェック
+            data_set($deletebooks[$i], 'process', 'use_user_on'); // 処理ステータスエラー
+          }
+      } 
+
+      // 削除データ決定後は削除を順番に実施する
+      // 画像保存ディレクトリ設定
+      $save_directory = "book_images";
+
+      // 削除データとりだし
+      for ($i = 0; $i < $count; $i++){
+        if ($deletebooks[$i]['process'] == 'processing'){
+        // 削除レコード取得
+        $delete_book = Bookdata::find($deletebooks[$i]['bookdata_id']);
+
+          // 写真削除がある場合
+          if (isset($delete_book['picture'])) {
+            // 開発環境で画像保存先を変更
+            if ( app()->isLocal() || app()->runningUnitTests() ) {
+              // 写真削除情報取得
+              $deletename = str_replace('/storage/'.$save_directory.'/','',$delete_book->picture);
+
+              $pathdel = storage_path() . '/app/public/book_images/' . $deletename;
+              // 写真削除
+              \File::delete($pathdel);
+            } else {
+              // 本番環境削除処理
+              // S3インスタンス生成
+              $s3settings = s3settings();
+              // S3削除処理
+              $picture_delete = picture_delete($save_directory,$delete_book,$s3settings);
+            }
+          }
+          // レコード削除
+          data_set($deletebooks[$i], 'title', $delete_book->title); // 表示タイトル名を追加
+          $delete_book->delete();
+          data_set($deletebooks[$i], 'msg', "を削除しました"); // メッセージを追加
+          data_set($deletebooks[$i], 'process', 'completion'); // 処理ステータス変更
+        }
+      }
+
+      return view('book.delete_result',['answers' => $deletebooks]);
+    }
 }
