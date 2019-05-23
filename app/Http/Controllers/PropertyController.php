@@ -181,6 +181,58 @@ class PropertyController extends Controller
       $param = ['input' => $title, 'books' => $properties, 'msg' => $msg];
       return view('property.find', $param);
     }
+    public function somedelete(Request $request){
+      // フォームデータ取得
+      unset($request['_token']); // トークン削除
+      $datas = $request->all(); // 削除所有書籍情報をフォームから取得
+      $count = count($datas); // 取得件数
+      $datas = array_keys($datas);
 
+      // 取得データなければ処理中止
+      if ($count == 0) {
+        // 削除情報が1件もないときはバリデーションエラーにする
+        $validator = Validator::make(['deleteproperty' => false], ['deleteproperty' => 'accepted'], ['所有書籍から解除する本が選択されていません']);
+        if ($validator->fails()) {
+          return redirect('property')
+                      ->withErrors($validator)
+                      ->withInput();
+        }
+      }
 
+      // 複数登録同様に結果配列をつくる
+      // 処理用配列へ追加
+      $i = 1; // 結果出力番号
+      foreach($datas as $data){
+        // 一度に削除できる上限数で処理を停止
+        if ($i > 20){
+          break;
+        }
+        // 配列格納
+        $deleteproperties[] = array(
+          'process' => 'processing', // 処理中ステータス
+          'number' => $i, // 番号
+          'property_id' => $data, // 所有書籍から解除するid
+          'msg' => null, // 処理テキスト
+        );
+        $i++;
+      }
+
+      // 削除の実行
+      for ($i = 0; $i < $count; $i++){
+        if ($deleteproperties[$i]['process'] == 'processing'){
+          // 削除レコード取得
+          $delete_property = Property::find($deleteproperties[$i]['property_id']);
+
+          // 本人の場合のみ削除実施
+          if ($delete_property['user_id'] == Auth::user()->id){
+            // レコード削除
+            $delete_property->delete();
+            data_set($deleteproperties[$i], 'title', $delete_property->bookdata->title); // 表示タイトル名を追加
+            data_set($deleteproperties[$i], 'msg', "所有書籍から解除しました"); // メッセージを追加
+            data_set($deleteproperties[$i], 'process', 'completion'); // 処理ステータス変更
+          }
+        }
+      }
+      return view('property.delete_result',['answers' => $deleteproperties]);
+    }
 }
