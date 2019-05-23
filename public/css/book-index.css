@@ -64,16 +64,23 @@
   padding: 0;
 }
 .index-content .books-list .book-table {
-  margin-top: 30px;
   font-size: 14px;
   width: 800px;
-  border-top: 1px solid #5ba5c8;
 }
 .index-content .books-list .book-table__list {
   height: 90px;
   padding: 10px 5px;
-  border-bottom: 1px solid #5ba5c8;
+  border-top: 1px solid #5ba5c8;
   display: flex;
+}
+.index-content .books-list .book-table__list--checkbox {
+  display: flex;
+  /*上下中央揃え*/
+  align-items: center;
+  margin-right: 10px;
+}
+.index-content .books-list .book-table__list--checkbox input[type=checkbox] {
+  transform: scale(2);
 }
 .index-content .books-list .book-table__list--picture {
   height: 90px;
@@ -109,6 +116,12 @@
 }
 .index-content .books-list .book-table__profile-list .profile-group__edit a {
   color: blue;
+}
+.index-content .books-list .book-table__btn {
+  margin: 10px 0;
+}
+.index-content .books-list .book-table__btn--delete {
+  color: red;
 }
 .index-content .books-list .book-detail {
   width: 100%;
