@@ -454,9 +454,8 @@ class BookController extends Controller
     public function somedelete(Request $request){
       // フォームデータ取得
       unset($request['_token']); // トークン削除
-      $datas = $request->all(); // 削除書籍情報をフォームから取得
+      $datas = $request->input('select_book'); // 削除書籍情報をフォームから取得
       $count = count($datas); // 取得件数
-      $datas = array_keys($datas);
 
       // 取得データなければ処理中止
       if ($count == 0) {

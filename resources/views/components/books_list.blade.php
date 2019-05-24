@@ -13,7 +13,7 @@
       @foreach ($books as $book)
         <div class="book-table__list">
           <div class="book-table__list--checkbox">
-            <input type="checkbox" name="{{$book->id}}">
+            <input type="checkbox" name="select_book[]" value="{{$book->id}}">
           </div>
           <div class="book-table__list--picture">
             <a href="/{{$page_path}}/{{$book->id}}">
