@@ -451,7 +451,7 @@ class BookController extends Controller
         return view('book.isbn_result',['answers' => $isbnrecords]);
     }
 
-    public function somedelete(Request $request){
+    public function someDelete(Request $request){
       // フォームデータ取得
       unset($request['_token']); // トークン削除
       $datas = $request->input('select_book'); // 削除書籍情報をフォームから取得
