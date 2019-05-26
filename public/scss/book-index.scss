@@ -62,15 +62,23 @@
       }
     }
     .book-table {
-      margin-top: 30px;
+      // margin-top: 30px;
       font-size: 14px;
       width: 800px;
-      border-top: 1px solid #5ba5c8;
       &__list {
         height: 90px;
         padding: 10px 5px;
-        border-bottom: 1px solid #5ba5c8;
+        border-top: 1px solid #5ba5c8;
         display: flex;
+        &--checkbox {
+          display: flex;
+          /*上下中央揃え*/
+          align-items: center;
+          margin-right: 10px;
+          input[type=checkbox] {
+            transform: scale(2);
+          }
+        }  
         &--picture {
           height: 90px;
           width: 90px;
@@ -111,12 +119,18 @@
           }
         }
       }
+      &__btn {
+        margin: 10px 0;
+        &--delete {
+          color: red;
+        }
+      }
     }
     .book-detail {
       width: 100%;
       display: flex;
       margin-top: 15px;
-      &__picture{
+      &__picture {
         img {
           height: 200px;
           width: 200px;
