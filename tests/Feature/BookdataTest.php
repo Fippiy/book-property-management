@@ -307,7 +307,34 @@ class BookdataTest extends TestCase
         $response->assertViewIs('book.find'); // book.findビューであること
         $response->assertSeeText('書籍がみつかりませんでした。'); // タイトルなしメッセージが表示されていること
     }
+     // 複数削除
+     public function test_bookControll_ok_someDelete()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
 
+        // faker 自動生成
+        $delete_bookdatas = factory(Bookdata::class, 20)->create();
+        // 送信フォームパス
+        $formpath = 'book/somedelete';
+        // 削除データ
+        $deletedata = ['select_books' => range(1, 20)];
+
+        //// 削除
+        $response = $this->from($formpath)->post($formpath, $deletedata); // 削除実施
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('book.delete_result'); // book.delete_resultビューであること
+
+        // 削除されていることの確認(resultページ)
+        $response->assertSeeText('書籍削除結果'); // 削除結果ページが出力されていること
+        $response->assertStatus(200); // 200ステータスであること
+        foreach($delete_bookdatas as $deletebook){
+            $response->assertSeeText($deletebook->title); // 削除タイトルが結果に反映されていること
+        }
+    }
 
     //// NGパターン調査
     // 手動登録タイトル未入力
