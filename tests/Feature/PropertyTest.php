@@ -200,7 +200,37 @@ class PropertyTest extends TestCase
             $response->assertSeeText($savebook->bookdata->title);
         } // 登録タイトルが表示されていること
     }
+     // 複数削除
+     public function test_propertySomeControll_ok_someDelete()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
 
+        // faker 自動生成
+        $delete_propertydatas = factory(Property::class, 20)->create([
+            'user_id' => $user->id,
+        ]);
+
+        // 送信フォームパス
+        $formpath = 'property/somedelete';
+        // 削除データ
+        $deletedatas = ['select_books' => range(1, 20)];
+
+        //// 削除
+        $response = $this->from($formpath)->post($formpath, $deletedatas); // 削除実施
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('property.delete_result'); // property.delete_resultビューであること
+
+        // 削除されていることの確認(resultページ)
+        $response->assertSeeText('所有書籍情報解除結果'); // 削除結果ページが出力されていること
+        $response->assertStatus(200); // 200ステータスであること
+        foreach($delete_propertydatas as $deleteproperty){
+            $response->assertSeeText($deleteproperty->bookdata->title); // 削除タイトルが結果に反映されていること
+        }
+    }
 
     //// NGパターン調査
     // タイトル未入力
