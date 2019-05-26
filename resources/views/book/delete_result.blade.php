@@ -33,10 +33,6 @@
               <span class="isbn-result__box--isbn">{{$answer['title']}}</span>
               <span class="isbn-result__box--msg">{{$answer['msg']}}</span>
             </div>
-            @if ($answer['process'] == 'completion')
-            <div class="isbn-result__box--bottom">
-            </div>
-            @endif
           </div>
         </div>
         @endforeach
