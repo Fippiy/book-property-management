@@ -259,7 +259,7 @@ class BookdataTest extends TestCase
             $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
         }
     }
-    // 検索
+    // 検索書籍有り
     public function test_findTitle_ok_yesMatchFindTitle()
     {
         //// ユーザー生成
@@ -282,6 +282,7 @@ class BookdataTest extends TestCase
         $response->assertStatus(200); // 200ステータスであること
         $response->assertSeeText($bookdata->title); // bookdataタイトルが表示されていること
     }
+    // 検索書籍なし
     public function test_findTitle_ok_noMatchFindTitle()
     {
         //// ユーザー生成
