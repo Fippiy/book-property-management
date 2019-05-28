@@ -259,7 +259,7 @@ class BookdataTest extends TestCase
             $response->assertSeeText($savebook->title); // 取得した本のタイトルがが反映されていること
         }
     }
-    // 検索
+    // 検索書籍有り
     public function test_findTitle_ok_yesMatchFindTitle()
     {
         //// ユーザー生成
@@ -282,6 +282,7 @@ class BookdataTest extends TestCase
         $response->assertStatus(200); // 200ステータスであること
         $response->assertSeeText($bookdata->title); // bookdataタイトルが表示されていること
     }
+    // 検索書籍なし
     public function test_findTitle_ok_noMatchFindTitle()
     {
         //// ユーザー生成
@@ -307,7 +308,34 @@ class BookdataTest extends TestCase
         $response->assertViewIs('book.find'); // book.findビューであること
         $response->assertSeeText('書籍がみつかりませんでした。'); // タイトルなしメッセージが表示されていること
     }
+     // 複数削除
+     public function test_bookControll_ok_someDelete()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
 
+        // faker 自動生成
+        $delete_bookdatas = factory(Bookdata::class, 20)->create();
+        // 送信フォームパス
+        $formpath = 'book/somedelete';
+        // 削除データ
+        $deletedata = ['select_books' => range(1, 20)];
+
+        //// 削除
+        $response = $this->from($formpath)->post($formpath, $deletedata); // 削除実施
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('book.delete_result'); // book.delete_resultビューであること
+
+        // 削除されていることの確認(resultページ)
+        $response->assertSeeText('書籍削除結果'); // 削除結果ページが出力されていること
+        $response->assertStatus(200); // 200ステータスであること
+        foreach($delete_bookdatas as $deletebook){
+            $response->assertSeeText($deletebook->title); // 削除タイトルが結果に反映されていること
+        }
+    }
 
     //// NGパターン調査
     // 手動登録タイトル未入力
@@ -711,5 +739,81 @@ class BookdataTest extends TestCase
             $response->assertSeeText($data); // 入力番号が反映されていること
             $response->assertSeeText('数値ではありません'); // エラー名が表示されていること
         }
+    }
+     // 複数削除エラー、postデータなし
+     public function test_bookControll_ng_someDeleteNotEntry()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 送信フォームパス
+        $formpath = 'book/somedelete';
+        // 削除データ
+        $deletedata = [];
+
+        //// 削除
+        $response = $this->from($formpath)->post($formpath, $deletedata); // 削除実施
+        $response->assertSessionHasErrors(); // エラーメッセージがあること
+        $response->assertStatus(302); // リダイレクト
+        $response->assertRedirect('book'); // bookビューであること
+        $this->assertEquals('削除する本が選択されていません',
+        session('errors')->first('deletebook')); // エラメッセージを確認
+    }
+     // 複数削除エラー、上限超過処理
+     public function test_bookControll_ng_someDeleteLimitNumber()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        $count = 20;// 上限設定
+        // faker 自動生成
+        $delete_bookdatas = factory(Bookdata::class, $count+1)->create();
+        // 送信フォームパス
+        $formpath = 'book/somedelete';
+        // 削除データ
+        $deletedata = ['select_books' => range(1, 20)];
+
+        //// 削除
+        $response = $this->from($formpath)->post($formpath, $deletedata); // 削除実施
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('書籍削除結果'); // 登録結果ページが出力されていること
+        // 編集ISBN番号結果確認
+        for ($i = 0; $i < $count+1; $i++){
+            if ($count > $i){ // 上限数まで結果表示されること
+                $response->assertSeeText($delete_bookdatas[$i]->title); // タイトルが反映されていること
+            } else { // 上限超過データは扱われていないこと
+                $response->assertDontSeeText($delete_bookdatas[$i]->title); // タイトルが反映されていないこと
+            }
+        }
+    }
+     // 複数削除エラー、所有者有り
+     public function test_bookControll_ng_someDeleteHaveProperty()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // faker 自動生成
+        $delete_bookdata = factory(Property::class)->create();
+        // 送信フォームパス
+        $formpath = 'book/somedelete';
+        // 削除データ
+        $deletedata = ['select_books' => [$delete_bookdata->bookdata_id]];
+
+        //// 削除
+        $response = $this->from($formpath)->post($formpath, $deletedata); // 削除実施
+        $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
+        $response->assertStatus(200); // 200ステータスであること
+
+        $response->assertSeeText('書籍削除結果'); // 登録結果ページが出力されていること
+        $response->assertSeeText($delete_bookdata->bookdata->title); // タイトルが反映されていること
+        $response->assertSeeText('所有者がいるため削除できません'); // 処理結果が反映されていること
     }
 }
