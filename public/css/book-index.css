@@ -67,6 +67,24 @@
   font-size: 14px;
   width: 800px;
 }
+.index-content .books-list .book-table .pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+.index-content .books-list .book-table .pagination .page-item {
+  border: 0.5px solid #eee;
+  padding: 15px;
+}
+.index-content .books-list .book-table .pagination .disabled {
+  color: #222;
+}
+.index-content .books-list .book-table .pagination .active {
+  background: #7dc7ea;
+}
+.index-content .books-list .book-table .pagination .page-link {
+  color: #999;
+}
 .index-content .books-list .book-table__list {
   height: 90px;
   padding: 10px 5px;

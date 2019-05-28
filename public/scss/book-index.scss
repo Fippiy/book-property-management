@@ -65,6 +65,24 @@
       // margin-top: 30px;
       font-size: 14px;
       width: 800px;
+      .pagination {
+        display: flex;
+        justify-content: center; 
+        margin: 20px;
+        .page-item {
+          border: 0.5px solid #eeeeee;
+          padding: 15px;
+        }
+        .disabled {
+          color: #222222;
+        }
+        .active {
+          background: #7dc7ea;
+        }
+        .page-link {
+          color: #999999;
+        }
+      }
       &__list {
         height: 90px;
         padding: 10px 5px;
