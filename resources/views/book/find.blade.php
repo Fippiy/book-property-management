@@ -43,9 +43,6 @@
           @slot('detail')
             detail
           @endslot
-          @slot('pagination')
-            find
-          @endslot
         @endcomponent
       @endif
     </div>

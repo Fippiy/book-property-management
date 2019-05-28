@@ -31,9 +31,6 @@
           @slot('detail')
             detail
           @endslot
-          @slot('pagination')
-            index
-          @endslot
         @endcomponent
       @endif
     </div>

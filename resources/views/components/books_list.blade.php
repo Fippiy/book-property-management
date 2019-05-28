@@ -5,11 +5,7 @@
     @else
       <form action="{{ route('property.some_delete') }}" method="post">
     @endif
-    @if ($pagination == 'index')
-      {{ $books->links() }}
-    @elseif ($pagination == 'find')
       {{ $books->appends(Request::only('find'))->links() }}
-    @endif
       <div class="book-table__btn">
         <span>操作：</span>
         <input type="submit" class="book-table__btn--delete" value="書籍情報一括削除">
@@ -38,10 +34,6 @@
         </div>
       @endforeach
     </form>
-    @if ($pagination == 'index')
-      {{ $books->links() }}
-    @elseif ($pagination == 'find')
       {{ $books->appends(Request::only('find'))->links() }}
-    @endif
   @endif
 </div>
