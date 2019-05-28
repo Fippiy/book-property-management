@@ -27,7 +27,7 @@ Route::group(['middleware' => ['verified']], function () {
   Route::post('/book/isbn_some', 'BookController@postIsbnSome');
   Route::get('/book/isbn_some_input', 'BookController@getIsbnSomeInput');
   Route::get('/book/find', 'BookController@find')->name('book.find');
-  Route::post('/book/find', 'BookController@search')->name('book.find');
+  Route::get('/book/search', 'BookController@search')->name('book.search');
   Route::post('/book/somedelete', 'BookController@somedelete')->name('book.some_delete');
   Route::resource('book', 'BookController');
   Route::get('/property/find', 'PropertyController@find')->name('property.find');
