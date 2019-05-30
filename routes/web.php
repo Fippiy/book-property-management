@@ -31,7 +31,7 @@ Route::group(['middleware' => ['verified']], function () {
   Route::post('/book/somedelete', 'BookController@somedelete')->name('book.some_delete');
   Route::resource('book', 'BookController');
   Route::get('/property/find', 'PropertyController@find')->name('property.find');
-  Route::post('/property/find', 'PropertyController@search')->name('property.find');
+  Route::get('/property/search', 'PropertyController@search')->name('property.search');
   Route::post('/property/somedelete', 'PropertyController@someDelete')->name('property.some_delete');
   Route::resource('property', 'PropertyController');
   Route::get('/user/email', 'UserController@userEmailEdit')->name('email.edit');
