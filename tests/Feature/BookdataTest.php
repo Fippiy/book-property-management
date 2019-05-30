@@ -334,6 +334,42 @@ class BookdataTest extends TestCase
             $response->assertSeeText($deletebook->title); // 削除タイトルが結果に反映されていること
         }
     }
+    // ページネーション表示テスト
+    public function test_bookControll_ok_paginationView()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 件数設定
+        $datarecords = 21; // テストレコード数
+        $paginate = 20; // 1ページ表示数
+        $totalpage = ceil($datarecords/$paginate); // 表示ページ総数
+
+        // faker 自動生成
+        $books = factory(Bookdata::class, $datarecords)->create();
+
+        // index表示パス
+        $viewpath = 'book?page=';
+
+        for ($i = 1; $i <= $totalpage; $i++){ // ページ数分繰り返し
+            $response = $this->get($viewpath.$i); // 各ページへアクセス
+            $response->assertStatus(200); // 200ステータスであること
+
+            // 表示ページに対してデータが確認できること
+            // レコード件数/総数で対象ページを算出
+            $j = 0;
+            foreach($books as $book){
+                $j++;
+                if ($i == ceil($j/$paginate)) { // 表示ページデータの場合
+                    $response->assertSeeText($book->title); // 対象ページに表示されていること
+                } else { // 表示ページデータでない場合
+                    $response->assertDontSeeText($book->title); // 対象ページに表示されていないこと
+                }
+            }
+        }
+    }
 
     //// NGパターン調査
     // 手動登録タイトル未入力
@@ -813,5 +849,32 @@ class BookdataTest extends TestCase
         $response->assertSeeText('書籍削除結果'); // 登録結果ページが出力されていること
         $response->assertSeeText($delete_bookdata->bookdata->title); // タイトルが反映されていること
         $response->assertSeeText('所有者がいるため削除できません'); // 処理結果が反映されていること
+    }
+    // ページネーション表示、ページ超過
+    public function test_bookControll_ng_paginationViewOverPage()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 件数設定
+        $datarecords = 21; // テストレコード数
+
+        // faker 自動生成
+        $books = factory(Bookdata::class, $datarecords)->create();
+
+        // index表示パス
+        $viewpath = 'book?page=';
+        // 表示ページ
+        $page = 3;
+
+        $response = $this->get($viewpath.$page); // 各ページへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+
+        // 表示ページにデータが出力されていないこと
+        foreach($books as $book){
+            $response->assertDontSeeText($book->title); // 対象ページに表示されていないこと
+        }
     }
 }
