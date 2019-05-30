@@ -231,6 +231,44 @@ class PropertyTest extends TestCase
             $response->assertSeeText($deleteproperty->bookdata->title); // 削除タイトルが結果に反映されていること
         }
     }
+    // ページネーション表示テスト
+    public function test_bookControll_ok_paginationView()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 件数設定
+        $datarecords = 21; // テストレコード数
+        $paginate = 20; // 1ページ表示数
+        $totalpage = ceil($datarecords/$paginate); // 表示ページ総数
+
+        // faker 自動生成
+        $properties = factory(Property::class, $datarecords)->create([
+            'user_id' => $user->id,
+        ]);
+
+        // index表示パス
+        $viewpath = 'property?page=';
+
+        for ($i = 1; $i <= $totalpage; $i++){ // ページ数分繰り返し
+            $response = $this->get($viewpath.$i); // 各ページへアクセス
+            $response->assertStatus(200); // 200ステータスであること
+
+            // 表示ページに対してデータが確認できること
+            // レコード件数/総数で対象ページを算出
+            $j = 0;
+            foreach($properties as $property){
+                $j++;
+                if ($i == ceil($j/$paginate)) { // 表示ページデータの場合
+                    $response->assertSeeText($property->bookdata->title); // 対象ページに表示されていること
+                } else { // 表示ページデータでない場合
+                    $response->assertDontSeeText($property->bookdata->title); // 対象ページに表示されていないこと
+                }
+            }
+        }
+    }
 
     //// NGパターン調査
     // タイトル未入力
@@ -546,5 +584,34 @@ class PropertyTest extends TestCase
         $response = $this->from($formpath)->post($formpath, $deletedata); // 削除実施
         $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
         $response->assertStatus(500); // 500ステータスであること
+    }
+    // ページネーション表示、ページ超過
+    public function test_bookControll_ok_paginationViewOverPage()
+    {
+        //// ユーザー生成
+        $user = factory(User::class)->create(); // ユーザーを作成
+        $this->actingAs($user); // ログイン済み
+        $this->assertTrue(Auth::check()); // Auth認証済であることを確認
+
+        // 件数設定
+        $datarecords = 21; // テストレコード数
+
+        // faker 自動生成
+        $properties = factory(Property::class, $datarecords)->create([
+            'user_id' => $user->id,
+        ]);
+
+        // index表示パス
+        $viewpath = 'property?page=';
+        // 表示ページ
+        $page = 3;
+
+        $response = $this->get($viewpath.$page); // 各ページへアクセス
+        $response->assertStatus(200); // 200ステータスであること
+
+        // 表示ページにデータが出力されていないこと
+        foreach($properties as $property){
+            $response->assertDontSeeText($property->bookdata->title); // 対象ページに表示されていないこと
+        }
     }
 }
