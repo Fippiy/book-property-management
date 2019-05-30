@@ -134,7 +134,7 @@ class PropertyTest extends TestCase
         $response = $this->get($find_post); // findページへアクセス
         $response->assertStatus(200); // 200ステータスであること
         $response->assertViewIs('property.find'); // findビューであること
-        $response = $this->from($find_post)->post($find_post, ['find' => $propertydata->bookdata->title]); // 検索実施
+        $response = $this->call('GET', 'property/search', ['find' => $bookdata->title]); // 検索実施
         $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
         $response->assertStatus(200); // 200ステータスであること
         $response->assertSeeText($propertydata->bookdata->title); // findタイトルが表示されていること
@@ -158,7 +158,7 @@ class PropertyTest extends TestCase
         $response = $this->get($find_post); // findページへアクセス
         $response->assertStatus(200); // 200ステータスであること
         $response->assertViewIs('property.find'); // findビューであること
-        $response = $this->from($find_post)->post($find_post, ['find' => 'b']); // 指定タイトル名で検索実施
+        $response = $this->call('GET', 'property/search', ['find' => 'b']); // 検索実施
         $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
         $response->assertStatus(200); // 200 ステータスであること
         $response->assertViewIs('property.find'); // findビューであること

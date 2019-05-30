@@ -5,6 +5,7 @@
     @else
       <form action="{{ route('property.some_delete') }}" method="post">
     @endif
+      {{ $books->appends(Request::only('find'))->links() }}
       <div class="book-table__btn">
         <span>操作：</span>
         <input type="submit" class="book-table__btn--delete" value="書籍情報一括削除">
@@ -33,5 +34,6 @@
         </div>
       @endforeach
     </form>
+      {{ $books->appends(Request::only('find'))->links() }}
   @endif
 </div>

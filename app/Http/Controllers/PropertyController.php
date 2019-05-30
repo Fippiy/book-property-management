@@ -171,12 +171,12 @@ class PropertyController extends Controller
                         ->join('bookdata','bookdata.id','=','properties.bookdata_id')
                         ->where('title', 'like', "%{$title}%")
                         ->select('properties.id','title','picture','cover','freememo')
-                        ->get();
+                        ->paginate(20);
       $count = count($properties);
       if ($count==0) {
         $msg = '書籍がみつかりませんでした。';
       } else {
-        $msg = $count.'件の書籍がみつかりました。';
+        $msg = $properties->total().'件の書籍がみつかりました。';
       }
       $param = ['input' => $title, 'books' => $properties, 'msg' => $msg];
       return view('property.find', $param);

@@ -29,8 +29,7 @@
         <p class="auth-contents__message--error">{{ $error }}</p>
         @endforeach
       </div>
-      <form class="book-find" action="{{ route('property.find') }}" method="post">
-        {{ csrf_field() }}
+      <form class="book-find" action="{{ route('property.search') }}" method="get">
         <div class="book-find__input">
           <input type="text" class="book-find__input--text" name="find" value="{{$input}}">
           <input type="submit" class="book-find__input--submit" value="検索">

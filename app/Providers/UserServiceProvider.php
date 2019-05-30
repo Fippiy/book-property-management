@@ -30,8 +30,8 @@ class UserServiceProvider extends ServiceProvider
             'components.user_nav', function($view) {
                 $view->with([
                     'name' => Auth::user()->name,
-                    'user_book_count'=> count(Property::userGetBook()),
-                ]);
+                    'user_book_count'=> Property::userGetBook()->total(),
+                    ]);
             }
         );
     }

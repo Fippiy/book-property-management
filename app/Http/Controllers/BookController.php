@@ -17,7 +17,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Bookdata::all();
+        $books = Bookdata::paginate(20);
         return view('book.index', ['books' => $books]);
     }
 
@@ -241,12 +241,12 @@ class BookController extends Controller
       // バリデーションチェック
       $this->validate($request, Bookdata::$searchRules);
       $title = $request->find;
-      $books = Bookdata::where('title', 'like', "%{$title}%")->get();
+      $books = Bookdata::where('title', 'like', "%{$title}%")->paginate(20);
       $count = count($books);
       if ($count==0) {
         $msg = '書籍がみつかりませんでした。';
       } else {
-        $msg = $count.'件の書籍がみつかりました。';
+        $msg = $books->total().'件の書籍がみつかりました。';
       }
       $param = ['input' => $title, 'books' => $books, 'msg' => $msg];
       return view('book.find', $param);
