@@ -269,17 +269,15 @@ class BookdataTest extends TestCase
 
         // faker book自動生成
         $bookdata = factory(Bookdata::class)->create();
-
-        //// 検索
-        // 検索の実施(findページ)
+        // 検索
         $find_post = 'book/find'; // 検索パス
-        $savebook = Bookdata::all()->first(); // 保存されたデータを取得
         $response = $this->get($find_post); // 検索ページへアクセス
         $response->assertStatus(200); // 200ステータスであること
         $response->assertViewIs('book.find'); // book.findビューであること
-        $response = $this->from($find_post)->post($find_post, ['find' => $bookdata->title]); // 検索実施
+        $response = $this->call('GET', 'book/search', ['find' => $bookdata->title]); // 検索実施
         $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
         $response->assertStatus(200); // 200ステータスであること
+        $response->assertViewIs('book.find'); // book.findビューであること
         $response->assertSeeText($bookdata->title); // bookdataタイトルが表示されていること
     }
     // 検索書籍なし
@@ -302,7 +300,7 @@ class BookdataTest extends TestCase
         $response = $this->get($find_post); // 検索ページへアクセス
         $response->assertStatus(200); // 200ステータスであること
         $response->assertViewIs('book.find'); // book.findビューであること
-        $response = $this->from($find_post)->post($find_post, ['find' => 'b']); // bで検索実施
+        $response = $this->call('GET', 'book/search', ['find' => 'b']); // 検索実施
         $response->assertSessionHasNoErrors(); // エラーメッセージがないこと
         $response->assertStatus(200); // 200 ステータスであること
         $response->assertViewIs('book.find'); // book.findビューであること
@@ -525,7 +523,7 @@ class BookdataTest extends TestCase
         $response = $this->get($find_post); // 検索ページへアクセス
         $response->assertStatus(200); // 200ステータスであること
         $response->assertViewIs('book.find'); // book.findビューであること
-        $response = $this->from($find_post)->post($find_post, ['find' => '']); // 検索実施
+        $response = $this->call('GET', 'book/search', ['find' => '']); // 検索実施
         $response->assertSessionHasErrors('find'); // エラーメッセージがあること
         $response->assertStatus(302); // リダイレクト
         $response->assertRedirect('book/find');  // 同ページへリダイレクト
